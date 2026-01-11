@@ -15,9 +15,64 @@ interface PreviewWrapperProps {
 export default function PreviewWrapper({ siteId, isPaid }: PreviewWrapperProps) {
   const { t } = useLanguage()
   const [reloadKey, setReloadKey] = useState(0)
-  // ... state ...
+  const [selectedImage, setSelectedImage] = useState<{ src: string, id: string } | null>(null)
+  const [newImageUrl, setNewImageUrl] = useState('')
+  const [isEditorOpen, setIsEditorOpen] = useState(false)
+  const iframeRef = useRef<HTMLIFrameElement>(null)
 
-// ... (Effect and handlers remain same)
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data.type === 'IMAGE_SELECTED') {
+        setSelectedImage({ src: event.data.src, id: event.data.id })
+        setNewImageUrl(event.data.src) // Default to current
+        setIsEditorOpen(true)
+      }
+    }
+    window.addEventListener('message', handleMessage)
+    return () => window.removeEventListener('message', handleMessage)
+  }, [])
+
+  const handleUpdate = () => {
+    setReloadKey(prev => prev + 1)
+  }
+
+  const handleSaveImage = async () => {
+    if (!selectedImage || !iframeRef.current) return
+
+    // 1. Update Iframe Visually
+    iframeRef.current.contentWindow?.postMessage({
+      type: 'UPDATE_IMAGE',
+      oldSrc: selectedImage.src,
+      newSrc: newImageUrl
+    }, '*')
+
+    // 2. Persist Changes
+    setTimeout(async () => {
+      if (!iframeRef.current?.contentDocument) return
+      
+      const updatedHtml = iframeRef.current.contentDocument.documentElement.outerHTML
+      const cleanHtml = updatedHtml.replace(/<script>[\s\S]*?document\.addEventListener\('DOMContentLoaded'[\s\S]*?<\/script>/, '')
+
+      try {
+        await fetch('/api/save-site', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ siteId, html: cleanHtml })
+        })
+      } catch (e) {
+        console.error('Failed to save', e)
+        alert('Failed to save changes')
+      }
+    }, 100)
+
+    setIsEditorOpen(false)
+  }
+
+  const handleDeleteImage = () => {
+      if(!confirm("Are you sure you want to remove this image?")) return;
+      setNewImageUrl('https://placehold.co/1x1/transparent/png') 
+      // User must click save after this.
+  }
 
   return (
     <div className="flex h-[calc(100vh-3.5rem)] flex-col relative">
