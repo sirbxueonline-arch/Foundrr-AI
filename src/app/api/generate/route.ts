@@ -23,7 +23,7 @@ export async function POST(request: Request) {
               cookiesToSet.forEach(({ name, value, options }) =>
                 cookieStore.set(name, value, options)
               )
-            } catch {}
+            } catch { }
           },
         },
       }
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
 
     // 🎨 STYLE CONFIGURATIONS
     const styleConfigs: Record<string, string> = {
-        minimal: `
+      minimal: `
             - Primary: Zinc 900 (#18181b), Secondary: Zinc 100 (#f4f4f5)
             - Background: White (#ffffff)
             - Font: 'Inter', sans-serif
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
             - Border Radius: rounded-none or rounded-sm
             - Buttons: Black background, white text, no rounded corners.
         `,
-        vibrant: `
+      vibrant: `
             - Primary: Indigo 600 (#4f46e5), Secondary: Purple 500 (#a855f7)
             - Background: White with subtle mesh gradients.
             - Font: 'Outfit', sans-serif
@@ -63,7 +63,7 @@ export async function POST(request: Request) {
             - Border Radius: rounded-2xl
             - Buttons: Gradient background (bg-gradient-to-r), rounded-full, heavy shadows.
         `,
-        corporate: `
+      corporate: `
             - Primary: Slate 800 (#1e293b), Secondary: Blue 600 (#2563eb)
             - Background: Slate 50 (#f8fafc)
             - Font: 'Roboto', sans-serif
@@ -71,7 +71,7 @@ export async function POST(request: Request) {
             - Border Radius: rounded-md
             - Buttons: Solid blue, slight shadow, rounded-md.
         `,
-        dark: `
+      dark: `
             - Primary: Emerald 400 (#34d399) or key accent color, Secondary: Zinc 800 (#27272a)
             - Background: Zinc 950 (#09090b)
             - Font: 'Inter', sans-serif
@@ -139,7 +139,7 @@ Return ONLY the raw HTML code. Do not wrap in markdown code blocks.
     while (attempts < maxAttempts) {
       attempts++
       console.log(`Generation Attempt ${attempts} (Style: ${style})...`)
-      
+
       const completion = await openai.chat.completions.create({
         model: 'gpt-4o',
         messages: [
@@ -158,46 +158,46 @@ Return ONLY the raw HTML code. Do not wrap in markdown code blocks.
       const hasStyle = html.toLowerCase().includes('<style')
 
       if (hasDoctype && (hasStyle || hasTailwind)) {
-         // 🖼️ PROCESS IMAGES (Server-side Unsplash Interception)
-         try {
-             // ... image processing code ...
-             const regex = /UNSPLASH_IMG:([a-zA-Z0-9\-\s]+)/g;
-             const matches = [...html.matchAll(regex)];
-             const uniqueKeywords = [...new Set(matches.map(m => m[1]))];
+        // 🖼️ PROCESS IMAGES (Server-side Unsplash Interception)
+        try {
+          // ... image processing code ...
+          const regex = /UNSPLASH_IMG:([a-zA-Z0-9\-\s]+)/g;
+          const matches = [...html.matchAll(regex)];
+          const uniqueKeywords = [...new Set(matches.map(m => m[1]))];
 
-             if (uniqueKeywords.length > 0) {
-                 console.log('Fetching Unsplash images for:', uniqueKeywords);
-                 
-                 const imageMap = new Map();
-                 await Promise.all(uniqueKeywords.map(async (keyword) => {
-                     try {
-                          // Add "minimal", "dark" etc to query based on style to match vibe
-                         const query = `${keyword} ${style === 'minimal' ? 'minimal' : style === 'dark' ? 'dark' : ''}`.trim();
-                         const unsplashRes = await fetch(`https://api.unsplash.com/photos/random?query=${encodeURIComponent(query)}&orientation=landscape&client_id=${process.env.UNSPLASH_ACCESS_KEY}`);
-                         if (unsplashRes.ok) {
-                             const data = await unsplashRes.json();
-                             const imageUrl = data.urls?.regular || data.urls?.small; // Prefer regular
-                             if (imageUrl) imageMap.set(keyword, imageUrl);
-                         } else {
-                            console.warn(`Unsplash Error for ${keyword}:`, unsplashRes.status);
-                         }
-                     } catch (e) {
-                         console.error(`Failed to fetch image for ${keyword}`, e);
-                     }
-                 }));
+          if (uniqueKeywords.length > 0) {
+            console.log('Fetching Unsplash images for:', uniqueKeywords);
 
-                 // Replace placeholders
-                 html = html.replace(regex, (match, keyword) => {
-                     return imageMap.get(keyword) || `https://loremflickr.com/1600/900/${keyword}`; // Fallback if API fails/limits
-                 });
-             }
-         } catch (e) {
-             console.error('Image processing failed:', e);
-             // If processing fails, regex replace with loremflickr fallback
-             html = html.replace(/UNSPLASH_IMG:([a-zA-Z0-9\-\s]+)/g, 'https://loremflickr.com/1600/900/$1');
-         }
+            const imageMap = new Map();
+            await Promise.all(uniqueKeywords.map(async (keyword) => {
+              try {
+                // Add "minimal", "dark" etc to query based on style to match vibe
+                const query = `${keyword} ${style === 'minimal' ? 'minimal' : style === 'dark' ? 'dark' : ''}`.trim();
+                const unsplashRes = await fetch(`https://api.unsplash.com/photos/random?query=${encodeURIComponent(query)}&orientation=landscape&client_id=${process.env.UNSPLASH_ACCESS_KEY}`);
+                if (unsplashRes.ok) {
+                  const data = await unsplashRes.json();
+                  const imageUrl = data.urls?.regular || data.urls?.small; // Prefer regular
+                  if (imageUrl) imageMap.set(keyword, imageUrl);
+                } else {
+                  console.warn(`Unsplash Error for ${keyword}:`, unsplashRes.status);
+                }
+              } catch (e) {
+                console.error(`Failed to fetch image for ${keyword}`, e);
+              }
+            }));
 
-         break // Valid output, exit loop
+            // Replace placeholders
+            html = html.replace(regex, (match, keyword) => {
+              return imageMap.get(keyword) || `https://loremflickr.com/1600/900/${keyword}`; // Fallback if API fails/limits
+            });
+          }
+        } catch (e) {
+          console.error('Image processing failed:', e);
+          // If processing fails, regex replace with loremflickr fallback
+          html = html.replace(/UNSPLASH_IMG:([a-zA-Z0-9\-\s]+)/g, 'https://loremflickr.com/1600/900/$1');
+        }
+
+        break // Valid output, exit loop
       } else if (attempts < maxAttempts) {
         console.warn(`Attempt ${attempts} failed validation (Missing DOCTYPE or Tailwind/Style). Retrying...`)
       }
@@ -211,7 +211,7 @@ Return ONLY the raw HTML code. Do not wrap in markdown code blocks.
 
     // Auto-fix viewport if missing (common AI error)
     if (!html.includes('<meta name="viewport"')) {
-        html = html.replace('<head>', '<head><meta name="viewport" content="width=device-width, initial-scale=1.0">')
+      html = html.replace('<head>', '<head><meta name="viewport" content="width=device-width, initial-scale=1.0">')
     }
 
     const siteId = Math.random().toString(36).substring(2, 9)
@@ -231,6 +231,7 @@ Return ONLY the raw HTML code. Do not wrap in markdown code blocks.
       user_id: user.id,
       html_path: fileName,
       paid: false,
+      name: 'Untitled Project',
       created_at: new Date().toISOString(),
     })
 

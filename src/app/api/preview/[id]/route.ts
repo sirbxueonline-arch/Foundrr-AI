@@ -6,7 +6,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
   // Extract ID from URL since context params might not work well in route.ts depending on folder structure
   // Actually in App Router, params are passed as 2nd arg.
   // Folder: src/app/api/preview/[id]/route.ts
-  
+
   const { id } = await context.params
 
   const cookieStore = await cookies()
@@ -17,10 +17,10 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
       cookies: {
         getAll() { return cookieStore.getAll() },
         setAll(cookiesToSet) {
-             try {
-                cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options))
-             } catch {}
-          },
+          try {
+            cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options))
+          } catch { }
+        },
       },
     }
   )
@@ -28,7 +28,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
   // 1. Get record to find path
   const { data: site, error } = await supabase
     .from('websites')
-    .select('html_path')
+    .select('html_path, user_id')
     .eq('id', id)
     .single()
 
@@ -36,12 +36,29 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
     return new NextResponse('Site not found', { status: 404 })
   }
 
+  // Determine file to serve
+  const url = new URL(request.url)
+  const requestedFile = url.searchParams.get('file') || 'index.html'
+
+  // Security: Prevent directory traversal
+  if (requestedFile.includes('/') || requestedFile.includes('..')) {
+    return new NextResponse('Invalid file path', { status: 400 })
+  }
+
+  // Construct path. Assuming standard structure: user_id/site_id/filename
+  // OR derive from html_path which is likely user_id/site_id/index.html
+  const pathParts = site.html_path.split('/')
+  const directory = pathParts.slice(0, -1).join('/')
+  const filePath = `${directory}/${requestedFile}`
+
   // 2. Download HTML
   const { data: fileData, error: downloadError } = await supabase.storage
     .from('websites')
-    .download(site.html_path)
+    .download(filePath)
 
   if (downloadError || !fileData) {
+    // If specific file not found (e.g. initial load of a new route that doesn't exist yet but was linked),
+    // we might want to return 404.
     return new NextResponse('Content not found', { status: 404 })
   }
 
@@ -66,26 +83,26 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
   // Middleware handles basic auth protection if I configured it for `/website/`.
   // Let's check middleware.ts. I only protected `/pay` and `/dashboard` (conceptually).
   // I should check if user is logged in and owns the site in `page.tsx` or here.
-  
+
   // Actually, for the Preview API, if `page.tsx` (the shell) does the check, the iframe content might still be accessible if guessed?
   // Secure approach: Check ownership here too.
-  
+
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
-     // If not logged in, maybe allow if it's just a raw preview? 
-     // But "Users can access only their own sites" is strong language.
-     // I'll return 401.
-     return new NextResponse('Unauthorized', { status: 401 })
+    // If not logged in, maybe allow if it's just a raw preview? 
+    // But "Users can access only their own sites" is strong language.
+    // I'll return 401.
+    return new NextResponse('Unauthorized', { status: 401 })
   }
-  
+
   const { data: ownership } = await supabase
     .from('websites')
     .select('user_id')
     .eq('id', id)
     .single()
-    
+
   if (ownership?.user_id !== user.id) {
-     return new NextResponse('Forbidden', { status: 403 })
+    return new NextResponse('Forbidden', { status: 403 })
   }
 
   // 4. INJECT EDITOR SCRIPT (For interactive editing)
@@ -93,8 +110,21 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
   const editorScript = `
     <script>
       document.addEventListener('DOMContentLoaded', () => {
+        // Intercept Links
         document.body.addEventListener('click', (e) => {
-          if (e.target.tagName === 'IMG') {
+            const link = e.target.closest('a');
+            if (link && link.getAttribute('href')?.endsWith('.html')) {
+                e.preventDefault();
+                e.stopPropagation();
+                const href = link.getAttribute('href');
+                window.parent.postMessage({
+                    type: 'NAVIGATION',
+                    path: href
+                }, '*');
+                return;
+            }
+
+            if (e.target.tagName === 'IMG') {
             e.preventDefault();
             e.stopPropagation();
             // Send message to parent (PreviewWrapper)
@@ -102,10 +132,6 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
               type: 'IMAGE_SELECTED',
               src: e.target.src,
               id: e.target.id || 'img-' + Math.random().toString(36).substr(2, 9),
-              // We need a way to identify this image specifically for replacement.
-              // Since we don't have stable IDs, we might need to add them or use index?
-              // Let's rely on the parent to handle the replacement logic or send back a selector.
-              // For now, let's just send the src.
             }, '*');
             
             // Highlight the image temporarily
@@ -138,7 +164,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
   const htmlWithScript = htmlContent.replace('</body>', `${editorScript}</body>`);
 
   return new NextResponse(htmlWithScript, {
-    headers: { 
+    headers: {
       'Content-Type': 'text/html',
       'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
       'Pragma': 'no-cache',

@@ -7,7 +7,9 @@ import { cn } from '@/lib/utils'
 
 interface FoundryAgentProps {
   siteId: string
-  onUpdate: () => void
+  activeFile: string
+  onUpdate: (filename?: string) => void
+  onNavigate?: (filename: string) => void
   className?: string
 }
 
@@ -16,11 +18,11 @@ interface Message {
   content: string
 }
 
-export function FoundryAgent({ siteId, onUpdate, className }: FoundryAgentProps) {
+export function FoundryAgent({ siteId, activeFile, onUpdate, onNavigate, className }: FoundryAgentProps) {
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: "Hi! I'm foundrr. I can help edit your website. Try saying 'Make the headline bigger' or 'Change the background to blue'." }
+    { role: 'assistant', content: "Hi! I'm Fondy. I can help edit your website or create new pages. Try saying 'Create an About page'." }
   ])
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -40,8 +42,8 @@ export function FoundryAgent({ siteId, onUpdate, className }: FoundryAgentProps)
     setIsLoading(true)
 
     try {
-      // 1. Fetch current HTML
-      const htmlRes = await fetch(`/api/preview/${siteId}`)
+      // 1. Fetch current HTML from ACTIVE file
+      const htmlRes = await fetch(`/api/preview/${siteId}?file=${activeFile}`)
       const currentHtml = await htmlRes.text()
 
       // 2. Send to Edit API
@@ -61,10 +63,15 @@ export function FoundryAgent({ siteId, onUpdate, className }: FoundryAgentProps)
       }
 
       const data = await res.json()
-      
+
       // 3. Update Success
-      setMessages(prev => [...prev, { role: 'assistant', content: "Done! I've updated the website for you." }])
-      onUpdate() // Trigger iframe reload
+      if (data.action === 'create') {
+        setMessages(prev => [...prev, { role: 'assistant', content: `I've created **${data.filename}**. Switching to it now...` }])
+        onUpdate(data.filename) // Switch to new file
+      } else {
+        setMessages(prev => [...prev, { role: 'assistant', content: "Done! I've updated the website." }])
+        onUpdate(data.filename) // Refresh current
+      }
 
     } catch (error: any) {
       console.error(error)
@@ -83,7 +90,7 @@ export function FoundryAgent({ siteId, onUpdate, className }: FoundryAgentProps)
             <Bot className="h-5 w-5" />
           </div>
           <div>
-            <h3 className="font-semibold">foundrr AI</h3>
+            <h3 className="font-semibold">Fondy</h3>
             <p className="text-xs text-muted-foreground">Interactive Editor</p>
           </div>
         </div>
@@ -102,7 +109,7 @@ export function FoundryAgent({ siteId, onUpdate, className }: FoundryAgentProps)
             )}
           >
             <span className="text-[10px] uppercase tracking-wider opacity-70 font-bold mb-1 block">
-                {msg.role === 'user' ? 'You' : 'Foundry'}
+              {msg.role === 'user' ? 'You' : 'Fondy'}
             </span>
             {msg.content}
           </div>

@@ -3,7 +3,9 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Loader2, Wand2, Sparkles } from 'lucide-react'
+import { Loader2, Wand2, Sparkles, ArrowRight } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { INSPIRATION_PROMPTS } from '@/lib/inspiration-prompts'
 
 const LOADING_STEPS = [
   "Analyzing business profile...",
@@ -25,7 +27,7 @@ export default function GeneratePage() {
     prompt: '',
     style: 'minimal' // Default style
   })
-  
+
   const [loading, setLoading] = useState(false)
   const [loadingStep, setLoadingStep] = useState(0)
 
@@ -50,53 +52,39 @@ export default function GeneratePage() {
     setFormData(prev => ({ ...prev, style }))
   }
 
+
+
+  // ... existing code ...
+
   const handleInspireMe = () => {
-    const scenarios = [
-        {
-            prompt: "A cozy portfolio for a landscape photographer based in Seattle. Use earth tones and a gallery grid layout.",
-            style: "minimal"
-        },
-        {
-            prompt: "A high-energy landing page for a new crypto wallet app called 'VaultX'. Needs to look futuristic with neon accents.",
-            style: "dark"
-        },
-        {
-            prompt: "A professional corporate site for a legal consultancy firm. Trustworthy blue colors, heavy on typography.",
-            style: "corporate"
-        },
-        {
-            prompt: "A playful, vibrant e-commerce store for handmade candles. Use bright colors and soft shapes.",
-            style: "vibrant"
-        }
-    ]
-    const random = scenarios[Math.floor(Math.random() * scenarios.length)]
+    const random = INSPIRATION_PROMPTS[Math.floor(Math.random() * INSPIRATION_PROMPTS.length)]
     setFormData(prev => ({ ...prev, ...random }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    
+
     try {
-        const res = await fetch('/api/generate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-        })
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
 
-        if (!res.ok) {
-            const error = await res.json()
-            throw new Error(error.message || 'Failed to generate website')
-        }
+      if (!res.ok) {
+        const error = await res.json()
+        throw new Error(error.message || 'Failed to generate website')
+      }
 
-        const { siteId } = await res.json()
-        
-        router.push(`/website/${siteId}`)
+      const { siteId } = await res.json()
+
+      router.push(`/website/${siteId}`)
     } catch (error) {
-        console.error('Generation failed:', error)
-        alert('Failed to generate website. Please try again.')
+      console.error('Generation failed:', error)
+      alert('Failed to generate website. Please try again.')
     } finally {
-        setLoading(false)
+      setLoading(false)
     }
   }
 
@@ -108,119 +96,136 @@ export default function GeneratePage() {
   ]
 
   return (
-    <div className="relative min-h-[calc(100vh-3.5rem)] flex items-center justify-center p-6 md:p-12 overflow-hidden bg-background">
-      {/* ... backgrounds ... */}
-      
-      <div className="w-full max-w-4xl animate-fade-in relative z-10">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/10 bg-primary/5 px-4 py-1.5 text-xs font-semibold text-primary backdrop-blur-md shadow-sm mb-6 uppercase tracking-wide">
-            <Sparkles className="w-3 h-3" />
-            {t.generate.badge}
-          </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-foreground">
+    <div className="relative min-h-[calc(100vh-3.5rem)] flex flex-col items-center justify-center p-4 overflow-hidden bg-background">
+      {/* Background Effects */}
+      <div className="absolute inset-0 -z-10 h-full w-full bg-background overflow-hidden">
+        <div className="absolute top-0 z-[0] h-screen w-screen bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.15),rgba(255,255,255,0))]" />
+        <div className="absolute top-1/4 -left-4 w-96 h-96 bg-purple-500/10 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob" />
+        <div className="absolute top-1/4 -right-4 w-96 h-96 bg-blue-500/10 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000" />
+        <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-pink-500/10 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000" />
+        <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20" />
+      </div>
+
+      <div className="w-full max-w-3xl animate-fade-in relative z-10">
+        <div className="text-center mb-6">
+          <motion.h1
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-5xl font-bold tracking-tighter mb-2 bg-clip-text text-transparent bg-gradient-to-b from-foreground via-foreground/90 to-foreground/50 pb-1"
+          >
             {t.generate.title}
-          </h1>
-          <p className="text-muted-foreground text-lg md:text-xl text-balance max-w-xl mx-auto font-medium">
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-muted-foreground text-sm md:text-base font-light text-balance max-w-lg mx-auto leading-relaxed"
+          >
             {t.generate.desc}
-          </p>
+          </motion.p>
         </div>
 
         <div className="relative">
-            {/* ... glow ... */}
-            
-            <form onSubmit={handleSubmit} className="relative border border-border/50 p-8 sm:p-10 rounded-3xl bg-card/80 backdrop-blur-xl shadow-2xl">
-            
+          <form onSubmit={handleSubmit} className="relative w-full">
+
             {loading && (
-              <div className="absolute inset-0 z-50 bg-card/95 backdrop-blur-sm rounded-3xl flex flex-col items-center justify-center p-8 space-y-6 animate-in fade-in duration-300">
-                  <div className="relative w-24 h-24">
-                    <Loader2 className="w-full h-full animate-spin text-primary opacity-20" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <Wand2 className="w-8 h-8 text-primary animate-pulse" />
-                    </div>
+              <div className="absolute inset-0 z-50 bg-background/80 backdrop-blur-md flex flex-col items-center justify-center p-8 space-y-6 animate-in fade-in duration-500 rounded-2xl">
+                <div className="relative w-16 h-16">
+                  <Loader2 className="w-full h-full animate-spin text-primary opacity-20" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Wand2 className="w-6 h-6 text-primary animate-pulse" />
                   </div>
-                  <div className="text-center space-y-2">
-                     <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-sky-500">
-                        {currentLoadingSteps[loadingStep]}
-                     </h3>
-                     <p className="text-muted-foreground text-sm">This usually takes about 30 seconds.</p>
-                  </div>
-                  <div className="w-64 h-1.5 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-primary animate-progress-indeterminate" />
-                  </div>
+                </div>
+                <div className="text-center space-y-2 max-w-sm">
+                  <h3 className="text-lg font-light tracking-tight text-foreground">
+                    {currentLoadingSteps[loadingStep]}
+                  </h3>
+                  <p className="text-muted-foreground text-xs font-light">Creating your masterpiece...</p>
+                </div>
+                <div className="w-40 h-1 bg-muted/50 rounded-full overflow-hidden">
+                  <div className="h-full bg-primary animate-progress-indeterminate" />
+                </div>
               </div>
             )}
 
-            <div className={`space-y-8 transition-opacity duration-500 ${loading ? 'opacity-20 blur-sm pointer-events-none' : 'opacity-100'}`}>
-                
-                {/* Header Actions */}
-                <div className="flex justify-end">
-                    <button 
-                        type="button"
-                        onClick={handleInspireMe}
-                        className="text-xs font-medium text-primary hover:text-primary/80 flex items-center gap-1.5 transition-colors"
+            <div className={`transition-all duration-700 ${loading ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'}`}>
+
+              {/* Header Actions */}
+              <div className="flex justify-center mb-6">
+                <button
+                  type="button"
+                  onClick={handleInspireMe}
+                  className="group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/5 hover:bg-primary/10 text-[10px] font-medium text-primary transition-all duration-300"
+                >
+                  <Sparkles className="w-3 h-3 group-hover:rotate-12 transition-transform" />
+                  {t.generate.form.inspireMe}
+                </button>
+              </div>
+
+              <div className="space-y-4 max-w-xl mx-auto">
+                {/* Prompt Box with Border Beam */}
+                <div className="group relative rounded-2xl p-[1px] overflow-hidden">
+                  {/* Animated Border Beam */}
+                  <div className="absolute inset-[-100%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#0000_0%,#0000_50%,var(--color-primary)_100%)] opacity-100 transition-opacity duration-500" />
+
+                  <div className="relative rounded-2xl bg-background backdrop-blur-xl border border-white/10">
+                    <textarea
+                      id="prompt"
+                      name="prompt"
+                      rows={2}
+                      className="w-full bg-transparent text-lg md:text-xl font-light rounded-2xl border-none px-6 py-4 placeholder:text-muted-foreground/50 focus:ring-0 resize-none transition-all duration-300 leading-relaxed text-center"
+                      placeholder={t.generate.form.promptPlaceholder}
+                      value={formData.prompt}
+                      onChange={handleChange}
+                      disabled={loading}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Style Selection */}
+              <div className="mt-8 space-y-4">
+                <div className="text-center text-[10px] font-medium text-muted-foreground/60 uppercase tracking-widest">{t.generate.form.style.title}</div>
+                <div className="flex flex-wrap justify-center gap-3">
+                  {styles.map((s) => (
+                    <button
+                      key={s.id}
+                      type="button"
+                      onClick={() => handleStyleSelect(s.id)}
+                      className={`group relative px-4 py-2 rounded-full border transition-all duration-300 ${formData.style === s.id
+                        ? 'border-primary bg-primary/5 text-primary'
+                        : 'border-border/40 hover:border-border hover:bg-muted/30 text-muted-foreground'
+                        }`}
                     >
-                        <Sparkles className="w-3.5 h-3.5" />
-                        Inspire Me
+                      <span className="relative z-10 text-xs font-medium">{s.name}</span>
+                      {formData.style === s.id && (
+                        <motion.div
+                          layoutId="activeStyle"
+                          className="absolute inset-0 rounded-full border border-primary opacity-50"
+                          transition={{ duration: 0.3 }}
+                        />
+                      )}
                     </button>
+                  ))}
                 </div>
+              </div>
 
-                <div className="space-y-2.5">
-                     <label htmlFor="prompt" className="text-sm font-semibold text-foreground ml-1">{t.generate.form.promptLabel}</label>
-                     <textarea
-                         id="prompt"
-                         name="prompt"
-                         rows={4}
-                         className="flex min-h-[140px] w-full rounded-xl border border-input bg-background/50 px-4 py-3 text-base shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring resize-none leading-relaxed"
-                         placeholder={t.generate.form.promptPlaceholder}
-                         value={formData.prompt}
-                         onChange={handleChange}
-                         disabled={loading}
-                     />
-                </div>
-
-                {/* Style Selection */}
-                <div className="space-y-3">
-                    <label className="text-sm font-semibold text-foreground ml-1">{t.generate.form.style.title}</label>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {styles.map((s) => (
-                            <button
-                                key={s.id}
-                                type="button"
-                                onClick={() => handleStyleSelect(s.id)}
-                                className={`relative group flex flex-col gap-2 p-3 rounded-xl border-2 transition-all duration-200 text-left h-full ${
-                                    formData.style === s.id 
-                                    ? 'border-primary ring-2 ring-primary/20 scale-[1.02]' 
-                                    : 'border-transparent hover:border-border/50 hover:bg-muted/50'
-                                }`}
-                            >
-                                <div className={`w-full aspect-video rounded-lg shadow-sm mb-1 ${s.color} flex items-center justify-center`}>
-                                   {formData.style === s.id && (
-                                     <div className="bg-background/20 backdrop-blur-md rounded-full p-1.5">
-                                        <Sparkles className="w-4 h-4 text-white" />
-                                     </div>
-                                   )}
-                                </div>
-                                <div>
-                                    <div className="font-semibold text-sm">{s.name}</div>
-                                    <div className="text-[10px] text-muted-foreground leading-tight">{s.desc}</div>
-                                </div>
-                            </button>
-                        ))}
-                    </div>
-                </div>
+              <div className="mt-10 flex justify-center">
+                <button
+                  type="submit"
+                  disabled={loading || !formData.prompt.trim()}
+                  className="group relative inline-flex h-12 items-center justify-center rounded-full bg-foreground px-8 text-base font-medium text-background shadow-xl transition-all hover:scale-105 hover:bg-foreground/90 disabled:opacity-50 disabled:pointer-events-none overflow-hidden"
+                >
+                  <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent z-10" />
+                  <div className="flex items-center gap-2 relative z-20">
+                    <span>{t.generate.form.submit}</span>
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </div>
+                </button>
+              </div>
             </div>
-
-            <button
-            type="submit"
-            disabled={loading}
-            className="w-full inline-flex h-14 items-center justify-center rounded-xl bg-primary px-8 text-lg font-bold text-primary-foreground shadow-lg transition-all hover:scale-[1.01] hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 mt-8"
-            >
-                <div className="flex items-center gap-2">
-                  <Wand2 className="h-5 w-5" />
-                  <span>{loading ? t.generate.form.generating : t.generate.form.submit}</span>
-                </div>
-            </button>
-            </form>
+          </form>
         </div>
       </div>
     </div>

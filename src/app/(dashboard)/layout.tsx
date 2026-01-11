@@ -17,9 +17,9 @@ export default async function DashboardLayout({
       cookies: {
         getAll() { return cookieStore.getAll() },
         setAll(cookiesToSet) {
-             try {
-                cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options))
-             } catch {}
+          try {
+            cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options))
+          } catch { }
         },
       },
     }
@@ -32,7 +32,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <DashboardShell>
+    <DashboardShell email={user.email || ''}>
       {children}
     </DashboardShell>
   )

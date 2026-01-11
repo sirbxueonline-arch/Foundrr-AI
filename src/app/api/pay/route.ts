@@ -14,7 +14,7 @@ export async function POST(request: Request) {
           setAll(cookiesToSet) {
             try {
               cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options))
-            } catch {}
+            } catch { }
           },
         },
       }
@@ -32,40 +32,19 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing site ID' }, { status: 400 })
     }
 
-    // Update paid status
-    // In a real app, we would verify a webhook or transaction ID here.
-    // For v1 Trust Based: We just trust the user clicked "I've paid".
-    
-    // Attempt to save payment_identifier
-    // Note: If the column doesn't exist, this might throw an error depending on Supabase configuration.
-    // We'll try to update it, if it fails, we fall back to just updating 'paid'.
-    
-    try {
-        const { error } = await supabase
-          .from('websites')
-          .update({ 
-            paid: true,
-            // @ts-ignore - column might not exist yet in types
-            payment_identifier: paymentIdentifier // Attempt to save the receipt/card info
-          })
-          .eq('id', siteId)
-          .eq('user_id', user.id) // Ensure they own it
-        
-        if (error) throw error
-    } catch (e) {
-        // Fallback: Just mark as paid if the above failed (likely due to missing column)
-        console.warn('Could not save payment_identifier, falling back to paid status only', e)
-        const { error: fallbackError } = await supabase
-          .from('websites')
-          .update({ paid: true })
-          .eq('id', siteId)
-          .eq('user_id', user.id)
-        
-        if (fallbackError) {
-             console.error('Payment Update Error:', fallbackError)
-             return NextResponse.json({ error: 'Failed to update status' }, { status: 500 })
-        }
-    }
+    // Update to PENDING status (Require Admin Approval)
+    const { error } = await supabase
+      .from('websites')
+      .update({
+        paid: false, // Do not unlock yet
+        payment_status: 'pending',
+        payment_method: (body.paymentMethod || 'm10'),
+        payment_identifier: paymentIdentifier
+      })
+      .eq('id', siteId)
+      .eq('user_id', user.id)
+
+    if (error) throw error
 
     return NextResponse.json({ success: true })
 
