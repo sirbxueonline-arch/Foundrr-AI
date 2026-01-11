@@ -1,3 +1,10 @@
+'use client'
+
+import { useState, useEffect, useRef } from 'react'
+import { FoundryAgent } from '@/components/FoundryAgent'
+import { Lock, Download } from 'lucide-react'
+import Link from 'next/link'
+import Image from 'next/image'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 interface PreviewWrapperProps {
