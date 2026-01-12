@@ -10,6 +10,16 @@ export async function GET(request: Request) {
 
   if (code) {
     const cookieStore = await cookies()
+
+    // Debugging: Check if keys exist
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      console.error('FATAL: Config Error. Missing Env Vars:', {
+        url: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+        key: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      })
+      return NextResponse.redirect(`${origin}/login?error=Configuration Error&error_description=Missing Environment Variables on Server`)
+    }
+
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
