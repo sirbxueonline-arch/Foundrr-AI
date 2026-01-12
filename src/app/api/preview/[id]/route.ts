@@ -110,6 +110,9 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
   const editorScript = `
     <script>
       document.addEventListener('DOMContentLoaded', () => {
+        // Analytics
+        fetch('/api/track?siteId=' + '${id}');
+
         // Intercept Links
         document.body.addEventListener('click', (e) => {
             const link = e.target.closest('a');

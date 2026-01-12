@@ -2,10 +2,11 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { FoundryAgent } from '@/components/FoundryAgent'
-import { Lock, Download } from 'lucide-react'
+import { Lock, Download, Smartphone, Tablet, Monitor, Palette, Sparkles, Rocket, Globe } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useLanguage } from '@/contexts/LanguageContext'
+import { ThemeEditor } from '@/components/ThemeEditor'
 
 interface PreviewWrapperProps {
   siteId: string
@@ -18,7 +19,12 @@ export default function PreviewWrapper({ siteId, isPaid }: PreviewWrapperProps) 
   const [selectedImage, setSelectedImage] = useState<{ src: string, id: string } | null>(null)
   const [newImageUrl, setNewImageUrl] = useState('')
   const [isEditorOpen, setIsEditorOpen] = useState(false)
+  const [isThemeEditorOpen, setIsThemeEditorOpen] = useState(false)
+  const [isApplyingTheme, setIsApplyingTheme] = useState(false)
+  const [isPublishing, setIsPublishing] = useState(false)
+  const [publicUrl, setPublicUrl] = useState('')
   const iframeRef = useRef<HTMLIFrameElement>(null)
+  const [previewMode, setPreviewMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop')
 
   // Rename features
   const [projectName, setProjectName] = useState("Untitled Project")
@@ -115,14 +121,60 @@ export default function PreviewWrapper({ siteId, isPaid }: PreviewWrapperProps) 
     setIsEditorOpen(false)
   }
 
+  // User must click save after this.
+
   const handleDeleteImage = () => {
     if (!confirm("Are you sure you want to remove this image?")) return;
     setNewImageUrl('https://placehold.co/1x1/transparent/png')
-    // User must click save after this.
+  }
+
+  const handleThemeApply = async (prompt: string) => {
+    setIsApplyingTheme(true)
+    try {
+      // 1. Fetch current HTML
+      const htmlRes = await fetch(`/api/preview/${siteId}?file=${activeFile}`)
+      const currentHtml = await htmlRes.text()
+
+      // 2. Send to Edit API
+      const res = await fetch('/api/edit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          siteId,
+          prompt,
+          currentHtml
+        })
+      })
+
+      if (!res.ok) throw new Error('Failed to update theme')
+
+      const data = await res.json()
+
+      // 3. Update
+      if (data.action === 'create') {
+        setActiveFile(data.filename)
+      } else {
+        setReloadKey(prev => prev + 1)
+      }
+      setIsThemeEditorOpen(false)
+
+    } catch (error) {
+      console.error(error)
+      alert("Failed to apply theme. Please try again.")
+    } finally {
+      setIsApplyingTheme(false)
+    }
   }
 
   return (
     <div className="flex h-[calc(100vh-3.5rem)] flex-col relative bg-muted/20">
+
+      <ThemeEditor
+        isOpen={isThemeEditorOpen}
+        onClose={() => setIsThemeEditorOpen(false)}
+        onApply={handleThemeApply}
+        isApplying={isApplyingTheme}
+      />
 
       {/* Background Pattern */}
       <div className="absolute inset-0 z-0 opacity-20 bg-[radial-gradient(#000000_1px,transparent_1px)] dark:bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]" />
@@ -141,14 +193,48 @@ export default function PreviewWrapper({ siteId, isPaid }: PreviewWrapperProps) 
               </button>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{t?.preview?.imageUrl || "Image URL"}</label>
-              <input
-                className="w-full bg-secondary/50 border-0 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 transition-all font-mono"
-                value={newImageUrl}
-                onChange={(e) => setNewImageUrl(e.target.value)}
-                placeholder="https://..."
-              />
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{t?.preview?.imageUrl || "Image URL"}</label>
+                <input
+                  className="w-full bg-secondary/50 border-0 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 transition-all font-mono"
+                  value={newImageUrl}
+                  onChange={(e) => setNewImageUrl(e.target.value)}
+                  placeholder="https://..."
+                />
+              </div>
+
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-muted" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">Or AI Generate</span>
+                </div>
+              </div>
+
+              <button
+                onClick={async () => {
+                  const prompt = window.prompt("Enter image description:");
+                  if (!prompt) return;
+
+                  try {
+                    // Optimistic UI could go here
+                    const res = await fetch('/api/generate-image', {
+                      method: 'POST',
+                      body: JSON.stringify({ prompt })
+                    });
+                    if (!res.ok) throw new Error("Failed");
+                    const data = await res.json();
+                    if (data.url) setNewImageUrl(data.url);
+                  } catch (e) {
+                    alert("Generation failed");
+                  }
+                }}
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-medium shadow-md hover:opacity-90 transition-all flex items-center justify-center gap-2"
+              >
+                <Sparkles className="w-4 h-4" /> Generate with DALL-E 3
+              </button>
             </div>
 
             <div className="flex gap-3 pt-2">
@@ -204,6 +290,83 @@ export default function PreviewWrapper({ siteId, isPaid }: PreviewWrapperProps) 
         </div>
 
         <div className="pointer-events-auto flex items-center gap-3">
+          {/* Responsive Toggle */}
+          <div className="flex items-center gap-1 bg-background/80 backdrop-blur-md border border-border/40 rounded-full p-1 shadow-sm mr-2">
+            <button
+              onClick={() => setPreviewMode('mobile')}
+              className={`p-2 rounded-full transition-all ${previewMode === 'mobile' ? 'bg-primary text-primary-foreground shadow-sm' : 'hover:bg-muted text-muted-foreground'}`}
+              title="Mobile"
+            >
+              <Smartphone className="h-4 w-4" />
+            </button>
+            <button
+              onClick={() => setPreviewMode('tablet')}
+              className={`p-2 rounded-full transition-all ${previewMode === 'tablet' ? 'bg-primary text-primary-foreground shadow-sm' : 'hover:bg-muted text-muted-foreground'}`}
+              title="Tablet"
+            >
+              <Tablet className="h-4 w-4" />
+            </button>
+            <button
+              onClick={() => setPreviewMode('desktop')}
+              className={`p-2 rounded-full transition-all ${previewMode === 'desktop' ? 'bg-primary text-primary-foreground shadow-sm' : 'hover:bg-muted text-muted-foreground'}`}
+              title="Desktop"
+            >
+              <Monitor className="h-4 w-4" />
+            </button>
+          </div>
+
+          <button
+            onClick={() => setIsThemeEditorOpen(true)}
+            className={`p-2 rounded-full bg-background/80 backdrop-blur-md border border-border/40 shadow-sm transition-all hover:bg-muted mr-3 ${isThemeEditorOpen ? 'ring-2 ring-primary' : ''}`}
+            title="Theme Editor"
+          >
+            <Palette className="h-4 w-4 text-pink-500" />
+          </button>
+
+          <button
+            onClick={async () => {
+              if (publicUrl) {
+                window.open(publicUrl, '_blank');
+                return;
+              }
+
+              // Custom Slug Prompt
+              const slug = window.prompt("Choose a unique name for your site (e.g. my-startup):");
+              if (!slug) return;
+
+              setIsPublishing(true);
+              try {
+                const res = await fetch('/api/publish', {
+                  method: 'POST',
+                  body: JSON.stringify({ siteId, publish: true, slug })
+                });
+
+                if (res.status === 409) {
+                  alert("That name is already taken. Please try another.");
+                  return;
+                }
+
+                if (res.ok) {
+                  const url = `${window.location.origin}/site/${slug}`;
+                  setPublicUrl(url);
+                  alert(`🚀 Published! URL: ${url}`);
+                } else {
+                  throw new Error("Failed");
+                }
+              } catch (e) {
+                alert("Failed to publish. Name might be taken or invalid.");
+              } finally {
+                setIsPublishing(false);
+              }
+            }}
+            className={`p-2 rounded-full bg-background/80 backdrop-blur-md border border-border/40 shadow-sm transition-all hover:bg-muted mr-3 ${publicUrl ? 'ring-2 ring-emerald-500 bg-emerald-100' : ''}`}
+            title={publicUrl ? "View Live Site" : "One-Click Publish"}
+          >
+            {isPublishing ? <span className="text-xs animate-pulse">...</span> :
+              publicUrl ? <Globe className="h-4 w-4 text-emerald-600" /> : <Rocket className="h-4 w-4 text-indigo-600" />
+            }
+          </button>
+
           {!isPaid ? (
             <>
               <div className="flex items-center gap-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 px-4 py-2 text-xs font-semibold text-amber-600 dark:text-amber-400 backdrop-blur-md">
@@ -241,15 +404,23 @@ export default function PreviewWrapper({ siteId, isPaid }: PreviewWrapperProps) 
       <div className="flex flex-1 overflow-hidden px-4 pb-4 gap-4 relative z-10">
 
         {/* Iframe Container - Floating Card */}
-        <div className="flex-1 relative bg-background rounded-2xl shadow-2xl border border-border/40 overflow-hidden ring-1 ring-black/5 dark:ring-white/5">
-          <iframe
-            ref={iframeRef}
-            key={`${reloadKey}-${activeFile}`}
-            src={`/api/preview/${siteId}?t=${reloadKey}&file=${activeFile}`}
-            className="h-[133.33%] w-[133.33%] border-0 bg-white origin-top-left scale-[0.75]"
-            title="Website Preview"
-            sandbox="allow-same-origin allow-scripts allow-modals"
-          />
+        <div className="flex-1 flex items-center justify-center overflow-auto bg-transparent">
+          <div
+            className={`relative bg-background rounded-2xl shadow-2xl border border-border/40 overflow-hidden ring-1 ring-black/5 dark:ring-white/5 transition-all duration-500 ease-in-out ${previewMode === 'mobile' ? 'w-[375px] h-[812px]' :
+              previewMode === 'tablet' ? 'w-[768px] h-[1024px] scale-[0.8] origin-center' :
+                'w-full h-full'
+              }`}
+          >
+            <iframe
+              ref={iframeRef}
+              key={`${reloadKey}-${activeFile}`}
+              src={`/api/preview/${siteId}?t=${reloadKey}&file=${activeFile}`}
+              className={`border-0 bg-white origin-top-left transition-all duration-300 ${previewMode === 'desktop' ? 'w-[133.33%] h-[133.33%] scale-[0.75]' : 'w-full h-full'
+                }`}
+              title="Website Preview"
+              sandbox="allow-same-origin allow-scripts allow-modals"
+            />
+          </div>
         </div>
 
         {/* AI Sidebar - Integrated Panel */}

@@ -2,7 +2,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Bot, Send, Sparkles } from 'lucide-react'
+import { Bot, Send, Sparkles, Mic, MicOff } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface FoundryAgentProps {
@@ -81,6 +81,39 @@ export function FoundryAgent({ siteId, activeFile, onUpdate, onNavigate, classNa
     }
   }
 
+  /* Voice Control Logic */
+  const [isListening, setIsListening] = useState(false)
+  const recognitionRef = useRef<any>(null)
+
+  const toggleListening = () => {
+    if (isListening) {
+      recognitionRef.current?.stop()
+      setIsListening(false)
+      return
+    }
+
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+    if (!SpeechRecognition) {
+      alert("Browser does not support Speech Recognition")
+      return
+    }
+
+    const recognition = new SpeechRecognition()
+    recognition.continuous = false
+    recognition.interimResults = false
+    recognition.lang = 'en-US'
+
+    recognition.onstart = () => setIsListening(true)
+    recognition.onend = () => setIsListening(false)
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript
+      setInput(prev => prev + (prev ? ' ' : '') + transcript)
+    }
+
+    recognitionRef.current = recognition
+    recognition.start()
+  }
+
   return (
     <div className={cn("flex flex-col border-l bg-background shadow-xl z-20 h-full overflow-hidden", className)}>
       {/* Header */}
@@ -94,6 +127,19 @@ export function FoundryAgent({ siteId, activeFile, onUpdate, onNavigate, classNa
             <p className="text-xs text-muted-foreground">Interactive Editor</p>
           </div>
         </div>
+        <button
+          onClick={() => {
+            const keywords = prompt("Enter target SEO keywords:");
+            if (keywords) {
+              setInput(`Optimize the page for SEO targeting: ${keywords}. Rewrite meta tags and headers.`);
+            }
+          }}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-yellow-500/10 text-yellow-600 hover:bg-yellow-500/20 text-[10px] font-medium transition-colors"
+          title="Optimize SEO"
+        >
+          <Sparkles className="w-3 h-3" />
+          SEO
+        </button>
       </div>
 
       {/* Messages */}
@@ -125,11 +171,24 @@ export function FoundryAgent({ siteId, activeFile, onUpdate, onNavigate, classNa
       {/* Input */}
       <div className="p-4 border-t bg-background shrink-0">
         <form onSubmit={handleSubmit} className="relative flex items-center">
+
+          <button
+            type="button"
+            onClick={toggleListening}
+            className={cn(
+              "absolute left-2 z-10 p-2 rounded-full transition-all",
+              isListening ? "bg-red-500 text-white animate-pulse" : "text-muted-foreground hover:bg-muted"
+            )}
+            title="Voice Control"
+          >
+            {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+          </button>
+
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Describe a change..."
-            className="w-full rounded-full border bg-muted/50 px-4 py-3 pr-12 text-sm outline-none focus:border-primary focus:bg-background transition-colors"
+            placeholder={isListening ? "Listening..." : "Describe a change..."}
+            className="w-full rounded-full border bg-muted/50 px-4 py-3 pl-10 pr-12 text-sm outline-none focus:border-primary focus:bg-background transition-colors"
             disabled={isLoading}
           />
           <button

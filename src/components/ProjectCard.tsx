@@ -18,6 +18,7 @@ interface Site {
   created_at: string
   paid: boolean
   name?: string
+  views?: number
 }
 
 export function ProjectCard({ site }: { site: Site }) {
@@ -103,6 +104,10 @@ export function ProjectCard({ site }: { site: Site }) {
               month: 'short',
               day: 'numeric'
             })}
+            <div className="ml-auto flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-eye mr-1 h-3 w-3"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></svg>
+              {site.views || 0}
+            </div>
           </div>
         </div>
 

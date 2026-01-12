@@ -93,6 +93,9 @@ export default function GeneratePage() {
     { id: 'vibrant', name: t.generate.form.style.vibrant, desc: t.generate.form.style.vibrantDesc, color: 'bg-gradient-to-br from-indigo-500 to-purple-600 text-white' },
     { id: 'corporate', name: t.generate.form.style.corporate, desc: t.generate.form.style.corporateDesc, color: 'bg-slate-800 text-white' },
     { id: 'dark', name: t.generate.form.style.dark, desc: t.generate.form.style.darkDesc, color: 'bg-black border-zinc-800 text-white' },
+    { id: 'retro', name: t.generate.form.style.retro, desc: t.generate.form.style.retroDesc, color: 'bg-[#fef3c7] border-black border-2 text-black' },
+    { id: 'cyberpunk', name: t.generate.form.style.cyberpunk, desc: t.generate.form.style.cyberpunkDesc, color: 'bg-black border-yellow-400 text-yellow-400' },
+    { id: 'luxury', name: t.generate.form.style.luxury, desc: t.generate.form.style.luxuryDesc, color: 'bg-[#1c1917] border-[#d4af37] text-[#d4af37]' },
   ]
 
   return (

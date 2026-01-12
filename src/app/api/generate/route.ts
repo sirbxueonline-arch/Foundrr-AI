@@ -79,15 +79,41 @@ export async function POST(request: Request) {
             - Border Radius: rounded-xl
             - Buttons: Outline or neon glow, glassmorphism.
             - TEXT MUST BE WHITE/LIGHT GRAY.
+        `,
+      retro: `
+            - Primary: Hot Pink (#be185d), Secondary: Yellow (#facc15)
+            - Background: Beige (#fef3c7) or Patterned
+            - Font: 'Press Start 2P' (Google Font), 'VT323', or 'Courier Prime'
+            - Vibe: 90s, arcade, pixel art, nostalgic, brutalist.
+            - Border Radius: rounded-none, heavy black borders (border-2 border-black)
+            - Buttons: 3D playful look, shadow-offset.
+        `,
+      cyberpunk: `
+            - Primary: Neon Yellow (#facc15), Secondary: Cyan (#06b6d4)
+            - Background: Black (#000000) or very dark blue
+            - Font: 'Orbitron', 'Rajdhani', or 'Share Tech Mono'
+            - Vibe: Futuristic, glitch, high-tech, dystopian.
+            - Border Radius: rounded-none, angled edges (clip-path).
+            - Buttons: Glitch effects, holograms, neon borders.
+        `,
+      luxury: `
+            - Primary: Gold (#d4af37) or Bronze (#cd7f32), Secondary: Charcoal (#333333)
+            - Background: Cream (#fdfbf7) or rich dark brown.
+            - Font: 'Playfair Display' (Headings), 'Lato' (Body)
+            - Vibe: Elegant, expensive, serif, sophisticated, timeless.
+            - Border Radius: rounded-sm or rounded-none.
+            - Buttons: Thin borders, uppercase tracking-widest, minimal.
         `
     }
 
     const selectedStyleConfig = styleConfigs[style] || styleConfigs.minimal
 
-    // 🔒 SYSTEM PROMPT (VERSION 4.2 - SINGLE PROMPT)
+    // 🔒 SYSTEM PROMPT (VERSION 4.3 - LONG PAGE + NO SEO)
     const systemPrompt = `
 You are an expert AI Frontend Engineer specializing in **Awwwards-winning, high-conversion landing pages**.
 Your goal is to generate a SINGLE html file containing a complete, production-ready website based on the user's description.
+
+⚠️ CRITICAL: YOU MUST WRITE THE FULL HTML CODE. DO NOT LEAVE COMMENTS LIKE "<!-- Rest of content -->". GENERATE ALL SECTIONS WITH REALISTIC COPY.
 
 ⚠️ CRITICAL TECH STACK REQUIREMENTS:
 1.  **Framework**: NONE. Use vanilla HTML5.
@@ -110,6 +136,11 @@ ${selectedStyleConfig}
 4.  **Grid Systems**: Use \`grid-cols-1 md:grid-cols-2 lg:grid-cols-3\` for feature/card/bento grids.
 5.  **Whitespace**: Use negative space generously. Don't crowd elements.
 
+⚠️ CONTENT RULES (NO SEO / FULL PAGE):
+1.  **NO SEO METADATA**: Do not waste tokens on meta description, keywords, or og:tags. Focus 100% on VISIBLE content.
+2.  **LONG SCROLLING PAGE**: The page MUST have at least 7 distinct sections (Hero, Logos, Features, How it Works, Testimonials, Pricing/FAQ, CTA, Footer).
+3.  **ANTI-LAZINESS**: Do not summarize sections. Write out every single feature, testimonial, and paragraph.
+
 🧩 RICH COMPONENT LIBRARY (MANDATORY):
 1.  **Navbar**: Sticky, glassmorphism (\`backdrop-blur-md\`). specific Logo + Links + CTA Button.
 2.  **Hero**: Headline + Subheadline + Two Buttons (Primary & Secondary) + Hero Image/Graphic.
@@ -122,6 +153,7 @@ ${selectedStyleConfig}
 ✍️ COPYWRITING:
 - **Hero**: Value Proposition Formula.
 - **Tone**: Match the '${style}' vibe.
+- **Content**: WRITE REALISTIC MARKETING COPY. DO NOT USE LOREM IPSUM.
 
 ✨ ANIMATIONS:
 - Add \`aos\` library via CDN or simple IntersectionObserver script for "fade-up" animations on scroll.
@@ -146,7 +178,8 @@ Return ONLY the raw HTML code. Do not wrap in markdown code blocks.
           { role: 'system', content: systemPrompt },
           { role: 'user', content: prompt },
         ],
-        temperature: 0.3, // Slightly higher for creativity within constraints
+        temperature: 0.4,
+        max_tokens: 12000, // Increased for full page generation
       })
 
       html = completion.choices[0].message.content || ''
