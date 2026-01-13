@@ -2,6 +2,7 @@ import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import LandingContent from '@/components/landing/LandingContent'
 import { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 
 export const metadata: Metadata = {
   title: 'foundrr | AI Website Builder',
@@ -26,6 +27,10 @@ export default async function Home() {
   )
 
   const { data: { user } } = await supabase.auth.getUser()
+  
+  if (user) {
+    redirect('/generate')
+  }
   
   // Note: We are passing the user object to the client component.
   return <LandingContent user={user} />
