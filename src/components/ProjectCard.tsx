@@ -72,11 +72,16 @@ export function ProjectCard({ site }: { site: Site }) {
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
-             <div className="flex flex-col items-center justify-center text-muted-foreground/50 gap-2">
+             <div className="flex flex-col items-center justify-center text-muted-foreground/50 gap-2 text-center p-4">
                 <div className="w-12 h-12 rounded-full bg-muted/50 flex items-center justify-center">
                    <Monitor className="w-6 h-6" />
                 </div>
-                <span className="text-[10px] font-medium uppercase tracking-widest">No Preview</span>
+                <span className="text-[10px] font-medium uppercase tracking-widest">
+                  Preview Not Ready
+                </span>
+                <span className="text-[9px] text-muted-foreground">
+                  Open & Save to Generate
+                </span>
              </div>
           )}
 
