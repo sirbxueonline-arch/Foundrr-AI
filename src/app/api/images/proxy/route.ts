@@ -11,20 +11,22 @@ export async function GET(request: Request) {
   }
 
   try {
-    const res = await fetch(`https://api.unsplash.com/photos/random?query=${encodeURIComponent(query)}&orientation=landscape&client_id=${process.env.UNSPLASH_ACCESS_KEY}`)
-    
-    if (res.ok) {
-      const data = await res.json()
-      const imageUrl = data.urls?.regular || data.urls?.small
-      if (imageUrl) {
-        return NextResponse.redirect(imageUrl)
+    // 1. Try Pexels (High Quality, needs PEXELS_API_KEY)
+    if (process.env.PEXELS_API_KEY) {
+      const pexelsRes = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1`, {
+        headers: { Authorization: process.env.PEXELS_API_KEY }
+      })
+      if (pexelsRes.ok) {
+        const data = await pexelsRes.json()
+        const imageUrl = data.photos?.[0]?.src?.large
+        if (imageUrl) return NextResponse.redirect(imageUrl)
       }
     }
   } catch (error) {
-    console.error('Unsplash Proxy Error:', error)
+    console.error('Image Proxy Error:', error)
   }
 
-  // Fallback to robust placeholder if Unsplash fails
-  const fallbackText = query || 'Image'
-  return NextResponse.redirect(`https://placehold.co/800x600/1e1e1e/FFF.png?text=${encodeURIComponent(fallbackText)}`)
+  // Fallback to LoremFlickr for fast, relevant stock photos (User requested no AI generation)
+  const fallbackText = query || 'work'
+  return NextResponse.redirect(`https://loremflickr.com/800/600/${encodeURIComponent(fallbackText)}?lock=${Math.floor(Math.random() * 100)}`)
 }

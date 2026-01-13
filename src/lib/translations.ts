@@ -7,6 +7,7 @@ export const translations = {
       dashboard: "İdarə Paneli",
       myWebsites: "Veb saytlarım",
       generateNew: "Yeni Yarat",
+      pricing: "Qiymətlər",
       billing: "Ödənişlər",
       account: "Hesab",
       logout: "Çıxış"
@@ -176,6 +177,7 @@ export const translations = {
       dashboard: "Dashboard",
       myWebsites: "My Websites",
       generateNew: "Generate New",
+      pricing: "Pricing",
       billing: "Billing & Plans",
       account: "Account",
       logout: "Log out"

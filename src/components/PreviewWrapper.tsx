@@ -28,6 +28,36 @@ export default function PreviewWrapper({ siteId, isPaid }: PreviewWrapperProps) 
   const [isEditingName, setIsEditingName] = useState(false)
   const [tempName, setTempName] = useState("")
 
+
+  // Image Gen Features
+  const [imagePrompt, setImagePrompt] = useState("")
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false)
+
+  const handleGenerateImage = async () => {
+    if (!imagePrompt.trim()) return;
+
+    setIsGeneratingImage(true);
+    try {
+      const res = await fetch('/api/generate-image', {
+        method: 'POST',
+        body: JSON.stringify({ prompt: imagePrompt })
+      });
+
+      if (!res.ok) throw new Error("Failed");
+
+      const data = await res.json();
+      if (data.url) {
+        setNewImageUrl(data.url);
+        setImagePrompt(""); // Clear after success
+      }
+    } catch (e) {
+      console.error(e)
+      alert("Generation failed. Please try again.");
+    } finally {
+      setIsGeneratingImage(false);
+    }
+  }
+
   // Multi-page features
   const [activeFile, setActiveFile] = useState("index.html")
 
@@ -158,37 +188,30 @@ export default function PreviewWrapper({ siteId, isPaid }: PreviewWrapperProps) 
                 />
               </div>
 
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-muted" />
+              <div className="space-y-2 pt-4 border-t border-border/50">
+                <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">AI Generation</label>
+                <div className="flex gap-2">
+                  <input
+                    className="flex-1 bg-secondary/50 border-0 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 transition-all"
+                    placeholder="Describe your image..."
+                    value={imagePrompt}
+                    onChange={(e) => setImagePrompt(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !isGeneratingImage) {
+                        handleGenerateImage();
+                      }
+                    }}
+                  />
+                  <button
+                    onClick={handleGenerateImage}
+                    disabled={isGeneratingImage || !imagePrompt.trim()}
+                    className="px-4 rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-medium shadow-md hover:opacity-90 transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isGeneratingImage ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Sparkles className="w-5 h-5" />}
+                  </button>
                 </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">Or AI Generate</span>
-                </div>
+                <p className="text-[10px] text-muted-foreground">Powered by DALL-E 3. High quality generation takes ~15s.</p>
               </div>
-
-              <button
-                onClick={async () => {
-                  const prompt = window.prompt("Enter image description:");
-                  if (!prompt) return;
-
-                  try {
-                    // Optimistic UI could go here
-                    const res = await fetch('/api/generate-image', {
-                      method: 'POST',
-                      body: JSON.stringify({ prompt })
-                    });
-                    if (!res.ok) throw new Error("Failed");
-                    const data = await res.json();
-                    if (data.url) setNewImageUrl(data.url);
-                  } catch (e) {
-                    alert("Generation failed");
-                  }
-                }}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-medium shadow-md hover:opacity-90 transition-all flex items-center justify-center gap-2"
-              >
-                <Sparkles className="w-4 h-4" /> Generate with DALL-E 3
-              </button>
             </div>
 
             <div className="flex gap-3 pt-2">
@@ -243,7 +266,7 @@ export default function PreviewWrapper({ siteId, isPaid }: PreviewWrapperProps) 
           )}
         </div>
 
-          
+
         <div className="pointer-events-auto flex items-center gap-3">
           {/* Responsive Toggle */}
           <div className="flex items-center gap-1 bg-background/80 backdrop-blur-md border border-border/40 rounded-full p-1 shadow-sm mr-2">
@@ -353,44 +376,43 @@ export default function PreviewWrapper({ siteId, isPaid }: PreviewWrapperProps) 
 
         {/* Iframe Container - Main Canvas */}
         <div className="flex-1 flex flex-col relative min-w-0">
-             <div className="absolute -top-12 left-0 flex items-center gap-2">
-                 <div className="bg-black/80 backdrop-blur text-white text-[10px] px-3 py-1 rounded-full font-bold border border-white/10 flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                    LIVE PREVIEW
-                 </div>
-             </div>
+          <div className="absolute -top-12 left-0 flex items-center gap-2">
+            <div className="bg-black/80 backdrop-blur text-white text-[10px] px-3 py-1 rounded-full font-bold border border-white/10 flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+              LIVE PREVIEW
+            </div>
+          </div>
 
-             <div className="flex-1 bg-zinc-900/5 backdrop-blur-sm rounded-2xl border border-white/10 shadow-2xl overflow-hidden relative">
-                 <div
-                    className={`bg-white h-full w-full transition-all duration-500 ease-in-out mx-auto ${
-                      previewMode === 'mobile' ? 'max-w-[375px] border-x border-black/10' :
-                      previewMode === 'tablet' ? 'max-w-[768px] border-x border-black/10' :
-                        'w-full'
-                      }`}
-                  >
-                    <iframe
-                      ref={iframeRef}
-                      key={`${reloadKey}-${activeFile}`}
-                      src={`/api/preview/${siteId}?t=${reloadKey}&file=${activeFile}`}
-                      className="w-full h-full border-0 bg-white"
-                      title="Website Preview"
-                      sandbox="allow-same-origin allow-scripts allow-modals"
-                    />
-                 </div>
-             </div>
+          <div className="flex-1 bg-zinc-900/5 backdrop-blur-sm rounded-2xl border border-white/10 shadow-2xl overflow-hidden relative">
+            <div
+              className={`bg-white h-full w-full transition-all duration-500 ease-in-out mx-auto ${previewMode === 'mobile' ? 'max-w-[375px] border-x border-black/10' :
+                previewMode === 'tablet' ? 'max-w-[768px] border-x border-black/10' :
+                  'w-full'
+                }`}
+            >
+              <iframe
+                ref={iframeRef}
+                key={`${reloadKey}-${activeFile}`}
+                src={`/api/preview/${siteId}?t=${reloadKey}&file=${activeFile}`}
+                className="w-full h-full border-0 bg-white"
+                title="Website Preview"
+                sandbox="allow-same-origin allow-scripts allow-modals"
+              />
+            </div>
+          </div>
         </div>
 
         {/* Terminal / Assistant Panel */}
         <div className="w-[400px] shrink-0 flex flex-col gap-4">
-           {/* We can put file explorer or other tools here later */}
-           <div className="flex-1 rounded-xl overflow-hidden shadow-2xl border border-white/10 bg-[#1e1e1e]">
-              <FoundryAgent
-                siteId={siteId}
-                activeFile={activeFile}
-                onUpdate={handleUpdate}
-                className="h-full border-0 rounded-none shadow-none"
-              />
-           </div>
+          {/* We can put file explorer or other tools here later */}
+          <div className="flex-1 rounded-xl overflow-hidden shadow-2xl border border-white/10 bg-[#1e1e1e]">
+            <FoundryAgent
+              siteId={siteId}
+              activeFile={activeFile}
+              onUpdate={handleUpdate}
+              className="h-full border-0 rounded-none shadow-none"
+            />
+          </div>
         </div>
       </div>
     </div>

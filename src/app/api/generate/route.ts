@@ -52,33 +52,64 @@ export async function POST(request: Request) {
     const fileName = `${user.id}/${siteId}/index.html`
 
     const systemPrompt = `
-    You are an expert Frontend Architect.
+    You are an expert Frontend Architect and UI/UX Designer.
     
-    GOAL: Build a single-file HTML website using Tailwind CSS based on the user's prompt.
+    GOAL: Build a high-performance Single Page Application (SPA) using Tailwind CSS.
     
     STRICT RULES:
     1.  **Output**: Return ONLY the raw HTML code. Do not wrap in markdown \`\`\`.
-    2.  **Tech Stack**: HTML5, Tailwind CSS (CDN), FontAwesome (CDN), Google Fonts.
+    2.  **Tech Stack**: HTML5, Tailwind CSS (CDN), FontAwesome (CDN), Google Fonts, AOS (Animate On Scroll).
     3.  **Language**: All visible text MUST be in ${lang === 'az' ? 'Azerbaijani' : 'English'}.
-    4.  **Images**: Use \`/api/images/proxy?query=KEYWORD\` for ALL images. Do not use Unsplash links directly.
-    5.  **Multi-Page Hooks**: The Navbar MUST have links to \`/about\`, \`/contact\`, even if they don't exist yet.
+    4.  **Images**: Use \`/api/images/proxy?query=KEYWORD\` for ALL images. Choose highly relevant keywords.
+    5.  **Design**: MUST be premium, modern, and "WOW". Use gradients, glassmorphism, and smooth transitions.
     
-    COMPONENTS TO USE (Adapt text/colors to the prompt "${prompt}" and style "${style}"):
+    COMPONENT SELECTION:
+    Analyze the user's prompt "${prompt}" and choose the best sections.
     
-    - Use this for Navbar:
+    1. **Navbar**: Always use this (Contains navigation logic):
     ${TEMPLATES.NAVBAR}
     
-    - Use this for PRO HERO (If style is Dark/Cyberpunk/Corporate):
-    ${TEMPLATES.HERO_DARK}
+    2. **Hero Section** (Pick ONE):
+       - If SaaS/Startup/Business -> Use HERO_SAAS:
+         ${TEMPLATES.HERO_SAAS}
+       - If Portfolio/Creative/Art -> Use HERO_CREATIVE:
+         ${TEMPLATES.HERO_CREATIVE}
+       - If Corporate/Dark Mode -> Use HERO_DARK:
+         ${TEMPLATES.HERO_DARK}
+       - Else -> Use HERO_MODERN:
+         ${TEMPLATES.HERO_MODERN}
     
-    - Use this for MODERN HERO (If style is Minimal/Vibrant/Luxury):
-    ${TEMPLATES.HERO_MODERN}
+    3. **Content Sections** (Pick relevant ones based on prompt):
+       - If selling a product/service -> Include PRICING:
+         ${TEMPLATES.PRICING}
+       - If showing work/images -> Include GALLERY:
+         ${TEMPLATES.GALLERY}
+       - If building trust -> Include TESTIMONIALS:
+         ${TEMPLATES.TESTIMONIALS}
+       - Always include features -> BENTO_GRID:
+         ${TEMPLATES.BENTO_GRID}
+       - Always include contact -> CONTACT:
+         ${TEMPLATES.CONTACT}
+
+    4. **Extra Pages** (ALWAYS INCLUDE THESE HIDDEN SECTIONS):
+       - About Page:
+         ${TEMPLATES.PAGE_ABOUT}
+       - Login Page:
+         ${TEMPLATES.PAGE_LOGIN}
+       - Signup Page:
+         ${TEMPLATES.PAGE_SIGNUP}
     
-    - Use this for FEATURES (Bento Grid is mandatory):
-    ${TEMPLATES.BENTO_GRID}
-    
-    - Use this for FOOTER:
+    5. **Footer**: Always use this:
     ${TEMPLATES.FOOTER}
+
+    6. **Router Script**: REQUIRED for navigation to work:
+    ${TEMPLATES.JS_ROUTER}
+    
+    INSTRUCTIONS:
+    - Assemble the selected components into the \`body\`.
+    - **MODIFY** the text, colors, and images in the templates to MATCH the user's request explicitly.
+    - **DO NOT** just copy-paste. Customize the H1, subheadlines, and button text.
+    - If the user asks for a specific color scheme (e.g. "Space theme"), override the Tailwind config colors.
     
     STRUCTURE:
     <!DOCTYPE html>
@@ -89,6 +120,7 @@ export async function POST(request: Request) {
       <script src="https://cdn.tailwindcss.com"></script>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+      <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
       <script>
         tailwind.config = {
           theme: {
@@ -98,16 +130,44 @@ export async function POST(request: Request) {
               },
               colors: {
                 primary: '${style === 'vibrant' ? '#4f46e5' : style === 'retro' ? '#be185d' : '#18181b'}',
+              },
+              animation: {
+                'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                'float': 'float 6s ease-in-out infinite',
+                'bounce-slow': 'bounce 3s infinite',
+              },
+              keyframes: {
+                fadeInUp: {
+                  '0%': { opacity: '0', transform: 'translateY(20px)' },
+                  '100%': { opacity: '1', transform: 'translateY(0)' },
+                },
+                float: {
+                    '0%, 100%': { transform: 'translateY(0)' },
+                    '50%': { transform: 'translateY(-20px)' },
+                }
               }
             }
           }
         }
       </script>
+      <style>
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
+        html { scroll-behavior: smooth; }
+        .page-section { transition: opacity 0.3s ease-in-out; }
+      </style>
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased text-slate-900 bg-white selection:bg-black selection:text-white overflow-x-hidden">
     
-    <!-- YOUR CONTENT HERE -->
-    
+    <!-- GENERATED SECTIONS GO HERE -->
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 800,
+        once: true,
+        offset: 100,
+      });
+    </script>
     </body>
     </html>
     `
