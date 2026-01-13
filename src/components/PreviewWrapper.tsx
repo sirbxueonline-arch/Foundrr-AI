@@ -158,6 +158,7 @@ export default function PreviewWrapper({ siteId, isPaid }: PreviewWrapperProps) 
         if (res.ok) {
           const data = await res.json()
           if (data.name) setProjectName(data.name)
+          if (data.is_published && data.slug) setPublicUrl(data.slug)
         }
       } catch (e) {
         console.error("Failed to fetch site details", e)
@@ -483,8 +484,6 @@ export default function PreviewWrapper({ siteId, isPaid }: PreviewWrapperProps) 
           </div>
         </div>
       )}
-        </div>
-      </div>
 
       {/* Canvas Layout */}
       <div className="flex flex-1 overflow-hidden px-6 pb-6 gap-6 relative z-10">
