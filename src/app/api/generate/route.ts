@@ -4,14 +4,11 @@ import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
 import { TEMPLATES } from '@/lib/generator-templates'
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
-
-export const maxDuration = 300
-export const runtime = 'edge'
-
+// Initialize lazily
 export async function POST(request: Request) {
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  })
   try {
     const cookieStore = await cookies()
     const supabase = createServerClient(
