@@ -26,7 +26,7 @@ export async function GET(request: Request) {
     console.error('Image Proxy Error:', error)
   }
 
-  // Fallback to LoremFlickr for fast, relevant stock photos (User requested no AI generation)
-  const fallbackText = query || 'work'
-  return NextResponse.redirect(`https://loremflickr.com/800/600/${encodeURIComponent(fallbackText)}?lock=${Math.floor(Math.random() * 100)}`)
+  // Fallback to Pollinations AI (Reliable, free, infinite generation)
+  const fallbackPrompt = query || 'abstract tech background'
+  return NextResponse.redirect(`https://image.pollinations.ai/prompt/${encodeURIComponent(fallbackPrompt)}?width=800&height=600&nologo=true`)
 }

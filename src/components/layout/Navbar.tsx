@@ -3,6 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { Globe } from 'lucide-react'
 import { cn } from "@/lib/utils"
 import { useLanguage } from '@/contexts/LanguageContext'
 
@@ -37,9 +38,11 @@ export function Navbar({ user }: NavbarProps) {
                     {/* Language Toggle */}
                     <button
                         onClick={toggleLanguage}
-                        className="text-xs font-mono border border-border px-2 py-1 rounded hover:bg-muted ml-2"
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-muted ml-2 transition-colors border border-border/40"
+                        aria-label="Toggle Language"
                     >
-                        {lang === 'az' ? 'EN' : 'AZ'}
+                        <Globe className="h-3.5 w-3.5" />
+                        <span className="text-xs font-semibold uppercase">{lang === 'az' ? 'EN' : 'AZ'}</span>
                     </button>
 
 

@@ -3,7 +3,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Loader2, Wand2, Sparkles, ArrowRight, BookOpen, Code2 } from 'lucide-react'
+import { Loader2, Wand2, Sparkles, ArrowRight, BookOpen, Code2, CheckCircle2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { INSPIRATION_PROMPTS } from '@/lib/inspiration-prompts'
 import { useLanguage } from '@/contexts/LanguageContext'
@@ -13,9 +13,14 @@ export default function GeneratePage() {
   const { t, lang } = useLanguage()
   const [outputLang, setOutputLang] = useState<'en' | 'az'>('en')
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    prompt: string;
+    style: string;
+    pages: string[];
+  }>({
     prompt: '',
-    style: 'minimal'
+    style: 'minimal',
+    pages: []
   })
 
   // State for streaming
@@ -122,8 +127,6 @@ export default function GeneratePage() {
     { id: 'vibrant', name: t.generate.form.style.vibrant, desc: t.generate.form.style.vibrantDesc },
     { id: 'corporate', name: t.generate.form.style.corporate, desc: t.generate.form.style.corporateDesc },
     { id: 'dark', name: t.generate.form.style.dark, desc: t.generate.form.style.darkDesc },
-    { id: 'retro', name: t.generate.form.style.retro, desc: t.generate.form.style.retroDesc },
-    { id: 'cyberpunk', name: t.generate.form.style.cyberpunk, desc: t.generate.form.style.cyberpunkDesc },
     { id: 'luxury', name: t.generate.form.style.luxury, desc: t.generate.form.style.luxuryDesc },
   ]
 
@@ -138,10 +141,11 @@ export default function GeneratePage() {
         <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20" />
       </div>
 
-      <div className={`animate-fade-in relative z-10 grid gap-12 items-center transition-all duration-700 ${loading ? 'w-full max-w-[95vw] grid-cols-1' : 'w-full max-w-5xl grid-cols-1 lg:grid-cols-2'}`}>
+      <div className={`animate-fade-in relative z-10 w-full transition-all duration-700 ${loading ? 'max-w-[98vw] h-[calc(100vh-6rem)]' : 'max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-12'}`}>
 
         {/* LEFT COLUMN: FORM */}
-        <div className={`transition-all duration-700 ${loading ? 'hidden opacity-0 scale-90' : 'opacity-100 scale-100'}`}>
+        {!loading && (
+        <div className="transition-all duration-700 opacity-100 scale-100">
           <div className="text-left mb-8">
             <motion.h1
               initial={{ opacity: 0, y: 10 }}
@@ -211,6 +215,35 @@ export default function GeneratePage() {
                   </button>
                 ))}
               </div>
+
+               {/* Multi-Page Selection */}
+               <div className="space-y-4 pt-2">
+                  <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">Pages & Features</span>
+                  <div className="flex flex-wrap gap-2">
+                    {['About', 'Contact', 'Pricing', 'Blog', 'Features'].map((page) => (
+                      <button
+                        key={page}
+                        type="button"
+                        onClick={() => {
+                          const current = formData.pages || [];
+                          const newPages = current.includes(page) 
+                             ? current.filter(p => p !== page)
+                             : [...current, page];
+                          setFormData(prev => ({ ...prev, pages: newPages }));
+                        }}
+                        className={`px-4 py-2 rounded-lg text-xs font-medium border transition-all ${
+                          (formData.pages || []).includes(page)
+                          ? 'bg-primary text-primary-foreground border-primary shadow-sm'
+                          : 'bg-background border-border/50 hover:bg-muted'
+                        }`}
+                      >
+                         {(formData.pages || []).includes(page) && <CheckCircle2 className="w-3 h-3 inline mr-1.5 mb-0.5" />}
+                         {page}
+                      </button>
+                    ))}
+                  </div>
+               </div>
+
             </div>
 
             {/* Submit & Lang */}
@@ -244,16 +277,17 @@ export default function GeneratePage() {
             </div>
           </form>
         </div>
+        )}
 
         {/* RIGHT COLUMN: TERMINAL / PREVIEW */}
-        <div className={`relative hidden lg:flex items-center justify-center transition-all duration-700 ${loading ? 'h-[85vh]' : 'h-[600px]'}`}>
+        <div className={`relative transition-all duration-700 ease-in-out ${loading ? 'w-full h-full' : 'hidden lg:flex items-center justify-center h-[600px]'}`}>
           <AnimatePresence mode="wait">
             {!loading ? (
               <motion.div
+                key="idle"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.5 }}
+                exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.3 } }}
                 className="relative w-full h-full"
               >
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-purple-500/20 rounded-[3rem] blur-3xl opacity-50 animate-pulse" />
@@ -269,12 +303,14 @@ export default function GeneratePage() {
               </motion.div>
             ) : (
               <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="w-full h-full flex flex-col gap-4"
+                key="generating"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="w-full h-full flex flex-col lg:flex-row gap-6"
               >
                 {/* TERMINAL UI */}
-                <div className="w-full bg-[#1e1e1e] rounded-xl border border-white/10 shadow-2xl overflow-hidden flex flex-col h-[250px] shrink-0">
+                <div className="w-full lg:w-[400px] shrink-0 bg-[#1e1e1e] rounded-xl border border-white/10 shadow-2xl overflow-hidden flex flex-col h-[300px] lg:h-full">
                   <div className="bg-[#2d2d2d] px-4 py-2 flex items-center gap-2 border-b border-white/5">
                     <div className="flex gap-1.5">
                       <div className="w-3 h-3 rounded-full bg-red-500/80" />
@@ -284,29 +320,38 @@ export default function GeneratePage() {
                     <span className="text-[10px] font-mono text-white/40 ml-2">architect-agent — zsh</span>
                   </div>
                   <div
-                    className="p-4 font-mono text-xs text-green-400 overflow-y-auto custom-scrollbar flex-1 space-y-1"
+                    className="p-4 font-mono text-[10px] leading-3 text-green-400/80 overflow-y-auto custom-scrollbar flex-1"
                     ref={logContainerRef}
                   >
-                    {logs.map((log, i) => (
-                      <div key={i} className="animate-in fade-in slide-in-from-left-2 duration-300">
-                        <span className="opacity-50 mr-2">[{new Date().toLocaleTimeString()}]</span>
-                        {log}
-                      </div>
-                    ))}
-                    <div className="animate-pulse">_</div>
+                     <pre className="whitespace-pre-wrap break-all font-mono">
+                        {streamData || logs.join('\n')}
+                        <span className="animate-pulse inline-block w-2 h-4 bg-green-500 ml-1 align-middle">_</span>
+                     </pre>
                   </div>
+                </div>
 
-                  {/* LIVE PREVIEW IFRAME */}
-                  <div className="w-full flex-1 bg-white rounded-xl border border-white/10 shadow-2xl overflow-hidden relative">
-                    <div className="absolute top-2 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur text-white text-[10px] px-3 py-1 rounded-full z-50 font-bold border border-white/10 flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                      LIVE PREVIEW
-                    </div>
-                    <iframe
-                      srcDoc={previewHtml}
-                      className="w-[125%] h-[125%] scale-[0.8] origin-top-left border-0"
-                      style={{ pointerEvents: 'none' }}
-                    />
+                {/* LIVE PREVIEW IFRAME */}
+                <div className="flex-1 bg-white rounded-xl border border-white/10 shadow-2xl overflow-hidden relative group">
+                  <div className="absolute top-3 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md text-white text-[10px] px-3 py-1.5 rounded-full z-50 font-medium border border-white/10 flex items-center gap-2 shadow-lg">
+                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-[pulse_1.5s_infinite]" />
+                    LIVE PREVIEW
+                  </div>
+                  
+                  {/* Iframe Container */}
+                  <div className="w-full h-full bg-neutral-100 dark:bg-neutral-900">
+                    {previewHtml ? (
+                       <iframe
+                       srcDoc={previewHtml}
+                       className="w-full h-full border-0"
+                       title="Live Preview"
+                     />
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground gap-4">
+                        <Loader2 className="w-8 h-8 animate-spin opacity-20" />
+                        <p className="text-sm font-light opacity-50">Waiting for HTML stream...</p>
+                      </div>
+                    )}
+                   
                   </div>
                 </div>
               </motion.div>

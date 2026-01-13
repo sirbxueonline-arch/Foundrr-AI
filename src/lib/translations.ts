@@ -59,7 +59,8 @@ export const translations = {
         2: "> 'Müasir Qaranlıq' palitrası seçilir...",
         3: "> Struktur qurulur...",
         4: "> Məzmun yazılır..."
-      }
+      },
+      madeIn: "Azərbaycan məhsuludur"
     },
     features: {
       items: [
@@ -167,6 +168,76 @@ export const translations = {
         WaitSub: "Zəhmət olmasa təsdiqi gözləyin. Buradan və ya paneldən yoxlaya bilərsiniz.",
         return: "Panelə Qayıt"
       }
+    },
+    terms: {
+      title: "İstifadə Şərtləri",
+      lastUpdated: "Son yenilənmə",
+      sections: [
+        {
+          title: "1. Şərtlərin Qəbulu",
+          content: "Foundrr-a daxil olmaqla və istifadə etməklə, bu İstifadə Şərtlərinə riayət etməyə və onunla bağlı olmağa razılaşırsınız. Razılaşmırsınızsa, xidmətlərimizdən qətiyyən istifadə etməyin."
+        },
+        {
+          title: "2. Xidmətlər",
+          content: "Foundrr süni intellektlə dəstəklənən veb sayt yaratma alətləri təqdim edir. Yüksək keyfiyyətə can atırıq, lakin yaradılan kodun səhvsiz olacağına və ya dəyişiklik edilmədən bütün məqsədlər üçün uyğun olacağına zəmanət vermirik."
+        },
+        {
+          title: "3. İstifadəçi Məsuliyyətləri",
+          items: [
+             "Hesabınızın məxfiliyini qorumaq sizin məsuliyyətinizdir.",
+             "Platformadan qeyri-qanuni, təhqiredici və ya zərərli məzmun yaratmaq üçün istifadə etməməlisiniz.",
+             "API-mızı tərs mühəndislik etməməyə və ya sui-istifadə etməməyə razılaşırsınız."
+          ]
+        },
+        {
+          title: "4. Ödənişlər və Geri Qaytarmalar",
+          content: "Ödənişlər hər layihə üçün birdəfəlikdir. Əgər yaradılan kod texniki cəhətdən qüsurludursa və düzəldilə bilmirsə, 30 günlük pul geri qaytarma zəmanəti təklif edirik."
+        },
+        {
+          title: "5. Məsuliyyətin Məhdudlaşdırılması",
+          content: "Foundrr, xidmətimizdən və ya onunla yaratdığınız veb saytlardan istifadə nəticəsində yaranan hər hansı dolayı, təsadüfi və ya nəticəli zərərlərə görə məsuliyyət daşımır."
+        },
+        {
+          title: "6. Əlaqə",
+          content: "Hüquqi sorğular üçün əlaqə: "
+        }
+      ]
+    },
+    privacy: {
+      title: "Məxfilik Siyasəti",
+      lastUpdated: "Son yenilənmə",
+      sections: [
+        {
+          title: "1. Giriş",
+          content: "Foundrr-a (\"biz\", \"bizim\" və ya \"bizə\") xoş gəlmisiniz. Şəxsi məlumatlarınızı və məxfilik hüququnuzu qorumağa sadiqik. Bu siyasət, süni intellekt veb sayt qurma platformamızdan istifadə etdiyiniz zaman məlumatlarınızı necə topladığımızı, istifadə etdiyimizi və paylaşdığımızı izah edir."
+        },
+        {
+          title: "2. Topladığımız Məlumatlar",
+          items: [
+            "Hesab Məlumatları: E-poçt ünvanı, ad və profil şəkli (Google/Github kimi autentifikasiya təminatçıları vasitəsilə).",
+            "Yaradılan Məzmun: Daxil etdiyiniz sorğular və süni intellektimiz tərəfindən yaradılan veb sayt kodu.",
+            "İstifadə Məlumatları: Veb saytımızdan necə istifadə etdiyiniz barədə məlumatlar, məsələn, səhifə baxışları və düymə klikləri."
+          ]
+        },
+        {
+          title: "3. Məlumatlarınızdan Necə İstifadə Edirik",
+          content: "Məlumatlarınızdan xidmətlərimizi təmin etmək, təkmilləşdirmək və qorumaq üçün istifadə edirik. Xüsusilə:",
+          list: [
+            "Veb sayt layihələrinizi yaratmaq və saxlamaq üçün.",
+            "İdarə panelinə girişinizi təsdiqləmək üçün.",
+            "Ödənişləri emal etmək üçün (təhlükəsiz üçüncü tərəf prosessorları vasitəsilə).",
+            "Süni intellekt modellərimizi və istifadəçi təcrübəmizi təkmilləşdirmək üçün."
+          ]
+        },
+        {
+          title: "4. Məlumat Mülkiyyəti",
+          content: "Platformamızda yaratdığınız və ödəniş etdiyiniz veb saytların hüquqları sizə məxsusdur. Satın alındıqdan sonra yaradılan HTML/CSS kodu üzərində mülkiyyət hüququ iddia etmirik."
+        },
+        {
+          title: "5. Bizimlə Əlaqə",
+          content: "Bu siyasətlə bağlı suallarınız varsa, bizimlə əlaqə saxlayın: "
+        }
+      ]
     }
   },
   en: {
@@ -229,7 +300,8 @@ export const translations = {
         2: "> Selecting 'Modern Dark' palette...",
         3: "> Generating layout structure...",
         4: "> Writing content..."
-      }
+      },
+      madeIn: "Made in Azerbaijan"
     },
     features: {
       items: [
@@ -337,6 +409,76 @@ export const translations = {
         WaitSub: "Please wait until approval. You can check back here or on your dashboard.",
         return: "Return to Dashboard"
       }
+    },
+    terms: {
+      title: "Terms of Service",
+      lastUpdated: "Last updated",
+      sections: [
+        {
+          title: "1. Acceptance of Terms",
+          content: "By accessing and using Foundrr, you agree to comply with and be bound by these Terms of Service. If you do not agree, strictly do not use our services."
+        },
+        {
+          title: "2. Services",
+          content: "Foundrr provides AI-powered website generation tools. We strive for high quality, but we do not guarantee that the code generated will be error-free or suitable for all purposes without modification."
+        },
+        {
+          title: "3. User Responsibilities",
+          items: [
+             "You are responsible for maintaining the confidentiality of your account.",
+             "You must not use the platform to generate illegal, offensive, or harmful content.",
+             "You agree not to reverse engineer or abuse our API."
+          ]
+        },
+        {
+          title: "4. Payments and Refunds",
+          content: "Payments are one-time per project. We offer a 30-day money-back guarantee if the generated code is technically defective and cannot be fixed."
+        },
+        {
+          title: "5. Limitation of Liability",
+          content: "Foundrr shall not be liable for any indirect, incidental, or consequential damages arising from the use of our service or the websites you generate with it."
+        },
+        {
+          title: "6. Contact",
+          content: "For legal inquiries, contact "
+        }
+      ]
+    },
+    privacy: {
+      title: "Privacy Policy",
+      lastUpdated: "Last updated",
+      sections: [
+        {
+          title: "1. Introduction",
+          content: "Welcome to Foundrr (\"we\", \"our\", or \"us\"). We are committed to protecting your personal information and your right to privacy. This policy explains how we collect, use, and share your information when you use our AI website building platform."
+        },
+        {
+          title: "2. Information We Collect",
+          items: [
+            "Account Information: Email address, name, and profile picture (via authentication providers like Google/Github).",
+            "Generated Content: The prompts you enter and the website code generated by our AI.",
+            "Usage Data: Information about how you use our website, such as page views and button clicks."
+          ]
+        },
+        {
+          title: "3. How We Use Your Information",
+          content: "We use your information to provide, improve, and secure our services. Specifically:",
+          list: [
+            "To generate and store your website projects.",
+            "To authenticate your access to the dashboard.",
+            "To process payments (via secure third-party processors).",
+            "To improve our AI models and user experience."
+          ]
+        },
+        {
+          title: "4. Data Ownership",
+          content: "You own the rights to the websites you generate and pay for on our platform. We do not claim ownership over your generated HTML/CSS code once purchased."
+        },
+        {
+          title: "5. Contact Us",
+          content: "If you have questions about this policy, please contact us at "
+        }
+      ]
     }
   }
 }

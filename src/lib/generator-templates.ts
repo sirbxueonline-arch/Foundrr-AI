@@ -1,43 +1,55 @@
 
 export const TEMPLATES = {
     NAVBAR: `
-    <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 transition-all duration-300" id="navbar">
+    <nav class="fixed top-0 w-full z-50 glass transition-all duration-300" id="navbar">
       <div class="container mx-auto px-6 h-20 flex items-center justify-between">
         <div class="flex items-center gap-2 cursor-pointer" onclick="navigateTo('home')">
-           <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center text-white"><i class="fas fa-layer-group"></i></div>
-           <span class="text-xl font-bold tracking-tight text-gray-900">BRAND_NAME</span>
+           <div class="w-10 h-10 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-500/30"><i class="fas fa-layer-group"></i></div>
+           <span class="text-xl font-bold tracking-tight text-slate-900">BRAND_NAME</span>
         </div>
         
         <!-- Desktop Menu -->
-        <div class="hidden md:flex gap-8 text-sm font-medium text-gray-600">
-          <button onclick="navigateTo('home')" class="hover:text-black transition-colors">Home</button>
-          <button onclick="navigateTo('features')" class="hover:text-black transition-colors">Features</button>
-          <button onclick="navigateTo('about')" class="hover:text-black transition-colors">About</button>
-          <button onclick="navigateTo('pricing')" class="hover:text-black transition-colors">Pricing</button>
+        <div class="hidden md:flex gap-8 text-sm font-semibold text-slate-600">
+          <button onclick="navigateTo('home')" class="hover:text-indigo-600 transition-colors">Home</button>
+          <button onclick="navigateTo('features')" class="hover:text-indigo-600 transition-colors">Features</button>
+          <button onclick="navigateTo('about')" class="hover:text-indigo-600 transition-colors">About</button>
+          <button onclick="navigateTo('pricing')" class="hover:text-indigo-600 transition-colors">Pricing</button>
+          <button onclick="navigateTo('contact')" class="hover:text-indigo-600 transition-colors">Contact</button>
         </div>
         
         <div class="flex items-center gap-4">
-            <button onclick="navigateTo('login')" class="hidden md:block text-sm font-medium hover:text-black">Log in</button>
-            <button onclick="navigateTo('signup')" class="px-5 py-2.5 rounded-full bg-black text-white text-sm font-medium hover:bg-gray-800 transition-all shadow-lg shadow-gray-200 hover:scale-105 active:scale-95">Get Started</button>
+            <button onclick="navigateTo('login')" class="hidden md:block text-sm font-semibold text-slate-900 hover:text-indigo-600 transition-colors">Log in</button>
+            <button onclick="navigateTo('signup')" class="px-6 py-2.5 rounded-full bg-slate-900 text-white text-sm font-bold hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 text-white">Get Started</button>
             
             <!-- Mobile Menu Button -->
-            <button class="md:hidden text-2xl text-gray-900 focus:outline-none" onclick="toggleMobileMenu()">
+            <button class="md:hidden text-2xl text-slate-900 focus:outline-none" onclick="toggleMobileMenu()">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
       </div>
       
       <!-- Mobile Menu Overlay -->
-      <div id="mobile-menu" class="hidden absolute top-20 left-0 w-full bg-white border-b border-gray-100 p-4 flex-col gap-4 shadow-xl md:hidden">
-          <button onclick="navigateTo('home')" class="text-left font-medium py-2 text-gray-600">Home</button>
-          <button onclick="navigateTo('features')" class="text-left font-medium py-2 text-gray-600">Features</button>
-          <button onclick="navigateTo('about')" class="text-left font-medium py-2 text-gray-600">About</button>
-          <button onclick="navigateTo('pricing')" class="text-left font-medium py-2 text-gray-600">Pricing</button>
+      <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-b border-gray-100 p-6 flex flex-col gap-4 shadow-2xl md:hidden transition-all duration-300 origin-top transform">
+          <button onclick="navigateTo('home'); toggleMobileMenu()" class="text-left font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 text-slate-600">Home</button>
+          <button onclick="navigateTo('features'); toggleMobileMenu()" class="text-left font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 text-slate-600">Features</button>
+          <button onclick="navigateTo('about'); toggleMobileMenu()" class="text-left font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 text-slate-600">About</button>
+          <button onclick="navigateTo('pricing'); toggleMobileMenu()" class="text-left font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 text-slate-600">Pricing</button>
+          <button onclick="navigateTo('contact'); toggleMobileMenu()" class="text-left font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 text-slate-600">Contact</button>
           <div class="h-px bg-gray-100 my-2"></div>
-          <button onclick="navigateTo('login')" class="text-left font-medium py-2 text-gray-600">Log in</button>
+          <button onclick="navigateTo('login'); toggleMobileMenu()" class="text-left font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 text-slate-600">Log in</button>
+          <button onclick="navigateTo('signup'); toggleMobileMenu()" class="text-center font-bold py-3 px-4 rounded-lg bg-slate-900 text-white shadow-md">Get Started</button>
       </div>
     </nav>
   `,
+
+    // ... (Keep HERO sections as is or assume they are picked up from previous context if not replacing full file) ...
+    // Note: I am replacing chunks, but this tool call assumes I replace the WHOLE file if I don't check offsets.
+    // The previous view_file allowed me to see lines. I'll use multi_replace or specific ranges if I can.
+    // But here I'm replacing lines 3-40 (Navbar) and 472-534 (Login/Signup) and 580-630 (Router).
+    // The tool `replace_file_content` says "SINGLE CONTIGUOUS block". I should use `multi_replace_file_content`.
+
+    // Wait, I will use multi_replace_file_content to do it all at once.
+
 
     HERO_MODERN: `
     <section id="home" class="page-section relative pt-32 pb-20 overflow-hidden bg-white min-h-screen flex flex-col justify-center">
@@ -470,34 +482,38 @@ export const TEMPLATES = {
   `,
 
     PAGE_LOGIN: `
-    <section id="login" class="page-section hidden pt-32 pb-20 bg-gray-50 min-h-screen flex items-center justify-center">
-        <div class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md border border-gray-100">
-             <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold">Welcome back</h2>
-                <p class="text-gray-500 mt-2">Please enter your details to sign in.</p>
+    <section id="login" class="page-section hidden pt-32 pb-20 bg-gray-50/50 min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div class="absolute inset-0 w-full h-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+        <div class="bg-white/80 backdrop-blur-xl p-8 md:p-12 rounded-3xl shadow-2xl w-full max-w-md border border-white relative z-10" data-aos="zoom-in">
+             <div class="text-center mb-10">
+                <div class="w-16 h-16 bg-slate-900 rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-6 shadow-xl shadow-slate-900/20">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-slate-900">Welcome back</h2>
+                <p class="text-slate-500 mt-3 font-medium">Please enter your details to sign in.</p>
              </div>
              
-             <div class="space-y-4">
-                 <button class="w-full py-3 rounded-xl border border-gray-200 font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-3">
-                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" />
+             <div class="space-y-5">
+                 <button class="w-full py-4 rounded-xl border border-gray-200 font-bold text-slate-700 hover:bg-gray-50 transition-all hover:scale-[1.02] flex items-center justify-center gap-3 bg-white">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-6 h-6" />
                     Sign in with Google
                  </button>
                  <div class="relative flex py-2 items-center">
                     <div class="flex-grow border-t border-gray-200"></div>
-                    <span class="flex-shrink-0 mx-4 text-gray-400 text-xs">OR</span>
+                    <span class="flex-shrink-0 mx-4 text-gray-400 text-xs font-bold uppercase tracking-wider">Or continue with</span>
                     <div class="flex-grow border-t border-gray-200"></div>
                  </div>
                  <div class="space-y-2">
-                    <label class="text-sm font-semibold text-gray-700">Email</label>
-                    <input type="email" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-black/5 outline-none" placeholder="name@example.com" />
+                    <label class="text-sm font-bold text-slate-700 ml-1">Email</label>
+                    <input type="email" class="w-full px-5 py-4 rounded-xl border border-gray-200 focus:ring-4 focus:ring-slate-100 focus:border-slate-400 outline-none transition-all bg-gray-50/50 focus:bg-white" placeholder="name@example.com" />
                  </div>
                  <div class="space-y-2">
-                    <label class="text-sm font-semibold text-gray-700">Password</label>
-                    <input type="password" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-black/5 outline-none" placeholder="••••••••" />
+                    <label class="text-sm font-bold text-slate-700 ml-1">Password</label>
+                    <input type="password" class="w-full px-5 py-4 rounded-xl border border-gray-200 focus:ring-4 focus:ring-slate-100 focus:border-slate-400 outline-none transition-all bg-gray-50/50 focus:bg-white" placeholder="••••••••" />
                  </div>
-                 <button class="w-full py-3 bg-black text-white font-bold rounded-xl hover:opacity-90 transition-opacity" onclick="alert('Demo Login Successful!')">Sign in</button>
-                 <p class="text-center text-sm text-gray-500">
-                    Don't have an account? <span class="text-black font-semibold cursor-pointer" onclick="navigateTo('signup')">Sign up</span>
+                 <button class="w-full py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all shadow-lg hover:shadow-slate-900/30 hover:-translate-y-1 active:translate-y-0" onclick="alert('Demo Login Successful!')">Sign in</button>
+                 <p class="text-center text-sm text-slate-500 font-medium">
+                    Don't have an account? <span class="text-slate-900 font-bold cursor-pointer hover:underline" onclick="navigateTo('signup')">Sign up for free</span>
                  </p>
              </div>
         </div>
@@ -505,28 +521,32 @@ export const TEMPLATES = {
   `,
 
     PAGE_SIGNUP: `
-    <section id="signup" class="page-section hidden pt-32 pb-20 bg-gray-50 min-h-screen flex items-center justify-center">
-        <div class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md border border-gray-100">
-             <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold">Create account</h2>
-                <p class="text-gray-500 mt-2">Start your 14-day free trial.</p>
+    <section id="signup" class="page-section hidden pt-32 pb-20 bg-gray-50/50 min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div class="absolute inset-0 w-full h-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+        <div class="bg-white/80 backdrop-blur-xl p-8 md:p-12 rounded-3xl shadow-2xl w-full max-w-md border border-white relative z-10" data-aos="zoom-in">
+             <div class="text-center mb-10">
+                <div class="w-16 h-16 bg-slate-900 rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-6 shadow-xl shadow-slate-900/20">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-slate-900">Create account</h2>
+                <p class="text-slate-500 mt-3 font-medium">Start your 14-day free trial today.</p>
              </div>
-             <div class="space-y-4">
+             <div class="space-y-5">
                  <div class="space-y-2">
-                    <label class="text-sm font-semibold text-gray-700">Full Name</label>
-                    <input type="text" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-black/5 outline-none" placeholder="John Doe" />
+                    <label class="text-sm font-bold text-slate-700 ml-1">Full Name</label>
+                    <input type="text" class="w-full px-5 py-4 rounded-xl border border-gray-200 focus:ring-4 focus:ring-slate-100 focus:border-slate-400 outline-none transition-all bg-gray-50/50 focus:bg-white" placeholder="John Doe" />
                  </div>
                  <div class="space-y-2">
-                    <label class="text-sm font-semibold text-gray-700">Email</label>
-                    <input type="email" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-black/5 outline-none" placeholder="name@example.com" />
+                    <label class="text-sm font-bold text-slate-700 ml-1">Email</label>
+                    <input type="email" class="w-full px-5 py-4 rounded-xl border border-gray-200 focus:ring-4 focus:ring-slate-100 focus:border-slate-400 outline-none transition-all bg-gray-50/50 focus:bg-white" placeholder="name@example.com" />
                  </div>
                  <div class="space-y-2">
-                    <label class="text-sm font-semibold text-gray-700">Password</label>
-                    <input type="password" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-black/5 outline-none" placeholder="••••••••" />
+                    <label class="text-sm font-bold text-slate-700 ml-1">Password</label>
+                    <input type="password" class="w-full px-5 py-4 rounded-xl border border-gray-200 focus:ring-4 focus:ring-slate-100 focus:border-slate-400 outline-none transition-all bg-gray-50/50 focus:bg-white" placeholder="••••••••" />
                  </div>
-                 <button class="w-full py-3 bg-black text-white font-bold rounded-xl hover:opacity-90 transition-opacity" onclick="alert('Demo Signup Successful!')">Create Account</button>
-                 <p class="text-center text-sm text-gray-500">
-                    Already have an account? <span class="text-black font-semibold cursor-pointer" onclick="navigateTo('login')">Log in</span>
+                 <button class="w-full py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all shadow-lg hover:shadow-slate-900/30 hover:-translate-y-1 active:translate-y-0" onclick="alert('Demo Signup Successful!')">Create Account</button>
+                 <p class="text-center text-sm text-slate-500 font-medium">
+                    Already have an account? <span class="text-slate-900 font-bold cursor-pointer hover:underline" onclick="navigateTo('login')">Log in</span>
                  </p>
              </div>
         </div>

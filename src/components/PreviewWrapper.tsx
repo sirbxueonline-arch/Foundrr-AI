@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { FoundryAgent } from '@/components/FoundryAgent'
-import { Lock, Download, Smartphone, Tablet, Monitor, Sparkles, Rocket, Globe } from 'lucide-react'
+import { Lock, Download, Smartphone, Tablet, Monitor, Sparkles, Rocket, Globe, Pencil, CheckCircle2 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useLanguage } from '@/contexts/LanguageContext'
@@ -22,6 +22,51 @@ export default function PreviewWrapper({ siteId, isPaid }: PreviewWrapperProps) 
   const [publicUrl, setPublicUrl] = useState('')
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const [previewMode, setPreviewMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop')
+  const [isTextEditing, setIsTextEditing] = useState(false)
+
+  // Toggle Editor
+  useEffect(() => {
+    if (iframeRef.current?.contentWindow) {
+      iframeRef.current.contentWindow.postMessage({
+        type: 'TOGGLE_EDIT_MODE',
+        enabled: isTextEditing
+      }, '*')
+    }
+  }, [isTextEditing])
+
+  const handleSaveText = () => {
+     if (iframeRef.current?.contentWindow) {
+       // Request HTML from child
+       iframeRef.current.contentWindow.postMessage({
+         type: 'GET_HTML'
+       }, '*')
+     }
+  }
+
+  // Listen for SAVE_HTML response
+  useEffect(() => {
+    const handleSave = async (event: MessageEvent) => {
+        if (event.data.type === 'SAVE_HTML' && event.data.html) {
+             setIsTextEditing(false); // Turn off edit mode
+             try {
+                // Optimistic UI update? No need, we just save.
+                await fetch('/api/save-site', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ siteId, html: event.data.html })
+                })
+                alert("Changes saved successfully!");
+                // Force reload iframe to ensure clean state? 
+                setReloadKey(prev => prev + 1);
+              } catch (e) {
+                console.error('Failed to save', e)
+                alert('Failed to save changes')
+              }
+        }
+    }
+    window.addEventListener('message', handleSave);
+    return () => window.removeEventListener('message', handleSave);
+  }, [siteId])
 
   // Rename features
   const [projectName, setProjectName] = useState("Untitled Project")
@@ -374,18 +419,50 @@ export default function PreviewWrapper({ siteId, isPaid }: PreviewWrapperProps) 
       {/* Canvas Layout */}
       <div className="flex flex-1 overflow-hidden px-6 pb-6 gap-6 relative z-10">
 
-        {/* Iframe Container - Main Canvas */}
-        <div className="flex-1 flex flex-col relative min-w-0">
-          <div className="absolute -top-12 left-0 flex items-center gap-2">
-            <div className="bg-black/80 backdrop-blur text-white text-[10px] px-3 py-1 rounded-full font-bold border border-white/10 flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-              LIVE PREVIEW
-            </div>
+        {/* Terminal / Assistant Panel (Left, consistent with Generate) */}
+        <div className="w-[400px] shrink-0 flex flex-col gap-4">
+          <div className="flex-1 rounded-xl overflow-hidden shadow-2xl border border-white/10 bg-[#1e1e1e]">
+            <FoundryAgent
+              siteId={siteId}
+              activeFile={activeFile}
+              onUpdate={handleUpdate}
+              className="h-full border-0 rounded-none shadow-none"
+            />
           </div>
+        </div>
 
-          <div className="flex-1 bg-zinc-900/5 backdrop-blur-sm rounded-2xl border border-white/10 shadow-2xl overflow-hidden relative">
+        {/* Iframe Container - Main Canvas (Right) */}
+        <div className="flex-1 flex flex-col relative min-w-0">
+          <div className="flex-1 bg-white rounded-xl border border-white/10 shadow-2xl overflow-hidden relative group">
+             {/* Unified Badge */}
+             <div className="absolute top-3 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md text-white text-[10px] px-3 py-1.5 rounded-full z-50 font-medium border border-white/10 flex items-center gap-2 shadow-lg">
+                <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-[pulse_1.5s_infinite]" />
+                LIVE PREVIEW
+              </div>
+
+               {/* Editor Controls */}
+               <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 bg-black/80 backdrop-blur-md border border-white/20 rounded-full p-1.5 shadow-xl">
+                 <button
+                    onClick={() => {
+                      setIsTextEditing(!isTextEditing);
+                    }}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${isTextEditing ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30' : 'hover:bg-white/10 text-white'}`}
+                 >
+                    {isTextEditing ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Pencil className="w-3.5 h-3.5" />}
+                    {isTextEditing ? "Finish Editing" : "Edit Content"}
+                 </button>
+                 {isTextEditing && (
+                    <button 
+                      onClick={handleSaveText}
+                      className="px-3 py-1.5 rounded-full bg-emerald-500 text-white text-xs font-semibold shadow-md hover:bg-emerald-600 transition-colors animate-in fade-in zoom-in duration-200"
+                    >
+                      Save Changes
+                    </button>
+                 )}
+              </div>
+
             <div
-              className={`bg-white h-full w-full transition-all duration-500 ease-in-out mx-auto ${previewMode === 'mobile' ? 'max-w-[375px] border-x border-black/10' :
+              className={`bg-neutral-100 dark:bg-neutral-900 h-full w-full transition-all duration-500 ease-in-out mx-auto flex items-center justify-center ${previewMode === 'mobile' ? 'max-w-[375px] border-x border-black/10' :
                 previewMode === 'tablet' ? 'max-w-[768px] border-x border-black/10' :
                   'w-full'
                 }`}
@@ -402,18 +479,6 @@ export default function PreviewWrapper({ siteId, isPaid }: PreviewWrapperProps) 
           </div>
         </div>
 
-        {/* Terminal / Assistant Panel */}
-        <div className="w-[400px] shrink-0 flex flex-col gap-4">
-          {/* We can put file explorer or other tools here later */}
-          <div className="flex-1 rounded-xl overflow-hidden shadow-2xl border border-white/10 bg-[#1e1e1e]">
-            <FoundryAgent
-              siteId={siteId}
-              activeFile={activeFile}
-              onUpdate={handleUpdate}
-              className="h-full border-0 rounded-none shadow-none"
-            />
-          </div>
-        </div>
       </div>
     </div>
   )

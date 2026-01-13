@@ -41,7 +41,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { prompt, style = 'minimal', lang = 'en' } = await request.json()
+    const { prompt, style = 'minimal', lang = 'en', pages = [] } = await request.json()
 
     if (!prompt) {
       return NextResponse.json({ error: 'Missing prompt' }, { status: 400 })
@@ -54,29 +54,33 @@ export async function POST(request: Request) {
     const systemPrompt = `
     You are an expert Frontend Architect and UI/UX Designer.
     
-    GOAL: Build a high-performance Single Page Application (SPA) using Tailwind CSS.
+    GOAL: Build a high-performance, PREMIUM Single Page Application (SPA) using Tailwind CSS.
     
     STRICT RULES:
     1.  **Output**: Return ONLY the raw HTML code. Do not wrap in markdown \`\`\`.
     2.  **Tech Stack**: HTML5, Tailwind CSS (CDN), FontAwesome (CDN), Google Fonts, AOS (Animate On Scroll).
     3.  **Language**: All visible text MUST be in ${lang === 'az' ? 'Azerbaijani' : 'English'}.
     4.  **Images**: Use \`/api/images/proxy?query=KEYWORD\` for ALL images. Choose highly relevant keywords.
-    5.  **Design**: MUST be premium, modern, and "WOW". Use gradients, glassmorphism, and smooth transitions.
+    5.  **Design**: MUST be premium, modern, and "WOW".
+        - Use gradients, glassmorphism, and smooth transitions.
+        - Use rounded-xl or rounded-2xl for cards.
+        - Use generous whitespace (py-24, px-8).
+        - NEVER use default Tailwind colors (e.g. bg-blue-500). ALWAYS use specific shades (e.g. bg-indigo-600, text-slate-800) or gradients.
     
     COMPONENT SELECTION:
     Analyze the user's prompt "${prompt}" and choose the best sections.
     
-    1. **Navbar**: Always use this (Contains navigation logic):
+    1. **Navbar**: Always use this (Contains navigation logic). REPLACE 'BRAND_NAME' with a creative name based on the prompt.
     ${TEMPLATES.NAVBAR}
     
-    2. **Hero Section** (Pick ONE):
-       - If SaaS/Startup/Business -> Use HERO_SAAS:
+    2. **Hero Section** (Pick ONE based on prompt type):
+       - If SaaS/Startup/Business -> Use HERO_SAAS
          ${TEMPLATES.HERO_SAAS}
-       - If Portfolio/Creative/Art -> Use HERO_CREATIVE:
+       - If Portfolio/Creative/Art -> Use HERO_CREATIVE
          ${TEMPLATES.HERO_CREATIVE}
-       - If Corporate/Dark Mode -> Use HERO_DARK:
+       - If Corporate/Dark Mode -> Use HERO_DARK
          ${TEMPLATES.HERO_DARK}
-       - Else -> Use HERO_MODERN:
+       - Else -> Use HERO_MODERN
          ${TEMPLATES.HERO_MODERN}
     
     3. **Content Sections** (Pick relevant ones based on prompt):
@@ -91,25 +95,74 @@ export async function POST(request: Request) {
        - Always include contact -> CONTACT:
          ${TEMPLATES.CONTACT}
 
-    4. **Extra Pages** (ALWAYS INCLUDE THESE HIDDEN SECTIONS):
-       - About Page:
+    4. **Extra Pages** (YOU MUST INCLUDE THESE AS HIDDEN SECTIONS - DO NOT OMIT):
+       - If user requested 'About' page or by default -> About Page (<section id="about" class="page-section hidden ...">):
          ${TEMPLATES.PAGE_ABOUT}
-       - Login Page:
+       
+       - If user requested 'Login' page or by default -> Login Page (<section id="login" class="page-section hidden ...">):
          ${TEMPLATES.PAGE_LOGIN}
-       - Signup Page:
+       
+       - If user requested 'Signup' page or by default -> Signup Page (<section id="signup" class="page-section hidden ...">):
          ${TEMPLATES.PAGE_SIGNUP}
+         
+       ${(pages || []).includes('Pricing') ? `
+       - Pricing Page (Create if requested):
+         <section id="pricing-page" class="page-section hidden pt-32 pb-12 bg-white dark:bg-slate-900">
+           ${TEMPLATES.PRICING}
+         </section>` : ''}
+         
+       ${(pages || []).includes('Blog') ? `
+       - Blog Page (Create if requested):
+          <section id="blog" class="page-section hidden pt-32 pb-12 bg-white dark:bg-slate-900">
+            <div class="container mx-auto px-6">
+               <h1 class="text-4xl font-bold mb-12 text-center" data-aos="fade-up">Latest Insights</h1>
+               <div class="grid md:grid-cols-3 gap-8">
+                  <!-- Generate 3 placeholder blog posts with images -->
+                  <article class="group cursor-pointer">
+                     <div class="overflow-hidden rounded-2xl mb-4 aspect-video">
+                        <img src="/api/images/proxy?query=technology" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Blog">
+                     </div>
+                     <span class="text-xs font-bold text-primary uppercase tracking-wider">Technology</span>
+                     <h3 class="text-xl font-bold mt-2 mb-2 group-hover:text-primary transition-colors">The Future of AI Web Design</h3>
+                     <p class="text-muted-foreground text-sm">How artificial intelligence is reshaping the landscape of modern web development and user experience.</p>
+                  </article>
+                   <article class="group cursor-pointer" data-aos="fade-up" data-aos-delay="100">
+                     <div class="overflow-hidden rounded-2xl mb-4 aspect-video">
+                        <img src="/api/images/proxy?query=design" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Blog">
+                     </div>
+                     <span class="text-xs font-bold text-primary uppercase tracking-wider">Design</span>
+                     <h3 class="text-xl font-bold mt-2 mb-2 group-hover:text-primary transition-colors">Minimalism in 2026</h3>
+                     <p class="text-muted-foreground text-sm">Why less continues to be more in the digital age, and how to implement it effectively.</p>
+                  </article>
+                   <article class="group cursor-pointer" data-aos="fade-up" data-aos-delay="200">
+                     <div class="overflow-hidden rounded-2xl mb-4 aspect-video">
+                        <img src="/api/images/proxy?query=coding" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="Blog">
+                     </div>
+                     <span class="text-xs font-bold text-primary uppercase tracking-wider">Development</span>
+                     <h3 class="text-xl font-bold mt-2 mb-2 group-hover:text-primary transition-colors">Optimizing React Performance</h3>
+                     <p class="text-muted-foreground text-sm">Key strategies to ensure your applications run smoothly on all devices.</p>
+                  </article>
+               </div>
+            </div>
+          </section>` : ''}
+    
+    5. **Footer**: Always use this:
     
     5. **Footer**: Always use this:
     ${TEMPLATES.FOOTER}
 
-    6. **Router Script**: REQUIRED for navigation to work:
+    6. **Router Script**: REQUIRED for navigation to work. DO NOT MODIFY THE LOGIC:
     ${TEMPLATES.JS_ROUTER}
     
     INSTRUCTIONS:
-    - Assemble the selected components into the \`body\`.
-    - **MODIFY** the text, colors, and images in the templates to MATCH the user's request explicitly.
-    - **DO NOT** just copy-paste. Customize the H1, subheadlines, and button text.
-    - If the user asks for a specific color scheme (e.g. "Space theme"), override the Tailwind config colors.
+    - **Assemble**: Put all the selected sections into the \`body\`.
+    - **Customize**: MODIFY the text, colors, and images in the templates to MATCH the user's request explicitly.
+    - **Branding**: Everywhere you see "BRAND_NAME", replace it with a catchy name for the project.
+    - **Pages**: Ensure the 'Extra Pages' (About, Login, Signup) are present in the HTML but with the class \`hidden\` initially. The router script will handle showing them.
+    - **Styling**: 
+      - If the user asks for "Dark Mode", add \`bg-slate-900 text-white\` to the body and update component backgrounds.
+      - If "Minimal", use black/white/gray.
+      - If "Vibrant", use saturated gradients.
     
     STRUCTURE:
     <!DOCTYPE html>
@@ -117,24 +170,31 @@ export async function POST(request: Request) {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>${prompt}</title>
       <script src="https://cdn.tailwindcss.com"></script>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;400;600;800&family=Playfair+Display:wght@400;700&family=Orbitron:wght@400;700&family=Roboto:wght@300;400;500;700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
       <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
       <script>
         tailwind.config = {
+          darkMode: 'class',
           theme: {
             extend: {
-              fontFamily: {
-                sans: ['Inter', 'sans-serif'],
+                fontFamily: {
+                sans: ['${style === 'corporate' ? 'Roboto' : 'Inter'}', 'sans-serif'],
+                heading: ['${style === 'luxury' ? 'Cinzel' : 'Outfit'}', 'sans-serif'],
               },
               colors: {
-                primary: '${style === 'vibrant' ? '#4f46e5' : style === 'retro' ? '#be185d' : '#18181b'}',
+                primary: '${style === 'vibrant' ? '#4f46e5' : style === 'corporate' ? '#0f172a' : style === 'luxury' ? '#000000' : '#18181b'}',
+                secondary: '${style === 'luxury' ? '#ca8a04' : '#64748b'}',
+              },
+              backgroundImage: {
+                'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
               },
               animation: {
                 'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
                 'float': 'float 6s ease-in-out infinite',
-                'bounce-slow': 'bounce 3s infinite',
+                'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
               },
               keyframes: {
                 fadeInUp: {
@@ -144,16 +204,18 @@ export async function POST(request: Request) {
                 float: {
                     '0%, 100%': { transform: 'translateY(0)' },
                     '50%': { transform: 'translateY(-20px)' },
-                }
+                },
               }
             }
           }
         }
       </script>
       <style>
-        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .glass-dark { background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
         html { scroll-behavior: smooth; }
-        .page-section { transition: opacity 0.3s ease-in-out; }
+        .page-section { transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; }
+        .hidden { display: none !important; }
       </style>
     </head>
     <body class="font-sans antialiased text-slate-900 bg-white selection:bg-black selection:text-white overflow-x-hidden">
@@ -165,7 +227,8 @@ export async function POST(request: Request) {
       AOS.init({
         duration: 800,
         once: true,
-        offset: 100,
+        offset: 50,
+        easing: 'ease-out-cubic',
       });
     </script>
     </body>

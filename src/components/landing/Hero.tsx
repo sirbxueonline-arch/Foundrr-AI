@@ -94,6 +94,22 @@ export function Hero({ lang = 'az', t }: { lang?: string, t?: any }) {
             >
               {text.ctaSecondary}
             </Link>
+
+          </motion.div>
+
+          {/* Made In Badge */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="mt-8 text-xs font-medium text-muted-foreground/60 tracking-wider uppercase"
+          >
+            {text.madeIn}
+            <img 
+              src="https://flagcdn.com/20x15/az.png" 
+              alt="Azerbaijan Flag" 
+              className="inline-block h-3 w-4 ml-2 object-contain" 
+            />
           </motion.div>
 
           {/* Visual/Demo Area */}

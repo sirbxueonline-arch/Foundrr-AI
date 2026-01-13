@@ -107,6 +107,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
 
   // 4. INJECT EDITOR SCRIPT (For interactive editing)
   // This script allows the parent window to know when an image is clicked.
+
   const editorScript = `
     <script>
       document.addEventListener('DOMContentLoaded', () => {
@@ -128,43 +129,45 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
             }
 
             if (e.target.tagName === 'IMG') {
-            e.preventDefault();
-            e.stopPropagation();
-            // Send message to parent (PreviewWrapper)
-            window.parent.postMessage({
-              type: 'IMAGE_SELECTED',
-              src: e.target.src,
-              id: e.target.id || 'img-' + Math.random().toString(36).substr(2, 9),
-            }, '*');
-            
-            // Highlight the image temporarily
-            const originalOutline = e.target.style.outline;
-            e.target.style.outline = '4px solid #3b82f6';
-            setTimeout(() => {
-              e.target.style.outline = originalOutline;
-            }, 1000);
-          }
-        }, true); // Capture phase
+             // Only if NOT in visual edit mode (which handles its own clicks)
+             if (!document.body.classList.contains('visual-editor-active')) {
+                e.preventDefault();
+                e.stopPropagation();
+                window.parent.postMessage({
+                  type: 'IMAGE_SELECTED',
+                  src: e.target.src,
+                  id: e.target.id || 'img-' + Math.random().toString(36).substr(2, 9),
+                }, '*');
+             }
+            }
+        }, true);
 
         // Listen for updates from Parent
         window.addEventListener('message', (event) => {
           if (event.data.type === 'UPDATE_IMAGE') {
-            const { oldSrc, newSrc } = event.data;
-            const images = document.querySelectorAll('img');
-            images.forEach(img => {
-              if (img.src === oldSrc) {
-                img.src = newSrc;
-              }
-            });
+             // ... existing image update logic
+             const { oldSrc, newSrc } = event.data;
+             const images = document.querySelectorAll('img');
+             images.forEach(img => {
+               if (img.src === oldSrc) {
+                 img.src = newSrc;
+               }
+             });
           }
         });
       });
     </script>
   `;
+  
+  const { visualEditorScript } = require('@/lib/visual-editor-script'); 
+  // Note: Using require or import above. Since this is a route handler file, 
+  // let's stick to the import we added in the previous step but fix the usage.
+  
+  const combinedScript = editorScript + (visualEditorScript || '');
 
   // Inject before closing body tag
   const htmlContent = await fileData.text();
-  const htmlWithScript = htmlContent.replace('</body>', `${editorScript}</body>`);
+  const htmlWithScript = htmlContent.replace('</body>', `${combinedScript}</body>`);
 
   return new NextResponse(htmlWithScript, {
     headers: {
