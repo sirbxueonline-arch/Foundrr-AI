@@ -4,11 +4,11 @@ import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
-
+// Initialize lazily to avoid build-time errors if env var is missing
 export async function POST(request: Request) {
+  const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+  })
   try {
     const cookieStore = await cookies()
     const supabase = createServerClient(
