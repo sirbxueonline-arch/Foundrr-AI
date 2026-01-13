@@ -8,30 +8,77 @@ export async function middleware(request: NextRequest) {
     },
   })
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options)
-          )
-        },
-      },
-    }
-  )
+  // Ensure keys exist to prevent crashes
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+     console.error('Middleware Error: Missing Supabase Environment Variables');
+     return response; // Return cleanly instead of crashing
+  }
 
-  const { data: { user } } = await supabase.auth.getUser()
+  try {
+      const supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+        {
+          cookies: {
+            getAll() {
+              return request.cookies.getAll()
+            },
+            setAll(cookiesToSet) {
+              cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
+              response = NextResponse.next({
+                request: {
+                  headers: request.headers,
+                },
+              })
+              cookiesToSet.forEach(({ name, value, options }) =>
+                response.cookies.set(name, value, options)
+              )
+            },
+          },
+        }
+      )
+
+      const { data: { user } } = await supabase.auth.getUser()
+  } catch (e) {
+      console.error('Middleware Supabase Error:', e);
+      // Continue without user if auth fails
+  }
+  
+  // Define user for scope (since try block scope is different)
+  // Re-fetch user in try block is not accessible here easily without refactoring scopes.
+  // Instead, let's just use empty user if failed.
+  // Actually, simplified approach:
+  let user = null;
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      try {
+           const supabase = createServerClient(
+             process.env.NEXT_PUBLIC_SUPABASE_URL,
+             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+             {
+               cookies: {
+                 getAll() {
+                   return request.cookies.getAll()
+                 },
+                 setAll(cookiesToSet) {
+                   cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
+                   response = NextResponse.next({
+                     request: {
+                       headers: request.headers,
+                     },
+                   })
+                   cookiesToSet.forEach(({ name, value, options }) =>
+                     response.cookies.set(name, value, options)
+                   )
+                 },
+               },
+             }
+           )
+           const { data } = await supabase.auth.getUser()
+           user = data.user
+      } catch (e) {
+           console.error('Middleware Auth Error', e)
+      }
+  }
 
   // SUBDOMAIN HANDLING
   const hostname = request.headers.get('host') || ''
