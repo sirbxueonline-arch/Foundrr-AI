@@ -72,20 +72,21 @@ export function ProjectCard({ site }: { site: Site }) {
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
-             <div className="flex flex-col items-center justify-center text-muted-foreground/50 gap-2 text-center p-4">
-                <div className="w-12 h-12 rounded-full bg-muted/50 flex items-center justify-center">
-                   <Monitor className="w-6 h-6" />
-                </div>
-                <span className="text-[10px] font-medium uppercase tracking-widest">
-                  Preview Not Ready
-                </span>
-                <span className="text-[9px] text-muted-foreground">
-                  Open & Save to Generate
-                </span>
-             </div>
+            <>
+             {/* Fallback to Iframe if no thumbnail exists yet */}
+              <iframe
+                src={`/api/preview/${site.id}`}
+                className="absolute inset-0 w-[400%] h-[400%] scale-[0.25] origin-top-left border-0 pointer-events-none select-none opacity-50 group-hover:opacity-100 transition-opacity"
+                loading="lazy"
+                title={`Preview of ${site.name || site.id}`}
+                tabIndex={-1}
+              />
+              {/* Overlay to catch clicks */}
+              <div className="absolute inset-0 z-10" />
+            </>
           )}
 
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/5 z-10 backdrop-blur-[1px]">
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/5 z-20 backdrop-blur-[1px]">
             <span className="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-semibold text-black shadow-sm transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
               {t.projects.openDesigner} <ExternalLink className="ml-1 h-3 w-3" />
             </span>

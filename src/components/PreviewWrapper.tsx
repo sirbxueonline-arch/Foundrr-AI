@@ -103,24 +103,62 @@ export default function PreviewWrapper({ siteId, isPaid }: PreviewWrapperProps) 
      }
   }
 
-  // Listen for SAVE_HTML response
+  // Autosave Logic
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+  const autosaveTimerRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Listen for HTML changes from Iframe (for autosave)
+  useEffect(() => {
+     const handleHtmlChanged = (event: MessageEvent) => {
+         if (event.data?.type === 'HTML_CHANGED' && event.data?.html) {
+             setHasUnsavedChanges(true);
+             
+             // Debounce Autosave (2 seconds)
+             if (autosaveTimerRef.current) clearTimeout(autosaveTimerRef.current);
+             
+             autosaveTimerRef.current = setTimeout(async () => {
+                 try {
+                    await fetch('/api/save-site', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ siteId, html: event.data.html })
+                    })
+                    // Capture Thumbnail silently
+                    captureThumbnail();
+                    setHasUnsavedChanges(false);
+                    // Don't alert on autosave, just save.
+                 } catch (e) {
+                    console.error("Autosave failed", e);
+                 }
+             }, 2000);
+         }
+     }
+     window.addEventListener('message', handleHtmlChanged);
+     return () => {
+        window.removeEventListener('message', handleHtmlChanged);
+        if (autosaveTimerRef.current) clearTimeout(autosaveTimerRef.current);
+     }
+  }, [siteId])
+
+  // Listen for manual SAVE_HTML response (Keep existing for button click)
   useEffect(() => {
     const handleSave = async (event: MessageEvent) => {
         if (event.data.type === 'SAVE_HTML' && event.data.html) {
+             // Handle manual save
+             // Clear any pending autosave to avoid double save
+             if (autosaveTimerRef.current) clearTimeout(autosaveTimerRef.current);
+
              setIsTextEditing(false); // Turn off edit mode
              try {
-                // Optimistic UI update? No need, we just save.
                 await fetch('/api/save-site', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ siteId, html: event.data.html })
                 })
                 alert("Changes saved successfully!");
-                // Capture Thumbnail
                 captureThumbnail();
-                
-                // Force reload iframe to ensure clean state? 
                 setReloadKey(prev => prev + 1);
+                setHasUnsavedChanges(false);
               } catch (e) {
                 console.error('Failed to save', e)
                 alert('Failed to save changes')
