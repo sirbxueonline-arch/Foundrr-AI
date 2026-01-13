@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import {
   ExternalLink, Calendar, CheckCircle, Lock,
-  MoreVertical, Trash2, Loader2, PenTool
+  MoreVertical, Trash2, Loader2, PenTool, Monitor
 } from 'lucide-react'
 
 import { useLanguage } from '@/contexts/LanguageContext'
@@ -19,6 +19,7 @@ interface Site {
   paid: boolean
   name?: string
   views?: number
+  thumbnail_url?: string
 }
 
 export function ProjectCard({ site }: { site: Site }) {
@@ -64,17 +65,23 @@ export function ProjectCard({ site }: { site: Site }) {
       <div className="h-full overflow-hidden rounded-xl border bg-card shadow-sm transition-all hover:shadow-md hover:border-primary/50 relative flex flex-col">
         {/* Preview / Thumbnail Area */}
         <div className="aspect-video w-full bg-muted/40 relative overflow-hidden flex items-center justify-center group-hover:bg-muted/60 transition-colors">
-          {/* Live Preview Iframe */}
-          <iframe
-            src={`/api/preview/${site.id}`}
-            className="absolute inset-0 w-[400%] h-[400%] scale-[0.25] origin-top-left border-0 pointer-events-none select-none"
-            loading="lazy"
-            title={`Preview of ${site.name || site.id}`}
-            tabIndex={-1}
-          />
+          {site.thumbnail_url ? (
+            <img 
+              src={site.thumbnail_url} 
+              alt={site.name || 'Project Preview'} 
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          ) : (
+             <div className="flex flex-col items-center justify-center text-muted-foreground/50 gap-2">
+                <div className="w-12 h-12 rounded-full bg-muted/50 flex items-center justify-center">
+                   <Monitor className="w-6 h-6" />
+                </div>
+                <span className="text-[10px] font-medium uppercase tracking-widest">No Preview</span>
+             </div>
+          )}
 
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/5 z-10">
-            <span className="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-semibold text-black shadow-sm">
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/5 z-10 backdrop-blur-[1px]">
+            <span className="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-semibold text-black shadow-sm transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
               {t.projects.openDesigner} <ExternalLink className="ml-1 h-3 w-3" />
             </span>
           </div>

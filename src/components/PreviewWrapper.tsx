@@ -65,6 +65,35 @@ export default function PreviewWrapper({ siteId, isPaid }: PreviewWrapperProps) 
     }
   }, [isTextEditing])
 
+  const captureThumbnail = async () => {
+    if (!iframeRef.current?.contentDocument?.body) return;
+    try {
+        // Dynamic import to avoid SSR issues
+        const html2canvas = (await import('html2canvas')).default
+        
+        const canvas = await html2canvas(iframeRef.current.contentDocument.body, {
+            width: 1280, 
+            height: 720,
+            scale: 0.5, // Reduced scale for smaller file size
+            useCORS: true,
+            logging: false
+        })
+
+        canvas.toBlob(async (blob) => {
+            if (!blob) return
+            const formData = new FormData()
+            formData.append('file', blob)
+            formData.append('siteId', siteId)
+            
+            // Upload in background, don't block UI
+            fetch('/api/thumbnail', { method: 'POST', body: formData })
+              .catch(e => console.error("Thumbnail upload failed", e))
+        }, 'image/jpeg', 0.8)
+    } catch (e) {
+        console.error("Failed to capture thumbnail", e)
+    }
+  }
+
   const handleSaveText = () => {
      if (iframeRef.current?.contentWindow) {
        // Request HTML from child
@@ -87,6 +116,9 @@ export default function PreviewWrapper({ siteId, isPaid }: PreviewWrapperProps) 
                   body: JSON.stringify({ siteId, html: event.data.html })
                 })
                 alert("Changes saved successfully!");
+                // Capture Thumbnail
+                captureThumbnail();
+                
                 // Force reload iframe to ensure clean state? 
                 setReloadKey(prev => prev + 1);
               } catch (e) {
