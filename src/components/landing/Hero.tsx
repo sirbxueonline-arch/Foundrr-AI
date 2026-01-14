@@ -53,11 +53,8 @@ export function Hero({ lang = 'az', t }: { lang?: string, t?: any }) {
             className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-foreground via-foreground/90 to-foreground/50 pb-4"
           >
             {text.headline} <br />
-            <span className="text-primary relative">
+            <span className="text-primary relative underline decoration-primary/30 underline-offset-8 decoration-4">
               {text.headlineSub}
-              <svg className="absolute -bottom-2 w-full h-3 text-primary/30" viewBox="0 0 100 10" preserveAspectRatio="none">
-                <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="3" fill="none" />
-              </svg>
             </span>
           </motion.h1>
 

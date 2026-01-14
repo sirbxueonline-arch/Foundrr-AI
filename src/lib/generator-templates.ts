@@ -586,7 +586,10 @@ export const TEMPLATES = {
                 </div>
             </div>
             <div class="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
-                <p>&copy; 2024 Brand Inc. All rights reserved.</p>
+                <div class="text-center md:text-left">
+                    <p>&copy; 2026 Brand Inc. All rights reserved.</p>
+                    <p class="text-xs mt-1">Made by Foundrr Group</p>
+                </div>
                 <div class="flex gap-4 mt-4 md:mt-0">
                     <i class="fab fa-twitter hover:text-black cursor-pointer"></i>
                     <i class="fab fa-github hover:text-black cursor-pointer"></i>
