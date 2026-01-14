@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "foundrr | Your website. Written and coded. Instantly.",
-  description: "Generate a complete, professional website in seconds. Preview it. Unlock it when you're ready.",
+  title: "foundrr | Pay Once Website Builder | No Subscriptions",
+  description: "Generate a complete, downloadable business website in seconds. You own the code forever. Production-ready HTML, SEO-optimized, and zero monthly fees.",
   icons: {
     icon: "/vercel.svg",
   },

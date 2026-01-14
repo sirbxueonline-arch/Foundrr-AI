@@ -48,10 +48,10 @@ export const translations = {
     hero: {
       badge: "foundrr Canlıdır",
       badgeSub: "Yeni Nəsil Mühərriki",
-      headline: "Xəyalınızdakı saytı",
-      headlineSub: "foundrr ilə qurun",
-      desc: "foundrr dizaynı, kodu və biznes məntiqini başa düşən inkişaf etmiş süni intellekt ilə ideyalarınızı saniyələr ərzində istehsala hazır veb saytlara çevirir.",
-      ctaPrimary: "Pulsuz Başla",
+      headline: "Həmişəlik Sahib Olduğunuz",
+      headlineSub: "Peşəkar Veb Sayt.",
+      desc: "Biznes saytınızı icarəyə götürməyi dayandırın. Foundrr sizin üçün saniyələr içində tam, yüklənə bilən veb sayt yaradır. Bir dəfə ödəyin, kodu götürün və bir daha heç vaxt abunə haqqı ödəməyin.",
+      ctaPrimary: "İndi Başla (Pulsuz)",
       ctaSecondary: "Nümunələrə Bax",
       prompt: "Müasir, qaranlıq estetikaya malik Brew & Bean adlı qəhvə mağazası üçün veb sayt yarat.",
       reasoning: {
@@ -65,8 +65,8 @@ export const translations = {
     features: {
       items: [
         { title: "Süni İntellektlə Yaradılma", description: "Mühərrikimiz məzmun və kodu eyni anda yazır. Şablon yoxdur, sadəcə xalis yaradıcılıq." },
-        { title: "İstehsala Hazır", description: "Lighthouse-da 100 bal toplayan təmiz, semantik HTML. SEO üçün optimallaşdırılıb." },
-        { title: "Mobil İlk", description: "Telefonlardan 4k monitorlara qədər hər cihazda mükəmməl görünən responsiv dizayn." },
+        { title: "Birdəfəlik Ödəniş", description: "Aylıq abunəlik yoxdur. Saytınızı bəyənirsinizsə, bir dəfə ödəyin və ömürlük sizin olsun." },
+        { title: "Tam Kod Sahibliyi", description: "HTML və CSS fayllarını birbaşa yükləyin. İstədiyiniz yerdə yerləşdirin." },
         { title: "Qlobal CDN", description: "Dərhal kənara yerləşdirin. Saytınız hər yerdə sürətli yüklənir." }
       ],
       title: "Sadəcə bir qurucu deyil.",
@@ -75,16 +75,16 @@ export const translations = {
     },
     whatYouGet: {
       badge: "İstehsala Hazır",
-      title: "Premium keyfiyyət,",
-      titleSub: "agentlik qiyməti olmadan.",
-      desc: "foundrr saytları biznes üçün qurulub. Təmiz kod, mobil üçün optimallaşdırılmış və hər yerdə yerləşdirilməyə hazır.",
+      title: "Bir Dəfə Ödə.",
+      titleSub: "Həmişəlik Sahib Ol.",
+      desc: "Əksər platformalar sizi bitməyən abunəliklərə məcbur edir. Foundrr sizə 100% sahib olduğunuz təmiz, ixrac edilə bilən kod verir. İstənilən yerdə pulsuz yerləşdirin.",
       list: [
-        "Mobil üçün dizayn",
-        "SEO üçün optimallaşdırılmış HTML",
-        "Premium tipoqrafiya",
+        "Aylıq ödəniş yoxdur",
+        "Tam kod çıxarışı (HTML/CSS)",
+        "SEO üçün optimallaşdırılmış",
         "Sürətli yüklənmə (Artıq yük yoxdur)",
         "Baxım tələb olunmur",
-        "Birdəfəlik ödəniş, ömürlük sahiblik"
+        "Mobil üçün mükəmməl dizayn"
       ],
       preview: "genişləndirmək üçün klikləyin"
     },
@@ -289,9 +289,9 @@ export const translations = {
     hero: {
       badge: "foundrr is Live",
       badgeSub: "New Generation Engine",
-      headline: "Build your dream",
-      headlineSub: "website with foundrr",
-      desc: "foundrr turns your ideas into production-ready websites in seconds. Powered by advanced AI that understands design, code, and business logic.",
+      headline: "The Professional Website",
+      headlineSub: "You Own Forever.",
+      desc: "Stop renting your business website. Foundrr generates a complete, downloadable website for you in seconds. You pay once, export the code, and never pay a subscription fee again.",
       ctaPrimary: "Start Building Free",
       ctaSecondary: "See Examples",
       prompt: "Create a landing page for a coffee shop called Brew & Bean with a modern, dark aesthetic.",
@@ -306,8 +306,8 @@ export const translations = {
     features: {
       items: [
         { title: "AI-Powered Generation", description: "Our engine writes content and code simultaneously. No templates, just pure creation." },
-        { title: "Production Ready", description: "Clean, semantic HTML that scores 100 on Lighthouse. SEO optimized out of the box." },
-        { title: "Mobile First", description: "Responsive design that looks perfect on any device, from phones to 4k monitors." },
+        { title: "One-Time Payment", description: "No monthly subscriptions. If you like your site, you pay once and own it forever." },
+        { title: "Full Code Ownership", description: "Download the raw HTML & CSS files. Host them anywhere you want, for free." },
         { title: "Global CDN", description: "Deploy instantly to the edge. Your site loads fast, everywhere." }
       ],
       title: "Not just a builder.",
@@ -316,16 +316,16 @@ export const translations = {
     },
     whatYouGet: {
       badge: "Production Ready",
-      title: "Premium quality,",
-      titleSub: "without the agency price tag.",
-      desc: "foundrr sites are built for business. Clean code, mobile-optimized, and ready to deploy anywhere.",
+      title: "Pay Once.",
+      titleSub: "Own It Forever.",
+      desc: "Most builders lock you into a never-ending subscription. Foundrr gives you clean, exportable code that you own 100%. Host it anywhere for free.",
       list: [
-        "Mobile-first responsive design",
-        "SEO-optimized semantic HTML",
-        "Neutral, premium typography",
-        "Fast loading speeds (No bloat)",
+        "No monthly fees",
+        "Full code export (HTML/CSS)",
+        "SEO-optimized out of the box",
+        "Blazing fast (No bloat)",
         "Zero maintenance required",
-        "One-time payment, lifetime ownership"
+        "Mobile-perfect design"
       ],
       preview: "Hover to preview"
     },

@@ -5,8 +5,8 @@ import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 
 export const metadata: Metadata = {
-  title: 'foundrr | AI Website Builder',
-  description: 'Clean, production-ready code in seconds.',
+  title: 'foundrr | AI Website Builder No Subscription',
+  description: 'Building a website shouldn\'t exist on a lease. Generate, download, and own your code forever. One-time payment.',
 }
 
 export default async function Home() {
