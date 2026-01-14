@@ -9,6 +9,7 @@ import { useLanguage } from '@/contexts/LanguageContext'
 
 import { Hero } from '@/components/landing/Hero'
 import { Features } from '@/components/landing/Features'
+import { PricingCards } from '@/components/pricing/PricingCards'
 import { Footer } from '@/components/layout/Footer'
 
 import { Navbar } from '@/components/layout/Navbar'
@@ -95,6 +96,15 @@ export default function LandingContent({ user }: { user: any }) {
           </div>
         </div>
       </section>
+      
+      {/* Pricing Section on Homepage */}
+      <div className="w-full bg-background border-t border-border/40 pt-24">
+        <div className="text-center max-w-3xl mx-auto mb-16 px-4">
+             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">{t.whatYouGet.title} {t.whatYouGet.titleSub}</h2>
+             <p className="text-muted-foreground">{t.whatYouGet.desc}</p>
+        </div>
+        <PricingCards />
+      </div>
 
       <Footer />
     </div>

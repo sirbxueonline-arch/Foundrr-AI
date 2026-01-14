@@ -112,32 +112,30 @@ export function PayContent({ siteId }: { siteId: string }) {
       </div>
 
       <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl overflow-hidden transition-all duration-300 relative z-10">
-        <div className="bg-gradient-to-br from-primary/10 to-transparent px-6 py-10 text-center relative border-b border-white/5">
+        <div className="bg-gradient-to-br from-primary/10 to-transparent px-6 py-8 text-center relative border-b border-white/5">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-50" />
-          <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70">{t?.payment?.title || "Unlock This Website"}</h1>
-          <p className="mt-2 text-muted-foreground text-sm max-w-xs mx-auto">
-            {t?.payment?.desc || "Secure lifetime ownership. No monthly fees."}
-          </p>
-          <div className="mt-8 relative inline-block">
-             <div className="absolute -inset-6 bg-primary/20 blur-2xl rounded-full opacity-60 animate-pulse" />
-             <div className="relative flex flex-col items-center">
-                <span className="bg-gradient-to-r from-amber-200 to-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-0.5 rounded-full mb-2 shadow-sm border border-yellow-200/50 uppercase tracking-wide">
-                  Limited Time Offer
-                </span>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-xl text-muted-foreground/50 line-through decoration-muted-foreground/50 decoration-2">
-                    99.99
-                  </span>
-                  <div className="text-6xl font-extrabold tracking-tighter text-foreground drop-shadow-sm">
-                    {priceLoading ? (
-                      <Loader2 className="animate-spin h-12 w-12 opacity-30 my-2" />
-                    ) : (
-                      <>49.99<span className="text-2xl font-medium text-muted-foreground/80 ml-1">{t?.payment?.currency || "AZN"}</span></>
-                    )}
-                  </div>
+          <h1 className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70 mb-6">{t?.payment?.title || "Unlock This Website"}</h1>
+          
+          <div className="space-y-3 mb-2 max-w-sm mx-auto bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/5 shadow-inner">
+             <div className="flex justify-between text-sm text-muted-foreground">
+                <span>{t?.payment?.breakdown?.website || "Static Website Price"}</span>
+                <span className="font-mono">49.99 {t?.payment?.currency || "AZN"}</span>
+             </div>
+             <div className="flex justify-between text-sm text-muted-foreground">
+                <span>{t?.payment?.breakdown?.fee || "Foundrr Service Fee"}</span>
+                <span className="font-mono">15.00 {t?.payment?.currency || "AZN"}</span>
+             </div>
+             <div className="h-px w-full bg-border/50 my-2" />
+             <div className="flex justify-between text-base font-bold text-foreground">
+                <span>{t?.payment?.breakdown?.total || "Total Payable"}</span>
+                <div className="flex items-center gap-1">
+                  {priceLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span className="font-mono text-primary text-xl">64.99 {t?.payment?.currency || "AZN"}</span>}
                 </div>
              </div>
           </div>
+          <p className="mt-4 text-xs text-muted-foreground/60 max-w-xs mx-auto">
+             {t?.payment?.desc || "Secure lifetime ownership. No monthly fees."}
+          </p>
         </div>
 
         <div className="p-6 sm:p-8 space-y-8 bg-gradient-to-b from-white/5 to-transparent">

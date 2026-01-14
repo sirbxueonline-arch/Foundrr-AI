@@ -4,8 +4,8 @@ import React from 'react'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { useLanguage } from '@/contexts/LanguageContext'
-import { Check, X, Shield, Zap, Code2, Smartphone } from 'lucide-react'
-import Link from 'next/link'
+import { Shield, Zap, Code2, Smartphone } from 'lucide-react'
+import { PricingCards } from './PricingCards'
 
 export default function PricingPage({ user }: { user: any }) {
     const { t, lang } = useLanguage()
@@ -35,124 +35,7 @@ export default function PricingPage({ user }: { user: any }) {
                 </section>
 
                 {/* Pricing Cards */}
-                <section className="pb-24">
-                    <div className="container px-4 md:px-6 max-w-7xl mx-auto">
-                        <div className="grid md:grid-cols-3 gap-8 items-start">
-
-                            {/* Free Plan */}
-                            <div className="rounded-3xl border border-border p-8 bg-card shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
-                                <div className="mb-8 text-center">
-                                    <h3 className="text-lg font-medium text-muted-foreground">{lang === 'az' ? 'Yaradıcılıq' : 'Creation'}</h3>
-                                    <div className="text-5xl font-bold mt-4 mb-2">0 <span className="text-2xl font-normal text-muted-foreground">AZN</span></div>
-                                    <p className="text-sm text-muted-foreground">{lang === 'az' ? 'Sınaq üçün mükəmməldir' : 'Perfect for experimenting'}</p>
-                                </div>
-                                <ul className="space-y-4 mb-8 w-fit mx-auto text-left">
-                                    <li className="flex items-center gap-3 text-sm">
-                                        <Check className="w-5 h-5 text-green-500 shrink-0" />
-                                        {lang === 'az' ? 'Limitsiz AI Generasiyası' : 'Unlimited AI Generation'}
-                                    </li>
-                                    <li className="flex items-center gap-3 text-sm">
-                                        <Check className="w-5 h-5 text-green-500 shrink-0" />
-                                        {lang === 'az' ? 'Dizayn Redaktoru' : 'Visual Design Editor'}
-                                    </li>
-                                    <li className="flex items-center gap-3 text-sm">
-                                        <Check className="w-5 h-5 text-green-500 shrink-0" />
-                                        {lang === 'az' ? 'İstənilən vaxt önizləmə' : 'Preview Anytime'}
-                                    </li>
-                                    <li className="flex items-center gap-3 text-sm text-muted-foreground">
-                                        <X className="w-5 h-5 shrink-0" />
-                                        {lang === 'az' ? 'HTML Yükləmə yoxdur' : 'No HTML Download'}
-                                    </li>
-                                    <li className="flex items-center gap-3 text-sm text-muted-foreground">
-                                        <X className="w-5 h-5 shrink-0" />
-                                        {lang === 'az' ? 'Xüsusi Domen yoxdur' : 'No Custom Domain Hosting'}
-                                    </li>
-                                </ul>
-                                <Link href="/login" className="block w-full py-3 rounded-xl border border-input bg-background hover:bg-muted text-center font-medium transition-colors">
-                                    {lang === 'az' ? 'Pulsuz Başla' : 'Start for Free'}
-                                </Link>
-                            </div>
-
-                            {/* Pro Plan */}
-                            <div className="rounded-3xl border border-primary/20 bg-background shadow-2xl relative overflow-hidden ring-1 ring-primary/20">
-                                <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-bl-xl">POPULAR</div>
-                                <div className="p-8">
-                                    <div className="mb-8 text-center">
-                                        <h3 className="text-lg font-medium text-primary">{lang === 'az' ? 'Sahiblik' : 'Ownership'}</h3>
-                                        <div className="flex items-baseline justify-center gap-2 mt-4 mb-2">
-                                            <span className="text-5xl font-bold">49.99</span>
-                                            <span className="text-2xl font-normal text-muted-foreground">AZN</span>
-                                        </div>
-                                        <p className="text-sm text-muted-foreground">{lang === 'az' ? 'Sayt başına birdəfəlik ödəniş' : 'One-time payment per site'}</p>
-                                    </div>
-                                    <ul className="space-y-4 mb-8 w-fit mx-auto text-left">
-                                        <li className="flex items-center gap-3 text-sm font-medium">
-                                            <div className="p-1 rounded-full bg-green-500/10 text-green-600 shrink-0"><Check className="w-3 h-3" /></div>
-                                            {lang === 'az' ? 'Tam HTML/CSS Koduna Çıxış' : 'Full HTML/CSS Code Access'}
-                                        </li>
-                                        <li className="flex items-center gap-3 text-sm font-medium">
-                                            <div className="p-1 rounded-full bg-green-500/10 text-green-600 shrink-0"><Check className="w-3 h-3" /></div>
-                                            {lang === 'az' ? 'Dərhal Yükləmə (ZIP)' : 'Instant Download (ZIP)'}
-                                        </li>
-                                        <li className="flex items-center gap-3 text-sm font-medium">
-                                            <div className="p-1 rounded-full bg-green-500/10 text-green-600 shrink-0"><Check className="w-3 h-3" /></div>
-                                            {lang === 'az' ? 'Kommersiya İstifadə Hüququ' : 'Commercial Usage Rights'}
-                                        </li>
-                                        <li className="flex items-center gap-3 text-sm font-medium">
-                                            <div className="p-1 rounded-full bg-green-500/10 text-green-600 shrink-0"><Check className="w-3 h-3" /></div>
-                                            {lang === 'az' ? 'SEO üçün Hazır' : 'SEO Optimized Code'}
-                                        </li>
-                                        <li className="flex items-center gap-3 text-sm font-medium">
-                                            <div className="p-1 rounded-full bg-green-500/10 text-green-600 shrink-0"><Check className="w-3 h-3" /></div>
-                                            {lang === 'az' ? 'Məhdudiyyətsiz Düzəlişlər' : 'Unlimited Future Edits'}
-                                        </li>
-                                    </ul>
-                                    <Link href="/login" className="block w-full py-3 rounded-xl bg-primary text-primary-foreground text-center font-bold hover:opacity-90 transition-opacity shadow-lg shadow-primary/20">
-                                        {lang === 'az' ? 'İndi Başla' : 'Get Started'}
-                                    </Link>
-                                </div>
-                                <div className="bg-muted/50 p-4 text-center text-xs text-muted-foreground border-t border-border/50">
-                                    {lang === 'az' ? '30 gün pulun geri qaytarılması zəmanəti' : '30-day money-back guarantee'}
-                                </div>
-                            </div>
-
-                            {/* Enterprise Plan */}
-                            <div className="rounded-3xl border border-border p-8 bg-card shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
-                                <div className="mb-8 text-center">
-                                    <h3 className="text-lg font-medium text-muted-foreground">{lang === 'az' ? 'Agentlik' : 'Agency'}</h3>
-                                    <div className="text-3xl font-bold mt-4 mb-2">{lang === 'az' ? 'Razılaşma ilə' : 'Custom Quote'}</div>
-                                    <p className="text-sm text-muted-foreground">{lang === 'az' ? 'Mürəkkəb layihələr üçün xüsusi həllər' : 'For complex projects needing extra power'}</p>
-                                </div>
-                                <ul className="space-y-4 mb-8 w-fit mx-auto text-left">
-                                    <li className="flex items-center gap-3 text-sm">
-                                        <Check className="w-5 h-5 text-indigo-500 shrink-0" />
-                                        {lang === 'az' ? 'İstifadəçi Girişi və Auth' : 'User Login & Authentication'}
-                                    </li>
-                                    <li className="flex items-center gap-3 text-sm">
-                                        <Check className="w-5 h-5 text-indigo-500 shrink-0" />
-                                        {lang === 'az' ? 'Backend İnteqrasiyası' : 'Backend Database Integration'}
-                                    </li>
-                                    <li className="flex items-center gap-3 text-sm">
-                                        <Check className="w-5 h-5 text-indigo-500 shrink-0" />
-                                        {lang === 'az' ? 'Çoxsəhifəli Dizayn' : 'Multi-page Custom Design'}
-                                    </li>
-                                    <li className="flex items-center gap-3 text-sm">
-                                        <Check className="w-5 h-5 text-indigo-500 shrink-0" />
-                                        {lang === 'az' ? 'Ödəniş Sistemləri' : 'Payment Frameworks'}
-                                    </li>
-                                    <li className="flex items-center gap-3 text-sm">
-                                        <Check className="w-5 h-5 text-indigo-500 shrink-0" />
-                                        {lang === 'az' ? 'Xüsusi Funksionallıq' : 'Custom Functionality'}
-                                    </li>
-                                </ul>
-                                <a href="mailto:contact@foundrr.com" className="block w-full py-3 rounded-xl border border-indigo-500/20 bg-indigo-50 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 text-center font-bold transition-colors">
-                                    {lang === 'az' ? 'Bizimlə Əlaqə' : 'Contact Us'}
-                                </a>
-                            </div>
-
-                        </div>
-                    </div>
-                </section>
+                <PricingCards />
 
                 {/* FAQ Style Grid */}
                 <section className="py-24 bg-muted/30 border-t border-border/40">

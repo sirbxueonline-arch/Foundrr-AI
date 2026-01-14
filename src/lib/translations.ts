@@ -132,6 +132,11 @@ export const translations = {
       title: "Veb saytınızın kilidini açın",
       desc: "Birdəfəlik qiymət. Ömürlük sahiblik. Abunə yoxdur.",
       currency: "AZN",
+      breakdown: {
+        website: "Statik Veb Sayt Qiyməti",
+        fee: "Foundrr Xidmət Haqqı",
+        total: "Cəmi Ödəniləcək Məbləğ"
+      },
       m10: "m10",
       card: "Kart",
       revealQr: "QR-i Göstər",
@@ -373,6 +378,11 @@ export const translations = {
       title: "Unlock your website",
       desc: "One-time price. Lifetime ownership. No subscriptions.",
       currency: "AZN",
+      breakdown: {
+        website: "Static Website Price",
+        fee: "Foundrr Service Fee",
+        total: "Total Payable Amount"
+      },
       m10: "m10",
       card: "Card",
       revealQr: "Reveal QR",
