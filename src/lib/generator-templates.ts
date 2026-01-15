@@ -142,6 +142,66 @@ export const TEMPLATES = {
     </section>
   `,
 
+    HERO_NEOBRUTAL: `
+    <section id="home" class="page-section relative pt-32 pb-20 bg-[#FFFDF5] min-h-screen flex items-center border-b-4 border-black">
+      <div class="container mx-auto px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-block bg-[#FF6B6B] border-4 border-black px-6 py-2 transform -rotate-2 mb-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all cursor-default">
+                <span class="font-black text-white uppercase tracking-wider">Early Access</span>
+            </div>
+            <h1 class="text-6xl md:text-8xl font-black text-black mb-8 leading-none uppercase" data-aos="fade-up">
+                Build <span class="bg-[#4ECDC4] border-4 border-black px-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-white inline-block transform rotate-1">LOUD</span> and <br/>
+                <span class="bg-[#FFE66D] border-4 border-black px-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] inline-block transform -rotate-1">Proud.</span>
+            </h1>
+            <p class="text-2xl font-bold text-black border-2 border-black p-6 bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mb-10 max-w-2xl mx-auto transform rotate-1" data-aos="fade-up" data-aos-delay="100">
+                Stop being subtle. Make an impact with bold borders, high contrast, and zero compromises.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center" data-aos="fade-up" data-aos-delay="200">
+                 <button onclick="navigateTo('signup')" class="px-8 py-4 bg-[#FF6B6B] border-4 border-black font-black text-xl text-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] hover:translate-x-2 hover:translate-y-2 transition-all">
+                    START NOW
+                 </button>
+                 <button onclick="navigateTo('features')" class="px-8 py-4 bg-white border-4 border-black font-black text-xl text-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)] hover:translate-x-2 hover:translate-y-2 transition-all">
+                    LEARN MORE
+                 </button>
+            </div>
+        </div>
+      </div>
+    </section>
+  `,
+
+    HERO_RETRO: `
+    <section id="home" class="page-section relative pt-32 pb-20 bg-[#000080] min-h-screen flex items-center justify-center font-mono">
+      <div class="container mx-auto px-6 text-center text-white">
+         <div class="border-2 border-white bg-[#C0C0C0] text-black w-full max-w-3xl mx-auto shadow-[4px_4px_0px_0px_rgba(0,0,0,0.5)]" data-aos="zoom-in">
+            <div class="bg-[#000080] text-white px-2 py-1 flex justify-between items-center bg-gradient-to-r from-[#000080] to-[#1084d0]">
+                <span class="font-bold">Welcome.exe</span>
+                <div class="flex gap-1">
+                    <button class="w-4 h-4 bg-[#C0C0C0] border border-white border-b-black border-r-black text-[10px] flex items-center justify-center text-black leading-none">_</button>
+                    <button class="w-4 h-4 bg-[#C0C0C0] border border-white border-b-black border-r-black text-[10px] flex items-center justify-center text-black leading-none">□</button>
+                    <button class="w-4 h-4 bg-[#C0C0C0] border border-white border-b-black border-r-black text-[10px] flex items-center justify-center text-black leading-none">x</button>
+                </div>
+            </div>
+            <div class="p-8 text-center bg-[#C0C0C0]">
+                <h1 class="text-4xl md:text-6xl font-bold text-black mb-6 tracking-tight" style="text-shadow: 2px 2px 0 #fff;">
+                    THE FUTURE <br/> IS PIXELATED
+                </h1>
+                <p class="text-lg text-black mb-8 leading-relaxed font-bold">
+                    EST. 1999 // LOADING ASSETS... <span class="animate-pulse">|</span>
+                </p>
+                <div class="flex justify-center gap-4">
+                    <button onclick="navigateTo('signup')" class="px-6 py-2 bg-[#C0C0C0] border-2 border-white border-b-black border-r-black text-black font-bold active:border-t-black active:border-l-black active:border-b-white active:border-r-white active:bg-gray-400">
+                        CLICK_ME
+                    </button>
+                     <button onclick="navigateTo('features')" class="px-6 py-2 bg-[#C0C0C0] border-2 border-white border-b-black border-r-black text-black font-bold active:border-t-black active:border-l-black active:border-b-white active:border-r-white active:bg-gray-400">
+                        READ_DOCS
+                    </button>
+                </div>
+            </div>
+         </div>
+      </div>
+    </section>
+  `,
+
     HERO_CREATIVE: `
     <section id="home" class="page-section relative min-h-screen flex items-center justify-center overflow-hidden bg-zinc-50">
       <div class="absolute inset-0 w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
@@ -448,6 +508,100 @@ export const TEMPLATES = {
                     </div>
                     <button class="w-full py-4 bg-black text-white font-bold rounded-xl hover:opacity-90 transition-opacity">Send Message</button>
                 </form>
+            </div>
+        </div>
+    </section>
+  `,
+
+    FAQ: `
+    <section id="faq" class="page-section py-24 bg-white">
+        <div class="container mx-auto px-6 max-w-3xl">
+            <h2 class="text-3xl font-bold text-center mb-12" data-aos="fade-up">Frequently Asked Questions</h2>
+            <div class="space-y-4">
+                <div class="group border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all cursor-pointer bg-gray-50 hover:bg-white" data-aos="fade-up" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-lg text-gray-900">How does the free trial work?</h3>
+                        <i class="fas fa-chevron-down transform transition-transform group-[.active]:rotate-180 text-gray-400"></i>
+                    </div>
+                    <p class="hidden group-[.active]:block mt-3 text-gray-600 leading-relaxed animate-fade-in">
+                        You get full access to all features for 14 days. No credit card required. At the end of the trial, you can choose to upgrade or remain on the free tier.
+                    </p>
+                </div>
+                <div class="group border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all cursor-pointer bg-gray-50 hover:bg-white" data-aos="fade-up" data-aos-delay="100" onclick="this.classList.toggle('active')">
+                     <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-lg text-gray-900">Can I cancel anytime?</h3>
+                        <i class="fas fa-chevron-down transform transition-transform group-[.active]:rotate-180 text-gray-400"></i>
+                    </div>
+                    <p class="hidden group-[.active]:block mt-3 text-gray-600 leading-relaxed animate-fade-in">
+                        Yes, absolutely. There are no lock-in contracts. You can cancel your subscription at any time from your dashboard settings.
+                    </p>
+                </div>
+                <div class="group border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all cursor-pointer bg-gray-50 hover:bg-white" data-aos="fade-up" data-aos-delay="200" onclick="this.classList.toggle('active')">
+                     <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-lg text-gray-900">Do you offer refunds?</h3>
+                        <i class="fas fa-chevron-down transform transition-transform group-[.active]:rotate-180 text-gray-400"></i>
+                    </div>
+                    <p class="hidden group-[.active]:block mt-3 text-gray-600 leading-relaxed animate-fade-in">
+                        We offer a 30-day money-back guarantee. If you're not satisfied properly, just reach out to our support team.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+  `,
+
+    TEAM: `
+    <section id="team" class="page-section py-24 bg-zinc-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+                 <h2 class="text-3xl font-bold mb-4">Meet the Team</h2>
+                 <p class="text-gray-500 text-lg">The brilliant minds behind our innovation.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center group hover:-translate-y-2 transition-transform" data-aos="fade-up">
+                    <div class="w-24 h-24 mx-auto bg-gray-100 rounded-full mb-4 overflow-hidden">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=ceo" class="w-full h-full" />
+                    </div>
+                    <h3 class="font-bold text-lg">Alex Morgan</h3>
+                    <p class="text-blue-600 text-sm font-medium mb-4">CEO & Founder</p>
+                    <div class="flex justify-center gap-3 text-gray-400">
+                        <i class="fab fa-twitter hover:text-blue-400 cursor-pointer"></i>
+                        <i class="fab fa-linkedin hover:text-blue-700 cursor-pointer"></i>
+                    </div>
+                </div>
+                 <div class="bg-white p-6 rounded-2xl shadow-sm text-center group hover:-translate-y-2 transition-transform" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-24 h-24 mx-auto bg-gray-100 rounded-full mb-4 overflow-hidden">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=cto" class="w-full h-full" />
+                    </div>
+                    <h3 class="font-bold text-lg">Sarah Chen</h3>
+                    <p class="text-blue-600 text-sm font-medium mb-4">CTO</p>
+                    <div class="flex justify-center gap-3 text-gray-400">
+                        <i class="fab fa-twitter hover:text-blue-400 cursor-pointer"></i>
+                        <i class="fab fa-linkedin hover:text-blue-700 cursor-pointer"></i>
+                    </div>
+                </div>
+                 <div class="bg-white p-6 rounded-2xl shadow-sm text-center group hover:-translate-y-2 transition-transform" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-24 h-24 mx-auto bg-gray-100 rounded-full mb-4 overflow-hidden">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=des" class="w-full h-full" />
+                    </div>
+                    <h3 class="font-bold text-lg">Marcus Weil</h3>
+                    <p class="text-blue-600 text-sm font-medium mb-4">Head of Design</p>
+                    <div class="flex justify-center gap-3 text-gray-400">
+                         <i class="fab fa-dribbble hover:text-pink-500 cursor-pointer"></i>
+                        <i class="fab fa-linkedin hover:text-blue-700 cursor-pointer"></i>
+                    </div>
+                </div>
+                 <div class="bg-white p-6 rounded-2xl shadow-sm text-center group hover:-translate-y-2 transition-transform" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-24 h-24 mx-auto bg-gray-100 rounded-full mb-4 overflow-hidden">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=mkt" class="w-full h-full" />
+                    </div>
+                    <h3 class="font-bold text-lg">Elena Rodriguez</h3>
+                    <p class="text-blue-600 text-sm font-medium mb-4">Marketing Lead</p>
+                    <div class="flex justify-center gap-3 text-gray-400">
+                        <i class="fab fa-twitter hover:text-blue-400 cursor-pointer"></i>
+                        <i class="fab fa-instagram hover:text-pink-600 cursor-pointer"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

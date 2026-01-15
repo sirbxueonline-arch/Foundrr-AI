@@ -63,6 +63,8 @@ export async function POST(request: Request) {
         - Use rounded-xl or rounded-2xl for cards.
         - Use generous whitespace (py-24, px-8).
         - NEVER use default Tailwind colors (e.g. bg-blue-500). ALWAYS use specific shades (e.g. bg-indigo-600, text-slate-800) or gradients.
+        - **Neo-Brutalism**: If style is 'neobrutal', use strict black borders (border-2 border-black), heavy shadowing (shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]), and vibrant colors (pink, yellow, blue) with standard sans-serif fonts.
+        - **Retro**: If style is 'retro', use 'Courier New' or monospace fonts, high contrast colors (blue background, gray windows), and pixelated effects.
     
     COMPONENT SELECTION:
     Analyze the user's prompt "${prompt}" and choose the best sections.
@@ -77,6 +79,10 @@ export async function POST(request: Request) {
          ${TEMPLATES.HERO_CREATIVE}
        - If Corporate/Dark Mode -> Use HERO_DARK
          ${TEMPLATES.HERO_DARK}
+       - If style is 'neobrutal' -> Use HERO_NEOBRUTAL
+         ${TEMPLATES.HERO_NEOBRUTAL}
+       - If style is 'retro' -> Use HERO_RETRO
+         ${TEMPLATES.HERO_RETRO}
        - Else -> Use HERO_MODERN
          ${TEMPLATES.HERO_MODERN}
     
@@ -89,6 +95,10 @@ export async function POST(request: Request) {
          ${TEMPLATES.TESTIMONIALS}
        - Always include features -> BENTO_GRID:
          ${TEMPLATES.BENTO_GRID}
+       - If requested 'FAQ' -> FAQ:
+         ${TEMPLATES.FAQ}
+       - If requested 'Team' -> TEAM:
+         ${TEMPLATES.TEAM}
        - Always include contact -> CONTACT:
          ${TEMPLATES.CONTACT}
 
@@ -160,6 +170,8 @@ export async function POST(request: Request) {
       - If the user asks for "Dark Mode", add \`bg-slate-900 text-white\` to the body and update component backgrounds.
       - If "Minimal", use black/white/gray.
       - If "Vibrant", use saturated gradients.
+      - If "Neo-Brutalism", use high contrast, bold borders, and pops of color.
+      - If "Retro", use computer blue backgrounds and gray containers.
     
     STRUCTURE:
     <!DOCTYPE html>
@@ -179,10 +191,10 @@ export async function POST(request: Request) {
             extend: {
                 fontFamily: {
                 sans: ['${style === 'corporate' ? 'Roboto' : 'Inter'}', 'sans-serif'],
-                heading: ['${style === 'luxury' ? 'Cinzel' : 'Outfit'}', 'sans-serif'],
+                heading: ['${style === 'luxury' ? 'Cinzel' : style === 'retro' ? 'Courier New' : 'Outfit'}', '${style === 'retro' ? 'monospace' : 'sans-serif'}'],
               },
-              colors: {
-                primary: '${style === 'vibrant' ? '#4f46e5' : style === 'corporate' ? '#0f172a' : style === 'luxury' ? '#000000' : '#18181b'}',
+                colors: {
+                primary: '${style === 'vibrant' ? '#4f46e5' : style === 'corporate' ? '#0f172a' : style === 'luxury' ? '#000000' : style === 'neobrutal' ? '#FF6B6B' : style === 'retro' ? '#000080' : '#18181b'}',
                 secondary: '${style === 'luxury' ? '#ca8a04' : '#64748b'}',
               },
               backgroundImage: {
