@@ -11,7 +11,7 @@ import { useLanguage } from '@/contexts/LanguageContext'
 export default function GeneratePage() {
   const router = useRouter()
   const { t, lang } = useLanguage()
-  const [outputLang, setOutputLang] = useState<'en' | 'az'>('en')
+  const [outputLang, setOutputLang] = useState<'en' | 'az'>('az')
 
   const [formData, setFormData] = useState<{
     prompt: string;
@@ -239,8 +239,8 @@ export default function GeneratePage() {
                           setFormData(prev => ({ ...prev, pages: newPages }));
                         }}
                         className={`px-4 py-2 rounded-lg text-xs font-medium border transition-all ${(formData.pages || []).includes(page)
-                            ? 'bg-primary text-primary-foreground border-primary shadow-sm'
-                            : 'bg-background border-border/50 hover:bg-muted'
+                          ? 'bg-primary text-primary-foreground border-primary shadow-sm'
+                          : 'bg-background border-border/50 hover:bg-muted'
                           }`}
                       >
                         {(formData.pages || []).includes(page) && <CheckCircle2 className="w-3 h-3 inline mr-1.5 mb-0.5" />}

@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="antialiased">
+    <html lang="az" className="antialiased">
       <body className={cn("min-h-screen bg-background font-sans text-foreground", inter.className)}>
         <LanguageProvider>
           <div className="relative flex min-h-screen flex-col">
