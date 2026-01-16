@@ -225,7 +225,7 @@ export default function AdminPage() {
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <span className="font-bold text-emerald-600">$49.99</span>
+                                                <span className="font-bold text-emerald-600">${(site.price || 49.99).toFixed(2)}</span>
                                             </td>
                                             <td className="px-6 py-4">
                                                 <span className="text-sm text-slate-500">{format(new Date(site.created_at), 'MMM d, HH:mm')}</span>
