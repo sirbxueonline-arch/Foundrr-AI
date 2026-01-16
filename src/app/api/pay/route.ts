@@ -39,7 +39,8 @@ export async function POST(request: Request) {
         paid: false, // Do not unlock yet
         payment_status: 'pending',
         payment_method: (body.paymentMethod || 'm10'),
-        payment_identifier: paymentIdentifier
+        payment_identifier: paymentIdentifier,
+        price: 49.99 // Enforce static price for everything
       })
       .eq('id', siteId)
       .eq('user_id', user.id)
