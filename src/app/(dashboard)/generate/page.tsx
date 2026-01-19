@@ -164,6 +164,14 @@ export default function GeneratePage() {
       preview: 'bg-slate-800'
     },
     {
+      id: 'futuristic',
+      name: 'Futuristic',
+      desc: 'Sleek, neon, minimal',
+      class: 'bg-zinc-950 text-indigo-400 border-indigo-900/50 hover:border-indigo-500/50 shadow-md',
+      activeClass: 'ring-2 ring-indigo-500 ring-offset-2',
+      preview: 'bg-zinc-900'
+    },
+    {
       id: 'dark',
       name: t.generate.form.style.dark,
       desc: t.generate.form.style.darkDesc,
@@ -221,7 +229,7 @@ export default function GeneratePage() {
               {/* Prompt Input */}
               <div className="space-y-4">
                 <div className="flex justify-between items-center px-1">
-                  <label htmlFor="prompt" className="text-sm font-semibold text-foreground flex items-center gap-2">
+                  <label htmlFor="prompt" className="text-sm font-semibold text-black dark:text-gray-200 flex items-center gap-2">
                     <LayoutTemplate className="w-4 h-4 text-primary" />
                     {t.generate.form.promptLabel}
                   </label>
@@ -241,7 +249,7 @@ export default function GeneratePage() {
                       id="prompt"
                       name="prompt"
                       rows={3}
-                      className="w-full bg-transparent text-lg font-light rounded-2xl border-none px-6 py-4 placeholder:text-muted-foreground/50 focus:ring-0 resize-none transition-all duration-300 leading-relaxed text-foreground"
+                      className="w-full bg-transparent text-lg font-light rounded-2xl border-none px-6 py-4 placeholder:text-black/40 dark:placeholder:text-white/40 focus:ring-0 resize-none transition-all duration-300 leading-relaxed text-black dark:text-white"
                       placeholder={t.generate.form.promptPlaceholder}
                       value={formData.prompt}
                       onChange={handleChange}
@@ -253,7 +261,7 @@ export default function GeneratePage() {
 
               {/* Style Selection - V2 Cards */}
               <div className="space-y-4">
-                <span className="text-sm font-semibold text-foreground px-1 flex items-center gap-2">
+                <span className="text-sm font-semibold text-black dark:text-white px-1 flex items-center gap-2">
                   <Palette className="w-4 h-4 text-pink-500" />
                   {t.generate.form.visualStyle}
                 </span>
@@ -287,7 +295,7 @@ export default function GeneratePage() {
 
                 {/* Color Picker */}
                 <div className="space-y-3">
-                  <label htmlFor="color" className="text-sm font-semibold text-foreground flex items-center gap-2">
+                  <label htmlFor="color" className="text-sm font-semibold text-black dark:text-white flex items-center gap-2">
                     <div className="w-4 h-4 rounded-full bg-gradient-to-tr from-blue-500 to-green-500 shadow-sm" />
                     {t.generate.form.primaryColor}
                   </label>
@@ -304,15 +312,15 @@ export default function GeneratePage() {
                       <div className="w-10 h-10 rounded-full border-2 border-white shadow-md ring-1 ring-gray-100" style={{ backgroundColor: formData.primaryColor }} />
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-xs font-mono font-medium text-foreground bg-secondary px-2 py-0.5 roundedElement w-fit mb-0.5">{formData.primaryColor}</span>
-                      <span className="text-[10px] text-muted-foreground">{t.generate.form.clickToChange}</span>
+                      <span className="text-xs font-mono font-medium text-black dark:text-white bg-secondary px-2 py-0.5 roundedElement w-fit mb-0.5">{formData.primaryColor}</span>
+                      <span className="text-[10px] text-black/60 dark:text-white/60">{t.generate.form.clickToChange}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Multi-Page Selection */}
                 <div className="space-y-3">
-                  <label className="text-sm font-semibold text-foreground flex items-center gap-2">
+                  <label className="text-sm font-semibold text-black dark:text-white flex items-center gap-2">
                     <BookOpen className="w-4 h-4 text-orange-500" />
                     {t.generate.form.includePages}
                   </label>
