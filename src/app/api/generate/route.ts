@@ -71,10 +71,12 @@ export async function POST(request: Request) {
         - **Animations**: heavily utilize AOS attributes (data-aos="fade-up", data-aos-delay="100") on EVERY section and major element.
     
     7. **Copywriting**:
+        - **NEGATIVE CONSTRAINTS**: DO NOT use the words: "Unlock", "Unleash", "Elevate", "Supercharge", "Game-changer", "Revolutionize", "Destiny", "Embark", "Realm".
         - NEVER use "Lorem Ipsum" or generic placeholders like "Feature 1" or "Brand Name".
         - Write CREATIVE, MARKETING-ORIENTED copy based on the prompt "${prompt}".
         - If the prompt is "Coffee Shop", the Hero title should be "Sip the Extraordinary", not "Welcome to our Coffee Shop".
         - Be concise and punchy.
+        - **TONE**: Adopt a specific persona based on the prompt. If it's a law firm, be "Confident & authoritative". If it's a creative agency, be "Bold & Avant-garde".
 
     COMPONENT SELECTION:
     Analyze the user's prompt "${prompt}" and choose the best sections.

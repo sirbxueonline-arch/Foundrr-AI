@@ -68,10 +68,10 @@ export const TEMPLATES = {
          </p>
 
          <div class="flex flex-col sm:flex-row items-center justify-center gap-5" data-aos="fade-up" data-aos-delay="300">
-            <button onclick="navigateTo('signup')" class="w-full sm:w-auto px-10 py-5 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-lg hover:scale-105 transition-all shadow-2xl hover:shadow-indigo-500/20 active:scale-95">
+            <button onclick="navigateTo('signup')" class="w-full sm:w-auto px-10 py-5 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-lg hover:scale-105 hover:shadow-indigo-500/50 transition-all shadow-2xl active:scale-95 duration-300">
                Get Started Free
             </button>
-            <button onclick="navigateTo('features')" class="w-full sm:w-auto px-10 py-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white font-bold text-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-all shadow-sm hover:shadow-md active:scale-95 flex items-center justify-center gap-2">
+            <button onclick="navigateTo('features')" class="w-full sm:w-auto px-10 py-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white font-bold text-lg hover:bg-slate-50 dark:hover:bg-slate-800 hover:-translate-y-1 transition-all shadow-sm hover:shadow-xl active:scale-95 flex items-center justify-center gap-2 duration-300">
                See How It Works
             </button>
          </div>
@@ -341,18 +341,18 @@ export const TEMPLATES = {
            <div class="grid grid-cols-1 md:grid-cols-4 grid-rows-3 gap-6 h-auto md:h-[900px]">
                
                <!-- Major Feature -->
-               <div class="col-span-1 md:col-span-2 row-span-2 bg-white dark:bg-slate-950 rounded-[2rem] p-10 border border-slate-200 dark:border-slate-800 shadow-xl hover:shadow-2xl transition-all duration-500 group overflow-hidden relative" data-aos="fade-up">
+               <div class="col-span-1 md:col-span-2 row-span-2 bg-white dark:bg-slate-950 rounded-[2rem] p-10 border border-slate-200 dark:border-slate-800 shadow-xl hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 group overflow-hidden relative cursor-default" data-aos="fade-up">
                    <div class="relative z-10 h-full flex flex-col">
-                       <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform duration-500">
+                       <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-blue-500/30 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
                            <i class="fas fa-chart-pie text-white text-2xl"></i>
                        </div>
                        <h3 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">Advanced Analytics</h3>
                        <p class="text-slate-600 dark:text-slate-400 text-lg leading-relaxed mb-8 max-w-sm">Deep dive into your data with our real-time dashboard. Track every metric that matters to your business.</p>
                        <div class="mt-auto">
-                           <button class="text-blue-600 font-bold group-hover:translate-x-2 transition-transform inline-flex items-center">Explore Dashboard <i class="fas fa-arrow-right ml-2"></i></button>
+                           <button class="text-blue-600 font-bold group-hover:translate-x-2 transition-transform inline-flex items-center">Explore Dashboard <i class="fas fa-arrow-right ml-2 group-hover:ml-3 transition-all"></i></button>
                        </div>
                    </div>
-                   <div class="absolute right-0 bottom-0 w-3/5 h-4/5 translate-x-12 translate-y-12 rounded-tl-[2rem] overflow-hidden border-t border-l border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 shadow-2xl transition-transform duration-700 group-hover:translate-x-8 group-hover:translate-y-8">
+                   <div class="absolute right-0 bottom-0 w-3/5 h-4/5 translate-x-12 translate-y-12 rounded-tl-[2rem] overflow-hidden border-t border-l border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 shadow-2xl transition-transform duration-700 group-hover:translate-x-8 group-hover:translate-y-8 group-hover:scale-105">
                         <img src="/api/images/proxy?query=analytics graph chart white" class="w-full h-full object-cover" />
                    </div>
                </div>
@@ -379,8 +379,8 @@ export const TEMPLATES = {
                </div>
                
                <!-- Compact Feature 2 -->
-               <div class="col-span-1 md:col-span-1 row-span-1 bg-white dark:bg-slate-950 rounded-[2rem] p-8 border border-slate-200 dark:border-slate-800 shadow-lg hover:shadow-xl transition-all" data-aos="fade-up" data-aos-delay="300">
-                   <i class="fas fa-shield-alt text-3xl text-emerald-500 mb-4"></i>
+               <div class="col-span-1 md:col-span-1 row-span-1 bg-white dark:bg-slate-950 rounded-[2rem] p-8 border border-slate-200 dark:border-slate-800 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group" data-aos="fade-up" data-aos-delay="300">
+                   <i class="fas fa-shield-alt text-3xl text-emerald-500 mb-4 group-hover:scale-110 transition-transform duration-300 inline-block"></i>
                    <h3 class="font-bold text-xl text-slate-900 dark:text-white mb-2">Secure</h3>
                    <p class="text-slate-500 text-sm">Enterprise-grade encryption for all your data.</p>
                </div>
@@ -526,20 +526,20 @@ export const TEMPLATES = {
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                 <!-- Basic -->
-                <div class="p-8 rounded-3xl border border-gray-200 hover:border-blue-500 transition-colors bg-white hover:shadow-lg" data-aos="fade-up" data-aos-delay="0">
-                    <h3 class="font-bold text-lg mb-2">Basic</h3>
-                    <div class="text-4xl font-bold mb-6">$19<span class="text-lg text-gray-500 font-normal">/mo</span></div>
+                <div class="p-8 rounded-3xl border border-gray-200 hover:border-blue-500 transition-all duration-300 bg-white hover:shadow-xl hover:-translate-y-2 cursor-default group" data-aos="fade-up" data-aos-delay="0">
+                    <h3 class="font-bold text-lg mb-2 text-gray-900 group-hover:text-blue-600 transition-colors">Basic</h3>
+                    <div class="text-4xl font-bold mb-6 text-gray-900">$19<span class="text-lg text-gray-500 font-normal">/mo</span></div>
                     <ul class="space-y-4 mb-8 text-sm text-gray-600">
                         <li class="flex items-center gap-3"><i class="fas fa-check text-green-500"></i> 1 User</li>
                         <li class="flex items-center gap-3"><i class="fas fa-check text-green-500"></i> 5 Projects</li>
                         <li class="flex items-center gap-3"><i class="fas fa-check text-green-500"></i> Basic Analytics</li>
                     </ul>
-                    <button onclick="navigateTo('signup')" class="w-full py-3 rounded-xl border border-gray-200 font-semibold hover:bg-gray-50 transition-colors">Get Started</button>
+                    <button onclick="navigateTo('signup')" class="w-full py-3 rounded-xl border border-gray-200 font-semibold hover:bg-blue-50 hover:border-blue-200 hover:text-blue-600 transition-all duration-300">Get Started</button>
                 </div>
                 
                 <!-- Pro -->
                 <div class="p-8 rounded-3xl bg-zinc-900 text-white relative shadow-2xl transform md:-translate-y-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-bl-xl rounded-tr-2xl">POPULAR</div>
+                    <div class="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-bl-xl rounded-tr-2xl shadow-lg">POPULAR</div>
                     <h3 class="font-bold text-lg mb-2">Pro</h3>
                     <div class="text-4xl font-bold mb-6">$49<span class="text-lg text-gray-400 font-normal">/mo</span></div>
                     <ul class="space-y-4 mb-8 text-sm text-gray-300">
@@ -548,7 +548,7 @@ export const TEMPLATES = {
                         <li class="flex items-center gap-3"><i class="fas fa-check text-blue-400"></i> Advanced Analytics</li>
                         <li class="flex items-center gap-3"><i class="fas fa-check text-blue-400"></i> Priority Support</li>
                     </ul>
-                    <button onclick="navigateTo('signup')" class="w-full py-3 rounded-xl bg-blue-600 font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-900/20 hover:scale-[1.02]">Get Started</button>
+                    <button onclick="navigateTo('signup')" class="w-full py-3 rounded-xl bg-blue-600 font-semibold hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/40 hover:scale-105 hover:shadow-blue-500/30">Get Started</button>
                 </div>
 
                 <!-- Enterprise -->
