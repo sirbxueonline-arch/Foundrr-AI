@@ -218,7 +218,7 @@ export default function GeneratePage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="text-4xl md:text-5xl font-bold tracking-tighter mb-2 bg-clip-text text-transparent bg-gradient-to-b from-foreground via-foreground/90 to-foreground/50 pb-1"
+                className="text-4xl md:text-5xl font-bold tracking-tighter mb-2 text-gray-900 dark:text-white"
               >
                 {t.generate.title}
               </motion.h1>
@@ -226,25 +226,25 @@ export default function GeneratePage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-muted-foreground text-sm md:text-base font-light text-balance leading-relaxed"
+                className="text-gray-500 dark:text-gray-400 text-sm md:text-base font-light text-balance leading-relaxed"
               >
                 {t.generate.desc}
               </motion.p>
             </div>
 
-            <form onSubmit={handleSubmit} className="relative w-full space-y-8 glass p-6 rounded-3xl border border-white/5 shadow-xl backdrop-blur-sm">
+            <form onSubmit={handleSubmit} className="relative w-full space-y-8 bg-white/80 dark:bg-zinc-900/50 p-8 rounded-[2rem] border border-gray-200/50 dark:border-white/5 shadow-2xl backdrop-blur-xl">
 
               {/* Prompt Input */}
               <div className="space-y-4">
                 <div className="flex justify-between items-center px-1">
-                  <label htmlFor="prompt" className="text-sm font-medium text-foreground/80 flex items-center gap-2">
-                    <LayoutTemplate className="w-4 h-4 text-purple-500" />
+                  <label htmlFor="prompt" className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                    <LayoutTemplate className="w-4 h-4 text-indigo-500" />
                     {t.generate.form.promptLabel}
                   </label>
                   <button
                     type="button"
                     onClick={handleInspireMe}
-                    className="group/btn text-xs flex items-center gap-1.5 text-primary hover:text-primary/80 transition-all bg-primary/10 px-3 py-1 rounded-full hover:bg-primary/20"
+                    className="group/btn text-xs flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 transition-all bg-indigo-50 dark:bg-indigo-500/10 px-3 py-1.5 rounded-full font-medium"
                   >
                     <Sparkles className="w-3 h-3 transition-transform group-hover/btn:rotate-12" />
                     {t.generate.form.inspireMe}
@@ -252,13 +252,12 @@ export default function GeneratePage() {
                 </div>
 
                 <div className="relative group">
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500" />
-                  <div className="relative rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 focus-within:border-white/20 focus-within:bg-white/10 transition-all duration-300 shadow-sm">
+                  <div className="relative rounded-2xl bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 focus-within:border-indigo-500/50 dark:focus-within:border-indigo-500/50 focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all duration-300 shadow-sm hover:shadow-md">
                     <textarea
                       id="prompt"
                       name="prompt"
                       rows={3}
-                      className="w-full bg-transparent text-lg font-light rounded-2xl border-none px-6 py-4 placeholder:text-muted-foreground/40 focus:ring-0 resize-none transition-all duration-300 leading-relaxed text-foreground"
+                      className="w-full bg-transparent text-lg font-light rounded-2xl border-none px-6 py-4 placeholder:text-gray-400 focus:ring-0 resize-none transition-all duration-300 leading-relaxed text-gray-900 dark:text-white"
                       placeholder={t.generate.form.promptPlaceholder}
                       value={formData.prompt}
                       onChange={handleChange}
@@ -270,7 +269,7 @@ export default function GeneratePage() {
 
               {/* Style Selection - V2 Cards */}
               <div className="space-y-4">
-                <span className="text-sm font-medium text-foreground/80 px-1 flex items-center gap-2">
+                <span className="text-sm font-semibold text-gray-700 dark:text-gray-200 px-1 flex items-center gap-2">
                   <Palette className="w-4 h-4 text-pink-500" />
                   {t.generate.form.visualStyle}
                 </span>
@@ -280,17 +279,17 @@ export default function GeneratePage() {
                       key={s.id}
                       type="button"
                       onClick={() => handleStyleSelect(s.id)}
-                      className={`group relative p-4 rounded-2xl flex flex-col items-start gap-2 text-left transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] overflow-hidden ${formData.style === s.id ? s.activeClass : 'border border-white/10 hover:border-white/20 bg-white/5'
+                      className={`group relative p-4 rounded-2xl flex flex-col items-start gap-2 text-left transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] overflow-hidden ${formData.style === s.id ? 'bg-indigo-50 dark:bg-indigo-900/20 ' + s.activeClass : 'bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20'
                         } ${s.class.replace('border-2', 'border')}`}
                     >
-                      <div className={`w-full h-12 rounded-lg mb-1 ${s.preview} shadow-sm opacity-90 group-hover:opacity-100 transition-opacity`} />
+                      <div className={`w-full h-12 rounded-lg mb-1 ${s.preview} shadow-sm opacity-90 group-hover:opacity-100 transition-opacity ring-1 ring-black/5 dark:ring-white/10`} />
                       <div className="space-y-0.5 z-10 w-full">
-                        <span className="text-sm font-semibold leading-none truncate w-full block">{s.name}</span>
-                        <span className="text-[10px] opacity-60 leading-tight block">{s.desc}</span>
+                        <span className={`text-sm font-bold leading-none truncate w-full block ${formData.style === s.id ? 'text-indigo-900 dark:text-indigo-100' : 'text-gray-700 dark:text-gray-200'}`}>{s.name}</span>
+                        <span className="text-[10px] text-gray-500 dark:text-gray-400 leading-tight block">{s.desc}</span>
                       </div>
                       {/* Selection Indicator */}
                       {formData.style === s.id && (
-                        <div className="absolute top-2 right-2 text-current scale-75">
+                        <div className="absolute top-2 right-2 text-indigo-600 dark:text-indigo-400 scale-75">
                           <CheckCircle2 className="w-5 h-5" />
                         </div>
                       )}
@@ -304,32 +303,32 @@ export default function GeneratePage() {
 
                 {/* Color Picker */}
                 <div className="space-y-3">
-                  <label htmlFor="color" className="text-sm font-medium text-foreground/80 flex items-center gap-2">
-                    <div className="w-4 h-4 rounded-full bg-gradient-to-tr from-blue-500 to-green-500" />
+                  <label htmlFor="color" className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                    <div className="w-4 h-4 rounded-full bg-gradient-to-tr from-blue-500 to-green-500 shadow-sm" />
                     {t.generate.form.primaryColor}
                   </label>
-                  <div className="flex items-center gap-3 p-3 bg-secondary/20 rounded-2xl border border-white/5 hover:border-white/10 transition-colors group cursor-pointer" onClick={() => document.getElementById('primaryColor')?.click()}>
-                    <div className="relative">
+                  <div className="flex items-center gap-4 p-3 bg-white dark:bg-black/20 rounded-2xl border border-gray-200 dark:border-white/10 hover:border-indigo-300 transition-all group cursor-pointer shadow-sm hover:shadow-md" onClick={() => document.getElementById('primaryColor')?.click()}>
+                    <div className="relative shrink-0">
                       <input
                         type="color"
                         id="primaryColor"
                         name="primaryColor"
                         value={formData.primaryColor}
                         onChange={handleChange}
-                        className="w-12 h-12 rounded-full cursor-pointer border-none p-0 bg-transparent opacity-0 absolute inset-0 z-10"
+                        className="w-10 h-10 rounded-full cursor-pointer border-none p-0 bg-transparent opacity-0 absolute inset-0 z-10"
                       />
-                      <div className="w-12 h-12 rounded-full border border-white/10 shadow-sm" style={{ backgroundColor: formData.primaryColor }} />
+                      <div className="w-10 h-10 rounded-full border-2 border-white shadow-md ring-1 ring-gray-100" style={{ backgroundColor: formData.primaryColor }} />
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-xs font-mono opacity-80 bg-black/10 dark:bg-white/10 px-2 py-1 rounded-md">{formData.primaryColor}</span>
-                      <span className="text-[10px] text-muted-foreground">{t.generate.form.clickToChange}</span>
+                      <span className="text-xs font-mono font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-white/10 px-2 py-0.5 roundedElement w-fit mb-0.5">{formData.primaryColor}</span>
+                      <span className="text-[10px] text-gray-400">{t.generate.form.clickToChange}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Multi-Page Selection */}
                 <div className="space-y-3">
-                  <label className="text-sm font-medium text-foreground/80 flex items-center gap-2">
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
                     <BookOpen className="w-4 h-4 text-orange-500" />
                     {t.generate.form.includePages}
                   </label>
@@ -345,9 +344,9 @@ export default function GeneratePage() {
                             : [...current, page];
                           setFormData(prev => ({ ...prev, pages: newPages }));
                         }}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${(formData.pages || []).includes(page)
-                          ? 'bg-foreground text-background border-foreground shadow-sm'
-                          : 'bg-background/40 border-border/40 hover:bg-muted text-muted-foreground'
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-200 ${(formData.pages || []).includes(page)
+                          ? 'bg-gray-900 dark:bg-white text-white dark:text-black border-transparent shadow-md transform scale-105'
+                          : 'bg-white dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:bg-gray-50'
                           }`}
                       >
                         {(formData.pages || []).includes(page) && <CheckCircle2 className="w-3 h-3 inline mr-1.5 mb-0.5" />}
@@ -359,14 +358,14 @@ export default function GeneratePage() {
               </div>
 
               {/* Submit & Lang */}
-              <div className="flex items-center gap-4 pt-4 border-t border-white/10 mt-6">
-                <div className="flex bg-secondary/30 p-1 rounded-full border border-border/30 shrink-0">
+              <div className="flex items-center gap-4 pt-6 border-t border-gray-100 dark:border-white/5 mt-6">
+                <div className="flex bg-gray-100 dark:bg-white/5 p-1 rounded-full shrink-0">
                   {(['en', 'az'] as const).map((l) => (
                     <button
                       key={l}
                       type="button"
                       onClick={() => setOutputLang(l)}
-                      className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${outputLang === l ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                      className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${outputLang === l ? 'bg-white dark:bg-zinc-800 shadow-sm text-gray-900 dark:text-white' : 'text-gray-400 hover:text-gray-600'}`}
                     >
                       {l === 'en' ? 'EN' : 'AZ'}
                     </button>
@@ -376,8 +375,9 @@ export default function GeneratePage() {
                 <button
                   type="submit"
                   disabled={loading || !formData.prompt.trim()}
-                  className="flex-1 inline-flex h-12 items-center justify-center rounded-full bg-foreground px-8 text-base font-bold text-background shadow-lg transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+                  className="flex-1 group relative inline-flex h-14 items-center justify-center rounded-full bg-gradient-to-r from-gray-900 to-black dark:from-white dark:to-zinc-200 px-8 text-base font-bold text-white dark:text-black shadow-xl shadow-black/10 transition-all hover:scale-[1.02] hover:shadow-2xl active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none overflow-hidden"
                 >
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
                   {loading ? (
                     <Loader2 className="h-5 w-5 animate-spin" />
                   ) : (
