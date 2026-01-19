@@ -232,19 +232,19 @@ export default function GeneratePage() {
               </motion.p>
             </div>
 
-            <form onSubmit={handleSubmit} className="relative w-full space-y-8 bg-white/80 dark:bg-zinc-900/50 p-8 rounded-[2rem] border border-gray-200/50 dark:border-white/5 shadow-2xl backdrop-blur-xl">
+            <form onSubmit={handleSubmit} className="relative w-full space-y-8 p-6">
 
               {/* Prompt Input */}
               <div className="space-y-4">
                 <div className="flex justify-between items-center px-1">
-                  <label htmlFor="prompt" className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
-                    <LayoutTemplate className="w-4 h-4 text-indigo-500" />
+                  <label htmlFor="prompt" className="text-sm font-semibold text-foreground flex items-center gap-2">
+                    <LayoutTemplate className="w-4 h-4 text-primary" />
                     {t.generate.form.promptLabel}
                   </label>
                   <button
                     type="button"
                     onClick={handleInspireMe}
-                    className="group/btn text-xs flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 transition-all bg-indigo-50 dark:bg-indigo-500/10 px-3 py-1.5 rounded-full font-medium"
+                    className="group/btn text-xs flex items-center gap-1.5 text-primary hover:text-primary/80 transition-all bg-primary/10 px-3 py-1.5 rounded-full font-medium"
                   >
                     <Sparkles className="w-3 h-3 transition-transform group-hover/btn:rotate-12" />
                     {t.generate.form.inspireMe}
@@ -252,12 +252,12 @@ export default function GeneratePage() {
                 </div>
 
                 <div className="relative group">
-                  <div className="relative rounded-2xl bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 focus-within:border-indigo-500/50 dark:focus-within:border-indigo-500/50 focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all duration-300 shadow-sm hover:shadow-md">
+                  <div className="relative rounded-2xl bg-transparent border-2 border-primary/20 focus-within:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-md">
                     <textarea
                       id="prompt"
                       name="prompt"
                       rows={3}
-                      className="w-full bg-transparent text-lg font-light rounded-2xl border-none px-6 py-4 placeholder:text-gray-400 focus:ring-0 resize-none transition-all duration-300 leading-relaxed text-gray-900 dark:text-white"
+                      className="w-full bg-transparent text-lg font-light rounded-2xl border-none px-6 py-4 placeholder:text-muted-foreground/50 focus:ring-0 resize-none transition-all duration-300 leading-relaxed text-foreground"
                       placeholder={t.generate.form.promptPlaceholder}
                       value={formData.prompt}
                       onChange={handleChange}
