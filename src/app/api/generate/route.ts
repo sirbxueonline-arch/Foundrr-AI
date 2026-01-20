@@ -48,6 +48,27 @@ export async function POST(request: Request) {
     const siteId = Math.random().toString(36).substring(2, 9)
     const fileName = `${user.id}/${siteId}/index.html`
 
+    // Generate Navbar Links
+    const standardLinks = ['Home'] // Home is always there
+    if (pages.includes('Features')) standardLinks.push('Features')
+    if (pages.includes('Pricing')) standardLinks.push('Pricing')
+    if (pages.includes('About')) standardLinks.push('About')
+    if (pages.includes('Blog')) standardLinks.push('Blog')
+    if (pages.includes('Contact')) standardLinks.push('Contact')
+
+    const navLinksHtml = standardLinks.filter(l => l !== 'Home').map(link => 
+      `<button onclick="navigateTo('${link.toLowerCase()}')" class="px-5 py-2 rounded-full text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white hover:shadow-sm transition-all">${link}</button>`
+    ).join('\n')
+
+    const mobileNavLinksHtml = standardLinks.filter(l => l !== 'Home').map(link => 
+      `<button onclick="navigateTo('${link.toLowerCase()}'); toggleMobileMenu()" class="text-left font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">${link}</button>`
+    ).join('\n')
+
+    // Prepare Navbar Template with injected links
+    const navbarTemplate = TEMPLATES.NAVBAR
+      .replace('{{NAV_LINKS}}', navLinksHtml)
+      .replace('{{MOBILE_NAV_LINKS}}', mobileNavLinksHtml)
+
     const systemPrompt = `
     You are an expert Frontend Architect and UI/UX Designer.
     
@@ -87,7 +108,7 @@ export async function POST(request: Request) {
     
     1. **Navbar**: Always use this (Contains navigation logic). REPLACE 'BRAND_NAME' with a creative name.
        - Ensure standard links: Home (#hero), Features (#features), Pricing (#pricing), Contact (#contact).
-    ${TEMPLATES.NAVBAR}
+    ${navbarTemplate}
     
     2. **Hero Section** (Pick ONE based on prompt type):
        - If SaaS/Startup/Business -> Use HERO_SAAS
@@ -106,30 +127,29 @@ export async function POST(request: Request) {
          ${TEMPLATES.HERO_MODERN}
     
     3. **Content Sections** (Pick relevant ones based on prompt):
-       - If selling a product/service -> Include PRICING:
-         ${TEMPLATES.PRICING}
        - If showing work/images -> Include GALLERY:
          ${TEMPLATES.GALLERY}
        - If building trust -> Include TESTIMONIALS:
          ${TEMPLATES.TESTIMONIALS}
-       - Always include features -> BENTO_GRID:
-         ${TEMPLATES.BENTO_GRID}
        - If requested 'FAQ' -> FAQ:
          ${TEMPLATES.FAQ}
        - If requested 'Team' -> TEAM:
          ${TEMPLATES.TEAM}
-       - Always include contact -> CONTACT:
-         ${TEMPLATES.CONTACT}
+       
+       ${pages.includes('Features') ? `- Features Section: ${TEMPLATES.BENTO_GRID}` : ''}
+       ${pages.includes('Pricing') ? `- Pricing Section: ${TEMPLATES.PRICING}` : ''}
+       ${pages.includes('Contact') ? `- Contact Section: ${TEMPLATES.CONTACT}` : ''}
+
 
     4. **Extra Pages** (YOU MUST INCLUDE THESE AS HIDDEN SECTIONS):
-        - About Page: ${TEMPLATES.PAGE_ABOUT}
         - Login Page: ${TEMPLATES.PAGE_LOGIN}
         - Signup Page: ${TEMPLATES.PAGE_SIGNUP}
-        ${(pages || []).includes('Pricing') ? `- Pricing Page: <section id="pricing-page" class="page-section hidden pt-32 pb-12 bg-white dark:bg-slate-900">${TEMPLATES.PRICING}</section>` : ''}
+        ${pages.includes('About') ? `- About Page: ${TEMPLATES.PAGE_ABOUT}` : ''}
+        ${pages.includes('Blog') ? `- Blog Page: ${TEMPLATES.PAGE_BLOG}` : ''}
     
     5. **Footer**: Always use this:
     ${TEMPLATES.FOOTER}
-
+    
     6. **Router Script**: REQUIRED for navigation:
     ${TEMPLATES.JS_ROUTER}
     

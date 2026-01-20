@@ -14,9 +14,7 @@ export const TEMPLATES = {
         <!-- Desktop Menu -->
         <div class="hidden md:flex items-center gap-1 p-1 rounded-full bg-slate-100/50 dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm">
           <button onclick="navigateTo('home')" class="px-5 py-2 rounded-full text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white hover:shadow-sm transition-all">Home</button>
-          <button onclick="navigateTo('features')" class="px-5 py-2 rounded-full text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white hover:shadow-sm transition-all">Features</button>
-          <button onclick="navigateTo('pricing')" class="px-5 py-2 rounded-full text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white hover:shadow-sm transition-all">Pricing</button>
-          <button onclick="navigateTo('about')" class="px-5 py-2 rounded-full text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white hover:shadow-sm transition-all">About</button>
+          {{NAV_LINKS}}
         </div>
         
         <div class="flex items-center gap-4">
@@ -33,9 +31,7 @@ export const TEMPLATES = {
       <!-- Mobile Menu Overlay -->
       <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-white dark:bg-slate-950 border-b border-gray-100 dark:border-slate-800 p-6 flex flex-col gap-4 shadow-2xl md:hidden transition-all duration-300 origin-top transform animate-fade-in-down">
           <button onclick="navigateTo('home'); toggleMobileMenu()" class="text-left font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">Home</button>
-          <button onclick="navigateTo('features'); toggleMobileMenu()" class="text-left font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">Features</button>
-          <button onclick="navigateTo('pricing'); toggleMobileMenu()" class="text-left font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">Pricing</button>
-          <button onclick="navigateTo('about'); toggleMobileMenu()" class="text-left font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">About</button>
+          {{MOBILE_NAV_LINKS}}
           <div class="h-px bg-gray-100 dark:bg-slate-800 my-2"></div>
           <button onclick="navigateTo('login'); toggleMobileMenu()" class="text-left font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">Log in</button>
           <button onclick="navigateTo('signup'); toggleMobileMenu()" class="text-center font-bold py-3 px-4 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md">Get Started</button>
@@ -754,6 +750,60 @@ export const TEMPLATES = {
                  </p>
              </div>
         </div>
+    </section>
+  `,
+
+    PAGE_BLOG: `
+    <section id="blog" class="page-section hidden pt-32 pb-20 bg-white dark:bg-slate-950 min-h-screen">
+       <div class="container mx-auto px-6">
+            <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+                 <h2 class="text-4xl font-bold mb-4 text-slate-900 dark:text-white">Latest Thoughts</h2>
+                 <p class="text-gray-500 text-lg">Insights, updates, and stories from our team.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Blog Post 1 -->
+                <article class="group cursor-pointer flex flex-col items-start" data-aos="fade-up" data-aos-delay="0">
+                    <div class="w-full aspect-video rounded-2xl overflow-hidden mb-6 bg-slate-100 dark:bg-slate-900 relative">
+                        <img src="/api/images/proxy?query=technology workspace minimal" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <div class="absolute top-4 left-4 bg-white/90 dark:bg-black/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Product</div>
+                    </div>
+                    <div class="text-sm text-slate-500 mb-2">Mar 15, 2024 вЂў 5 min read</div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-blue-600 transition-colors">The Future of Digital Design</h3>
+                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed mb-4 line-clamp-3">
+                        Exploring the upcoming trends that will shape how we interact with digital products in the next decade. From spatial computing to AI-driven interfaces.
+                    </p>
+                    <span class="text-blue-600 font-semibold group-hover:translate-x-2 transition-transform inline-flex items-center">Read Article <i class="fas fa-arrow-right ml-2"></i></span>
+                </article>
+
+                <!-- Blog Post 2 -->
+                <article class="group cursor-pointer flex flex-col items-start" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-full aspect-video rounded-2xl overflow-hidden mb-6 bg-slate-100 dark:bg-slate-900 relative">
+                        <img src="/api/images/proxy?query=team collaboration office meeting" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <div class="absolute top-4 left-4 bg-white/90 dark:bg-black/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Culture</div>
+                    </div>
+                    <div class="text-sm text-slate-500 mb-2">Mar 10, 2024 вЂў 3 min read</div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-blue-600 transition-colors">Building Remote-First Teams</h3>
+                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed mb-4 line-clamp-3">
+                        How we scale our engineering culture across 12 different time zones while maintaining velocity and cohesion.
+                    </p>
+                    <span class="text-blue-600 font-semibold group-hover:translate-x-2 transition-transform inline-flex items-center">Read Article <i class="fas fa-arrow-right ml-2"></i></span>
+                </article>
+
+                <!-- Blog Post 3 -->
+                <article class="group cursor-pointer flex flex-col items-start" data-aos="fade-up" data-aos-delay="200">
+                     <div class="w-full aspect-video rounded-2xl overflow-hidden mb-6 bg-slate-100 dark:bg-slate-900 relative">
+                        <img src="/api/images/proxy?query=coding abstract software" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <div class="absolute top-4 left-4 bg-white/90 dark:bg-black/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Engineering</div>
+                    </div>
+                    <div class="text-sm text-slate-500 mb-2">Feb 28, 2024 вЂў 8 min read</div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-blue-600 transition-colors">Optimizing React Performance</h3>
+                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed mb-4 line-clamp-3">
+                        A deep dive into advanced techniques for reducing bundle size and improving interaction time in large-scale applications.
+                    </p>
+                    <span class="text-blue-600 font-semibold group-hover:translate-x-2 transition-transform inline-flex items-center">Read Article <i class="fas fa-arrow-right ml-2"></i></span>
+                </article>
+            </div>
+       </div>
     </section>
   `,
 
