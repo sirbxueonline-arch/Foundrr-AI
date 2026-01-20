@@ -7,6 +7,7 @@ import { ArrowRight, CheckCircle2, Terminal, Code2, Sparkles } from "lucide-reac
 import { cn } from "@/lib/utils";
 import { TypewriterText } from "@/components/landing/TypewriterText";
 
+export function Hero({ lang, t }: { lang?: string; t?: any }) {
   // Demo State
   const [demoStep, setDemoStep] = React.useState<'idle' | 'analyzing' | 'building' | 'complete'>('idle');
 
