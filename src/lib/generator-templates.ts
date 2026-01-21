@@ -1148,5 +1148,12 @@ export const TEMPLATES = {
             menu.classList.toggle('hidden');
         }
     </script>
-  `
+  `,
+    
+    WATERMARK: `
+    <a href="https://foundrr.online" target="_blank" class="fixed bottom-4 right-4 z-[9999] bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm border border-slate-200 dark:border-slate-800 rounded-full px-4 py-2 text-xs font-medium text-slate-600 dark:text-slate-400 shadow-xl hover:scale-105 hover:text-black dark:hover:text-white transition-all flex items-center gap-2 group decoration-0">
+        <span class="no-underline">Made by Foundrr Group</span>
+        <div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse group-hover:bg-indigo-500"></div>
+    </a>
+    `
 }
