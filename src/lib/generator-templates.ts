@@ -78,61 +78,70 @@ export const TEMPLATES = {
     HERO_MODERN: `
     <section id="home" class="page-section relative pt-32 pb-24 lg:pt-48 lg:pb-32 overflow-hidden bg-white dark:bg-slate-950 transition-colors duration-500">
        <!-- Dynamic Background -->
-       <div class="absolute inset-0 w-full h-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+       <div class="absolute inset-0 w-full h-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)] opacity-80"></div>
+       <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-indigo-500/20 rounded-full blur-[100px] -z-10 mix-blend-multiply dark:mix-blend-normal dark:bg-indigo-500/10"></div>
        
        <div class="container mx-auto px-6 relative z-10 text-center">
          
-         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 mb-8 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shadow-sm" data-aos="fade-down">
+         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 mb-8 cursor-pointer hover:bg-white dark:hover:bg-white/10 transition-colors shadow-sm backdrop-blur-sm" data-aos="fade-down">
             <span class="flex h-2 w-2 relative">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            <span class="text-sm font-semibold text-slate-600 dark:text-slate-300">v2.0 is now available</span>
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">New Feature Released</span>
          </div>
 
-         <h1 class="text-6xl md:text-8xl lg:text-[7rem] font-bold tracking-tighter text-slate-900 dark:text-white mb-8 leading-[0.9]" data-aos="fade-up" data-aos-delay="100">
-           Build <br class="hidden md:block" />
-           <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient bg-300%">Something Great.</span>
+         <h1 class="text-6xl md:text-8xl lg:text-[6.5rem] font-bold tracking-tight text-slate-900 dark:text-white mb-8 leading-[0.95] drop-shadow-sm" data-aos="fade-up" data-aos-delay="100">
+           Build <span class="hidden md:inline">Faster.</span> <br/>
+           <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 animate-gradient bg-300%">Scale Smarter.</span>
          </h1>
 
-         <p class="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed font-light" data-aos="fade-up" data-aos-delay="200">
-           The all-in-one platform for modern teams. Design, prototype, and ship your next masterpiece with unparalleled speed.
+         <p class="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed" data-aos="fade-up" data-aos-delay="200">
+           The ultimate platform for modern teams. Transform your workflow with AI-driven insights and automated scaling.
          </p>
 
-         <div class="flex flex-col sm:flex-row items-center justify-center gap-5" data-aos="fade-up" data-aos-delay="300">
-            <button onclick="navigateTo('signup')" class="w-full sm:w-auto px-10 py-5 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-lg hover:scale-105 hover:shadow-indigo-500/50 transition-all shadow-2xl active:scale-95 duration-300">
-               Get Started Free
+         <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20" data-aos="fade-up" data-aos-delay="300">
+            <button onclick="navigateTo('signup')" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-lg hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/20 transition-all active:scale-95 duration-200">
+               Start Free Trial
             </button>
-            <button onclick="navigateTo('features')" class="w-full sm:w-auto px-10 py-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white font-bold text-lg hover:bg-slate-50 dark:hover:bg-slate-800 hover:-translate-y-1 transition-all shadow-sm hover:shadow-xl active:scale-95 flex items-center justify-center gap-2 duration-300">
-               See How It Works
+            <button onclick="navigateTo('features')" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-bold text-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-all hover:border-slate-300 active:scale-95 duration-200 flex items-center justify-center gap-2">
+               <i class="fas fa-play text-xs"></i> Watch Demo
             </button>
+         </div>
+
+         <!-- Social Proof Strip -->
+         <div class="border-y border-slate-100 dark:border-white/5 py-8 mb-20 backdrop-blur-sm bg-white/30 dark:bg-white/5" data-aos="fade-up" data-aos-delay="400">
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Trusted by 10,000+ teams</p>
+            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+                <i class="fab fa-aws text-3xl"></i>
+                <i class="fab fa-google text-2xl"></i>
+                <i class="fab fa-stripe text-4xl"></i>
+                <i class="fab fa-spotify text-3xl"></i>
+                <i class="fab fa-airbnb text-3xl"></i>
+            </div>
          </div>
          
          <!-- Hero Image/Dashboard Preview -->
-         <div class="mt-20 relative max-w-6xl mx-auto rounded-xl bg-slate-900/5 dark:bg-white/5 p-2 ring-1 ring-inset ring-slate-900/10 dark:ring-white/10 lg:rounded-2xl lg:p-4" data-aos="fade-up" data-aos-delay="400">
-             <div class="rounded-lg overflow-hidden shadow-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 relative group">
-                <div class="absolute top-0 w-full h-10 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 flex items-center px-4 gap-2 z-20">
+         <div class="relative max-w-6xl mx-auto rounded-2xl bg-slate-900/5 dark:bg-white/5 p-2 lg:p-4 ring-1 ring-inset ring-slate-900/10 dark:ring-white/10" data-aos="fade-up" data-aos-delay="500">
+             <div class="rounded-xl overflow-hidden shadow-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 relative group aspect-[16/10]">
+                <div class="absolute top-0 w-full h-10 bg-slate-50 dark:bg-slate-800/80 border-b border-slate-100 dark:border-slate-800 flex items-center px-4 gap-2 z-20 backdrop-blur-md">
                     <div class="w-3 h-3 rounded-full bg-red-400/80"></div>
                     <div class="w-3 h-3 rounded-full bg-yellow-400/80"></div>
                     <div class="w-3 h-3 rounded-full bg-green-400/80"></div>
+                    <div class="ml-4 w-64 h-5 bg-slate-200 dark:bg-slate-700/50 rounded-full"></div>
                 </div>
-                <!-- Pseudo-UI for clearer preview if image fails -->
-                <div class="aspect-[16/9] w-full bg-slate-50 dark:bg-slate-950 flex items-center justify-center overflow-hidden">
-                    <img src="/api/images/proxy?query=software dashboard minimalist white ui&width=1600&height=900" alt="App UI" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]" />
+                <img src="/api/images/proxy?query=saas dashboard analytics ui dark mode&width=1600&height=1000" alt="App UI" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.01]" />
+                
+                <!-- Floating Element -->
+                <div class="absolute bottom-8 right-8 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl p-4 rounded-2xl shadow-2xl border border-white/20 dark:border-white/10 flex items-center gap-4 animate-float hidden md:flex">
+                    <div class="h-10 w-10 rounded-full bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-sm text-slate-900 dark:text-white">Optimization Complete</p>
+                        <p class="text-xs text-slate-500">Saved 12.4s load time</p>
+                    </div>
                 </div>
-             </div>
-             
-             <!-- Floating Badge 1 -->
-             <div class="absolute -left-4 top-1/4 bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 animate-float hidden lg:block">
-                 <div class="flex items-center gap-3">
-                     <span class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-                        <i class="fas fa-arrow-trend-up"></i>
-                     </span>
-                     <div>
-                         <p class="text-xs font-medium text-slate-500 dark:text-slate-400">Growth</p>
-                         <p class="text-lg font-bold text-slate-900 dark:text-white">+245%</p>
-                     </div>
-                 </div>
              </div>
          </div>
        </div>
@@ -1148,12 +1157,5 @@ export const TEMPLATES = {
             menu.classList.toggle('hidden');
         }
     </script>
-  `,
-    
-    WATERMARK: `
-    <a href="https://foundrr.online" target="_blank" class="fixed bottom-4 right-4 z-[9999] bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm border border-slate-200 dark:border-slate-800 rounded-full px-4 py-2 text-xs font-medium text-slate-600 dark:text-slate-400 shadow-xl hover:scale-105 hover:text-black dark:hover:text-white transition-all flex items-center gap-2 group decoration-0">
-        <span class="no-underline">Made by Foundrr Group</span>
-        <div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse group-hover:bg-indigo-500"></div>
-    </a>
-    `
+  `
 }

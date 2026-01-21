@@ -121,17 +121,27 @@ export async function POST(request: Request) {
         - <meta name="description" content="Engaging 160 char description...">
     5.  **Images**: Use \`/api/images/proxy?query=KEYWORD\` for ALL images. Choose highly relevant, specific keywords.
         - NEVER use generic keywords like "business" or "office". Use "minimalist scandinavian office" or "modern SaaS dashboard".
-    6.  **Design**: MUST be premium, modern, and "WOW".
-        - **Visuals**: Use glassmorphism (bg-white/80 backdrop-blur-md), smooth gradients, and subtle shadows (shadow-xl).
-        - **Typography**: Use "Outfit" for headings (font-heading) and "Inter" for body (font-sans).
-        - **Spacing**: Use generous whitespace (py-32, gap-12, px-8). NEVER create cramped layouts.
-        - **Colors**: NEVER use default Tailwind colors like 'bg-blue-500'. Use specific, sophisticated shades (e.g., 'bg-indigo-600', 'text-slate-800', 'bg-slate-50').
-        - **Radii**: Use \`rounded-2xl\` or \`rounded-3xl\` for all cards and buttons.
-        - **Animations**: heavily utilize AOS attributes (data-aos="fade-up", data-aos-delay="100") on EVERY section and major element.
+    6.  **Design System & Aesthetics**:
+        - **Visuals**: Use glassmorphism (bg-white/90 backdrop-blur-md), subtle borders (border-white/10), and deep shadows (shadow-2xl).
+        - **Colors**: If no primaryColor is given, CHOOSE one based on psychology:
+            - Fintech/Trust -> Slate/Emerald
+            - Creative/SaaS -> Indigo/Violet
+            - Health/Nature -> Teal/Sage
+            - Luxury -> Black/Gold or Zinc/Stone
+        - **Typography**: Use 'Outfit' for modern headings, 'Playfair Display' for luxury/elegant headings. 'Inter' for all body text.
+        - **Spacing**: Use "Breathable" layout. Minimum py-24 or py-32 for sections. NEVER crowd elements.
+        - **Animations**: heavily utilize AOS (data-aos="fade-up") with staggered delays (data-aos-delay="100", "200").
+
+    7. **Copywriting (The "Apple" Standard)**:
+        - **Unfair Advantage**: Focus on the specific *value* the user gets. Don't list features; list *superpowers*.
+        - **No Fluff**: Delete words like "cutting-edge", "seamless", "robust", "synergy".
+        - **Active Voice**: "Build faster" > "Allows you to build faster".
+        - **Specifics**: "10x faster rendering" > "High performance".
+        - **Headlines**: Must be punchy, short (2-5 words), and emotional.
     
-    7. **Copywriting & Completeness**:
-        - **NEGATIVE CONSTRAINTS**: DO NOT use the words: "Unlock", "Unleash", "Elevate", "Supercharge", "Game-changer", "Revolutionize", "Destiny", "Embark", "Realm".
-        - **NO PLACEHOLDERS**: NEVER use "Lorem Ipsum", "Feature 1", "John Doe", or generic text. Write REAL, CREATIVE content.
+    8. **Content Completeness**:
+        - **NEGATIVE CONSTRAINTS**: DO NOT use: "Unlock", "Unleash", "Elevate", "Supercharge", "Game-changer", "Revolutionize", "Destiny", "Embark", "Realm", "Tapestry".
+        - **NO PLACEHOLDERS**: NEVER use "Lorem Ipsum", "Feature 1", "John Doe". Generate realistic names/titles.
         - **FUNCTIONAL BUTTONS**: ALL buttons and links MUST work.
             - Navigation links must match section IDs (e.g., href="#features").
             - "Get Started" or "Contact" buttons should link to #contact or #pricing.
@@ -308,14 +318,7 @@ export async function POST(request: Request) {
           // We need to clean markdown if present (though system prompt says no)
           // CLEANUP & SAVE (After stream finishes)
           // We need to clean markdown if present (though system prompt says no)
-          let cleanHtml = fullHtml.replace(/```html/g, '').replace(/```/g, '').trim()
-
-          // Inject Watermark (Always)
-          if (cleanHtml.includes('</body>')) {
-             cleanHtml = cleanHtml.replace('</body>', `${TEMPLATES.WATERMARK}\n</body>`)
-          } else {
-             cleanHtml += TEMPLATES.WATERMARK
-          }
+          const cleanHtml = fullHtml.replace(/```html/g, '').replace(/```/g, '').trim()
 
           // Save to Storage
           await supabase.storage
