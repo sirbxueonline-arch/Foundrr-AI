@@ -1299,10 +1299,14 @@ export const TEMPLATES = {
         const lucide = window.lucide; 
         
         // Safely access global lucide object
+        // Safely access global lucide object
         const { 
             Camera, Moon, Sun, Menu, X, ArrowRight, Check, Star, 
-            ChevronRight, Play, Globe, Shield, Zap, Layout, 
-            BarChart, Users, Mail, Phone, MapPin 
+            ChevronRight, Play, Globe, Shield, Zap, 
+            Users, Mail, Phone, MapPin,
+            // Fallbacks for potentially missing/renamed icons
+            BarChart = lucide.BarChart2 || lucide.BarChart3 || lucide.Activity,
+            Layout = lucide.LayoutDashboard || lucide.LayoutGrid || lucide.PanelLeft,
         } = lucide || {}; 
         
         if (!window.lucide) {
