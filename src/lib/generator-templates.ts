@@ -1296,22 +1296,18 @@ export const TEMPLATES = {
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        const lucide = window.lucide; 
+        const lucide = window.lucide || {};
+        const FallbackIcon = () => null;
         
-        // Safely access global lucide object
         // Safely access global lucide object
         const { 
             Camera, Moon, Sun, Menu, X, ArrowRight, Check, Star, 
             ChevronRight, Play, Globe, Shield, Zap, 
             Users, Mail, Phone, MapPin,
             // Fallbacks for potentially missing/renamed icons
-            BarChart = lucide.BarChart2 || lucide.BarChart3 || lucide.Activity,
-            Layout = lucide.LayoutDashboard || lucide.LayoutGrid || lucide.PanelLeft,
-        } = lucide || {}; 
-        
-        if (!window.lucide) {
-            console.warn('Lucide icons failed to load. Icons will be missing.');
-        } 
+            BarChart = lucide.BarChart2 || lucide.BarChart3 || lucide.Activity || FallbackIcon,
+            Layout = lucide.LayoutDashboard || lucide.LayoutGrid || lucide.PanelLeft || FallbackIcon,
+        } = lucide; 
 
         // Error Boundary
         class ErrorBoundary extends React.Component {

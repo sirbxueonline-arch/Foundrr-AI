@@ -122,33 +122,40 @@ export async function POST(request: Request) {
           // 1. Send Shell Start
           controller.enqueue(encoder.encode(shellStart))
 
+          // 2. Fetch Full Completion (Buffered)
           const completion = await openai.chat.completions.create({
             model: 'gpt-4o',
             messages: [
               { role: 'system', content: systemPrompt },
               { role: 'user', content: `Build a website for: ${prompt}. Style: ${style}.` },
             ],
-            stream: true,
+            stream: false, // Turn off streaming to ensure we get full code to clean
           })
 
-          let reactCodeFull = ''
+          const rawContent = completion.choices[0]?.message?.content || ''
+          
+          // 3. Clean Code (Remove Markdown)
+          // Matches ```jsx ... ``` or ``` ... ```
+          let cleanContent = rawContent
+            .replace(/^```(jsx|tsx|javascript|js)?/gm, '') // Remove start fences
+            .replace(/```$/gm, '') // Remove end fences
+            .trim()
 
-          // 2. Stream React Code
-          for await (const chunk of completion) {
-            const content = chunk.choices[0]?.delta?.content || ''
-            if (content) {
-              const CLEAN_CONTENT = content.replace(/```jsx/g, '').replace(/```/g, '')
-              reactCodeFull += CLEAN_CONTENT
-              controller.enqueue(encoder.encode(CLEAN_CONTENT))
-            }
+          // Fallback: If AI returns "Here is the code: ...", try to extract just the function
+          if (!cleanContent.includes('function App')) {
+             // Try to find the function block
+             const match = cleanContent.match(/function App\s*\(\)\s*{[\s\S]*}/);
+             if (match) cleanContent = match[0];
           }
 
-          // 3. Send Shell End
+          // 4. Send Code
+          controller.enqueue(encoder.encode(cleanContent))
+
+          // 5. Send Shell End
           controller.enqueue(encoder.encode(shellEnd))
 
           // CLEANUP & SAVE
-          const cleanReactCode = reactCodeFull.replace(/```jsx/g, '').replace(/```/g, '').trim()
-          const finalHtml = shellStart + cleanReactCode + shellEnd
+          const finalHtml = shellStart + cleanContent + shellEnd
 
           // Save to Storage
           await supabase.storage
