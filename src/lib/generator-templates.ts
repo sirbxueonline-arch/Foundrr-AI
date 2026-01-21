@@ -13,28 +13,34 @@ export const TEMPLATES = {
         
         <!-- Desktop Menu -->
         <div class="hidden md:flex items-center gap-1 p-1 rounded-full bg-slate-100/50 dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm">
-          <button onclick="navigateTo('home')" class="px-5 py-2 rounded-full text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white hover:shadow-sm transition-all">Home</button>
+          <button onclick="navigateTo('home')" class="px-5 py-2 rounded-full text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white hover:shadow-sm transition-all active:scale-95">Home</button>
           {{NAV_LINKS}}
         </div>
         
         <div class="flex items-center gap-4">
             <button onclick="navigateTo('login')" class="hidden md:block text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">Log in</button>
-            <button onclick="navigateTo('signup')" class="px-6 py-2.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-bold hover:opacity-90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0">Get Started</button>
+            <button onclick="navigateTo('signup')" class="hidden md:block px-6 py-2.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-bold hover:opacity-90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:scale-95">Get Started</button>
             
             <!-- Mobile Menu Button -->
-            <button class="md:hidden text-2xl text-slate-900 dark:text-white focus:outline-none" onclick="toggleMobileMenu()">
+            <button class="md:hidden text-2xl text-slate-900 dark:text-white focus:outline-none p-2" onclick="toggleMobileMenu()">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
       </div>
       
-      <!-- Mobile Menu Overlay -->
-      <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-white dark:bg-slate-950 border-b border-gray-100 dark:border-slate-800 p-6 flex flex-col gap-4 shadow-2xl md:hidden transition-all duration-300 origin-top transform animate-fade-in-down">
-          <button onclick="navigateTo('home'); toggleMobileMenu()" class="text-left font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">Home</button>
-          {{MOBILE_NAV_LINKS}}
-          <div class="h-px bg-gray-100 dark:bg-slate-800 my-2"></div>
-          <button onclick="navigateTo('login'); toggleMobileMenu()" class="text-left font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">Log in</button>
-          <button onclick="navigateTo('signup'); toggleMobileMenu()" class="text-center font-bold py-3 px-4 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md">Get Started</button>
+      <!-- Mobile Menu Overlay (Full Screen) -->
+      <div id="mobile-menu" class="hidden fixed inset-0 z-50 bg-white/95 dark:bg-slate-950/95 backdrop-blur-2xl md:hidden flex flex-col justify-center items-center opacity-0 transition-opacity duration-300">
+          <button class="absolute top-6 right-6 text-3xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors" onclick="toggleMobileMenu()">
+            <i class="fas fa-times"></i>
+          </button>
+          
+          <div class="flex flex-col gap-6 text-center w-full px-8">
+            <button onclick="navigateTo('home'); toggleMobileMenu()" class="text-2xl font-bold text-slate-900 dark:text-white hover:text-blue-600 transition-colors">Home</button>
+            {{MOBILE_NAV_LINKS}}
+            <div class="h-px bg-slate-200 dark:bg-slate-800 w-1/3 mx-auto my-4"></div>
+            <button onclick="navigateTo('login'); toggleMobileMenu()" class="text-xl font-semibold text-slate-600 dark:text-slate-300">Log in</button>
+            <button onclick="navigateTo('signup'); toggleMobileMenu()" class="py-4 px-8 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-lg shadow-xl">Get Started</button>
+          </div>
       </div>
     </nav>
   `,
@@ -76,7 +82,7 @@ export const TEMPLATES = {
     `,
 
     HERO_MODERN: `
-    <section id="home" class="page-section relative pt-32 pb-24 lg:pt-48 lg:pb-32 overflow-hidden bg-white dark:bg-slate-950 transition-colors duration-500">
+    <section id="home" class="page-section relative pt-24 pb-16 lg:pt-48 lg:pb-32 overflow-hidden bg-white dark:bg-slate-950 transition-colors duration-500">
        <!-- Dynamic Background -->
        <div class="absolute inset-0 w-full h-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)] opacity-80"></div>
        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-indigo-500/20 rounded-full blur-[100px] -z-10 mix-blend-multiply dark:mix-blend-normal dark:bg-indigo-500/10"></div>
@@ -91,17 +97,17 @@ export const TEMPLATES = {
             <span class="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">New Feature Released</span>
          </div>
 
-         <h1 class="text-6xl md:text-8xl lg:text-[6.5rem] font-bold tracking-tight text-slate-900 dark:text-white mb-8 leading-[0.95] drop-shadow-sm" data-aos="fade-up" data-aos-delay="100">
+         <h1 class="text-4xl md:text-8xl lg:text-[6.5rem] font-bold tracking-tight text-slate-900 dark:text-white mb-8 leading-[1.1] md:leading-[0.95] drop-shadow-sm" data-aos="fade-up" data-aos-delay="100">
            Build <span class="hidden md:inline">Faster.</span> <br/>
            <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 animate-gradient bg-300%">Scale Smarter.</span>
          </h1>
 
-         <p class="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed" data-aos="fade-up" data-aos-delay="200">
+         <p class="text-lg md:text-2xl text-slate-600 dark:text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed" data-aos="fade-up" data-aos-delay="200">
            The ultimate platform for modern teams. Transform your workflow with AI-driven insights and automated scaling.
          </p>
 
          <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20" data-aos="fade-up" data-aos-delay="300">
-            <button onclick="navigateTo('signup')" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-lg hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/20 transition-all active:scale-95 duration-200">
+            <button onclick="navigateTo('signup')" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-lg hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/20 transition-transform active:scale-95 duration-200">
                Start Free Trial
             </button>
             <button onclick="navigateTo('features')" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-bold text-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-all hover:border-slate-300 active:scale-95 duration-200 flex items-center justify-center gap-2">
@@ -156,21 +162,21 @@ export const TEMPLATES = {
        <div class="container mx-auto px-6 md:px-12 relative z-10">
          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
              <div class="lg:col-span-8">
-                 <h1 class="text-6xl md:text-8xl lg:text-[7rem] font-serif leading-[0.9] text-stone-900 dark:text-stone-100 mb-8 tracking-tight" data-aos="fade-up">
+                 <h1 class="text-5xl md:text-8xl lg:text-[7rem] font-serif leading-[0.95] text-stone-900 dark:text-stone-100 mb-8 tracking-tight" data-aos="fade-up">
                     Structure <br/>
                     <span class="italic text-stone-500">& Serenity.</span>
                  </h1>
                  <div class="h-px w-24 bg-stone-900 dark:bg-stone-100 mb-8" data-aos="fade-right" data-aos-delay="200"></div>
-                 <p class="text-xl md:text-2xl text-stone-600 dark:text-stone-400 max-w-2xl leading-relaxed font-light" data-aos="fade-up" data-aos-delay="300">
+                 <p class="text-lg md:text-2xl text-stone-600 dark:text-stone-400 max-w-2xl leading-relaxed font-light" data-aos="fade-up" data-aos-delay="300">
                     We design spaces that breathe. Merging sustainable innovation with timeless aesthetic principles.
                  </p>
              </div>
              <div class="lg:col-span-4 flex flex-col items-start lg:items-end justify-end pb-2 gap-6" data-aos="fade-up" data-aos-delay="500">
-                <button onclick="navigateTo('projects')" class="group flex items-center gap-4 text-lg font-medium text-stone-900 dark:text-stone-100 hover:text-stone-600 dark:hover:text-stone-300 transition-colors">
+                <button onclick="navigateTo('projects')" class="group flex items-center gap-4 text-lg font-medium text-stone-900 dark:text-stone-100 hover:text-stone-600 dark:hover:text-stone-300 transition-colors active:scale-95 origin-left">
                     Explore Our Work
                     <span class="w-12 h-px bg-current transition-all group-hover:w-20"></span>
                 </button>
-                <button onclick="navigateTo('contact')" class="group flex items-center gap-4 text-lg font-medium text-stone-900 dark:text-stone-100 hover:text-stone-600 dark:hover:text-stone-300 transition-colors">
+                <button onclick="navigateTo('contact')" class="group flex items-center gap-4 text-lg font-medium text-stone-900 dark:text-stone-100 hover:text-stone-600 dark:hover:text-stone-300 transition-colors active:scale-95 origin-left">
                     Get in Touch
                     <span class="w-12 h-px bg-current transition-all group-hover:w-20"></span>
                 </button>
@@ -334,7 +340,7 @@ export const TEMPLATES = {
       <div class="container mx-auto px-6 relative z-10">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div class="space-y-8" data-aos="fade-right">
-                <h1 class="text-6xl md:text-8xl font-bold tracking-tighter leading-tight bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+                <h1 class="text-4xl md:text-8xl font-bold tracking-tighter leading-tight bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
                     Master your <br/> digital workflow.
                 </h1>
                 <p class="text-xl text-zinc-400 leading-relaxed max-w-lg">
@@ -375,7 +381,7 @@ export const TEMPLATES = {
             <div class="inline-block bg-[#FF6B6B] border-4 border-black px-6 py-2 transform -rotate-2 mb-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all cursor-default">
                 <span class="font-black text-white uppercase tracking-wider">Early Access</span>
             </div>
-            <h1 class="text-6xl md:text-8xl font-black text-black mb-8 leading-none uppercase" data-aos="fade-up">
+            <h1 class="text-4xl md:text-8xl font-black text-black mb-8 leading-none uppercase" data-aos="fade-up">
                 Build <span class="bg-[#4ECDC4] border-4 border-black px-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-white inline-block transform rotate-1">LOUD</span> and <br/>
                 <span class="bg-[#FFE66D] border-4 border-black px-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] inline-block transform -rotate-1">Proud.</span>
             </h1>
@@ -408,7 +414,7 @@ export const TEMPLATES = {
                 </div>
             </div>
             <div class="p-8 text-center bg-[#C0C0C0]">
-                <h1 class="text-4xl md:text-6xl font-bold text-black mb-6 tracking-tight" style="text-shadow: 2px 2px 0 #fff;">
+                <h1 class="text-3xl md:text-6xl font-bold text-black mb-6 tracking-tight" style="text-shadow: 2px 2px 0 #fff;">
                     THE FUTURE <br/> IS PIXELATED
                 </h1>
                 <p class="text-lg text-black mb-8 leading-relaxed font-bold">
@@ -433,7 +439,7 @@ export const TEMPLATES = {
       <div class="absolute inset-0 w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
       <div class="container mx-auto px-6 relative z-10 text-center">
          <span class="inline-block py-1 px-3 rounded-full bg-black text-white text-xs font-bold uppercase tracking-widest mb-6" data-aos="fade-down">Portfolio 2024</span>
-         <h1 class="text-7xl md:text-[10rem] font-black text-black mb-8 leading-none tracking-tighter mix-blend-multiply" data-aos="zoom-in">
+         <h1 class="text-6xl md:text-[10rem] font-black text-black mb-8 leading-none tracking-tighter mix-blend-multiply" data-aos="zoom-in">
             CREATE <br/>
             <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-pink-600">IMPACT.</span>
          </h1>
@@ -460,7 +466,7 @@ export const TEMPLATES = {
                         <i class="fas fa-star text-xs"></i> #1 Product of the Week
                     </div>
 
-                    <h1 class="text-6xl md:text-7xl font-bold text-slate-900 dark:text-white leading-[1.05] tracking-tight">
+                    <h1 class="text-4xl md:text-7xl font-bold text-slate-900 dark:text-white leading-[1.05] tracking-tight">
                         Power your <br/>
                         <span class="text-blue-600 relative whitespace-nowrap">
                             Business
@@ -533,7 +539,7 @@ export const TEMPLATES = {
         <div class="container mx-auto px-6 relative z-10 text-center">
              <div class="w-px h-24 bg-gradient-to-b from-transparent to-yellow-600 mx-auto mb-8" data-aos="fade-down"></div>
              <h2 class="text-sm font-serif tracking-[0.3em] text-yellow-500 uppercase mb-6" data-aos="fade-up">Est. 2024</h2>
-             <h1 class="text-6xl md:text-8xl font-serif font-thin text-white mb-8 leading-tight tracking-wide" data-aos="fade-up" data-aos-delay="100">
+             <h1 class="text-4xl md:text-8xl font-serif font-thin text-white mb-8 leading-tight tracking-wide" data-aos="fade-up" data-aos-delay="100">
                 ELEGANCE <br/>
                 <span class="italic font-light text-white/80">REDEFINED</span>
              </h1>
@@ -754,7 +760,7 @@ export const TEMPLATES = {
                         <li class="flex items-center gap-3"><i class="fas fa-check text-green-500"></i> 5 Projects</li>
                         <li class="flex items-center gap-3"><i class="fas fa-check text-green-500"></i> Basic Analytics</li>
                     </ul>
-                    <button onclick="navigateTo('signup')" class="w-full py-3 rounded-xl border border-gray-200 font-semibold hover:bg-blue-50 hover:border-blue-200 hover:text-blue-600 transition-all duration-300">Get Started</button>
+                    <button onclick="navigateTo('signup')" class="w-full py-3 rounded-xl border border-gray-200 font-semibold hover:bg-blue-50 hover:border-blue-200 hover:text-blue-600 transition-all duration-300 active:scale-95">Get Started</button>
                 </div>
                 
                 <!-- Pro -->
@@ -768,7 +774,7 @@ export const TEMPLATES = {
                         <li class="flex items-center gap-3"><i class="fas fa-check text-blue-400"></i> Advanced Analytics</li>
                         <li class="flex items-center gap-3"><i class="fas fa-check text-blue-400"></i> Priority Support</li>
                     </ul>
-                    <button onclick="navigateTo('signup')" class="w-full py-3 rounded-xl bg-blue-600 font-semibold hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/40 hover:scale-105 hover:shadow-blue-500/30">Get Started</button>
+                    <button onclick="navigateTo('signup')" class="w-full py-3 rounded-xl bg-blue-600 font-semibold hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/40 hover:scale-105 hover:shadow-blue-500/30 active:scale-95">Get Started</button>
                 </div>
 
                 <!-- Enterprise -->
@@ -780,7 +786,7 @@ export const TEMPLATES = {
                         <li class="flex items-center gap-3"><i class="fas fa-check text-green-500"></i> SSO & Security</li>
                         <li class="flex items-center gap-3"><i class="fas fa-check text-green-500"></i> Custom Integration</li>
                     </ul>
-                    <button onclick="navigateTo('contact')" class="w-full py-3 rounded-xl border border-gray-200 font-semibold hover:bg-gray-50 transition-colors">Contact Sales</button>
+                    <button onclick="navigateTo('contact')" class="w-full py-3 rounded-xl border border-gray-200 font-semibold hover:bg-gray-50 transition-colors active:scale-95">Contact Sales</button>
                 </div>
             </div>
         </div>
@@ -1154,7 +1160,13 @@ export const TEMPLATES = {
 
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                setTimeout(() => menu.classList.remove('opacity-0'), 10);
+            } else {
+                menu.classList.add('opacity-0');
+                setTimeout(() => menu.classList.add('hidden'), 300);
+            }
         }
     </script>
   `

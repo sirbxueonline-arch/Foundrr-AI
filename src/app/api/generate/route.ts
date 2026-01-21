@@ -116,32 +116,40 @@ export async function POST(request: Request) {
         - Translate ALL headlines, paragraphs, buttons, and navigation links.
         - Do NOT mix languages.
 
-    4.  **SEO (CRITICAL)**: You MUST include the following in the <head>:
-        - <title>Catchy Title | Brand</title>
-        - <meta name="description" content="Engaging 160 char description...">
-    5.  **Images**: Use \`/api/images/proxy?query=KEYWORD\` for ALL images. Choose highly relevant, specific keywords.
-        - NEVER use generic keywords like "business" or "office". Use "minimalist scandinavian office" or "modern SaaS dashboard".
-    6.  **Design System & Aesthetics**:
-        - **Visuals**: Use glassmorphism (bg-white/90 backdrop-blur-md), subtle borders (border-white/10), and deep shadows (shadow-2xl).
-        - **Colors**: If no primaryColor is given, CHOOSE one based on psychology:
-            - Fintech/Trust -> Slate/Emerald
-            - Creative/SaaS -> Indigo/Violet
-            - Health/Nature -> Teal/Sage
-            - Luxury -> Black/Gold or Zinc/Stone
-        - **Typography**: Use 'Outfit' for modern headings, 'Playfair Display' for luxury/elegant headings. 'Inter' for all body text.
-        - **Spacing**: Use "Breathable" layout. Minimum py-24 or py-32 for sections. NEVER crowd elements.
-        - **Animations**: heavily utilize AOS (data-aos="fade-up") with staggered delays (data-aos-delay="100", "200").
+    4.  **SEO & Performance**: 
+        -   <title>Catchy Title | Brand</title>
+        -   <meta name="description" content="Engaging 160 char description...">
+        -   <link rel="preconnect" href="https://fonts.googleapis.com">
+        -   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        -   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    5.  **Images**: Use \`/api/images/proxy?query=KEYWORD\` for ALL images. 
+        -   **Specifics Matter**: NEVER use "office". Use "modern minimalist white office workspace with macbook".
+        -   **Style Matching**: If layout is "Dark", query "dark futuristic cyber city". If "Luxury", query "marble gold texture luxury interior".
+    6.  **Design System & Aesthetics (MOBILE FIRST)**:
+        -   **Mobile Logic**: ALWAYS design for mobile first. Use \`flex-col\` by default, \`md:flex-row\` for desktop.
+        -   **Touch Targets**: ALL buttons/links MUST be at least 44px high. Use \`py-3\` or \`h-12\`.
+        -   **Typography**: 
+            - Headings: \`text-4xl\` on mobile, \`md:text-6xl\` or \`lg:text-7xl\` on desktop.
+            - Body: \`text-base\` or \`text-lg\`.
+            - Fonts: Use 'Outfit' for modern headings, 'Playfair Display' for luxury. 'Inter' for body.
+        -   **Spacing**: 
+            - Mobile: \`py-12\` or \`py-16\`. \`px-6\`.
+            - Desktop: \`md:py-24\` or \`lg:py-32\`.
+            - Use "Breathable" layout.
+        -   **Visuals**: Use glassmorphism (bg-white/90 backdrop-blur-md), subtle borders (border-white/10), and deep shadows (shadow-2xl).
+        -   **Colors**: If no primaryColor is given, CHOOSE one based on psychology.
+        -   **Animations**: heavily utilize AOS (data-aos="fade-up") with staggered delays.
 
     7. **Copywriting (The "Apple" Standard)**:
-        - **Unfair Advantage**: Focus on the specific *value* the user gets. Don't list features; list *superpowers*.
-        - **No Fluff**: Delete words like "cutting-edge", "seamless", "robust", "synergy".
-        - **Active Voice**: "Build faster" > "Allows you to build faster".
-        - **Specifics**: "10x faster rendering" > "High performance".
-        - **Headlines**: Must be punchy, short (2-5 words), and emotional.
+        -   **Rule #1**: NO MARKETING FLUFF.
+        -   **Bad**: "Our cutting-edge solution revolutionizes the way you work."
+        -   **Good**: "Work faster. Save time."
+        -   **Focus**: Active verbs. Short sentences. User benefits.
+        -   **Headlines**: Punchy, short (2-5 words), emotional. "Your Ideas. Realized."
     
     8. **Content Completeness**:
-        - **NEGATIVE CONSTRAINTS**: DO NOT use: "Unlock", "Unleash", "Elevate", "Supercharge", "Game-changer", "Revolutionize", "Destiny", "Embark", "Realm", "Tapestry".
-        - **NO PLACEHOLDERS**: NEVER use "Lorem Ipsum", "Feature 1", "John Doe". Generate realistic names/titles.
+        -   **NEGATIVE CONSTRAINTS**: DO NOT use: "Unlock", "Unleash", "Elevate", "Supercharge", "Game-changer", "Revolutionize", "Destiny", "Embark", "Realm", "Tapestry", "Delve", "Cutting-edge", "State-of-the-art".
+        -   **NO PLACEHOLDERS**: NEVER use "Lorem Ipsum", "Feature 1", "John Doe". Generate realistic names/titles.
         - **FUNCTIONAL BUTTONS**: ALL buttons and links MUST work.
             - Navigation links must match section IDs (e.g., href="#features").
             - "Get Started" or "Contact" buttons should link to #contact or #pricing.

@@ -29,6 +29,7 @@ export default function GeneratePage() {
   const [streamData, setStreamData] = useState('') // Full raw data
   const [previewHtml, setPreviewHtml] = useState('') // Throttled for iframe
   const [logs, setLogs] = useState<{ text: string, type: 'info' | 'success' | 'warning' | 'error' }[]>([])
+  const [viewMode, setViewMode] = useState<'desktop' | 'mobile'>('desktop')
 
   // Ref for auto-scrolling terminal
   const logContainerRef = useRef<HTMLDivElement>(null)
@@ -448,29 +449,80 @@ export default function GeneratePage() {
                 </div>
 
                 {/* LIVE PREVIEW IFRAME */}
-                <div className="flex-1 bg-transparent rounded-xl border border-white/10 shadow-xl overflow-hidden relative">
-                  <div className="absolute top-3 right-3 z-50">
-                    <div className="bg-zinc-950/80 backdrop-blur text-zinc-400 text-[10px] px-3 py-1.5 rounded-full font-medium border border-white/10 flex items-center gap-2 shadow-sm">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                      Live Preview
-                    </div>
+                <div className="flex-1 bg-zinc-900/50 rounded-xl border border-white/10 shadow-xl overflow-hidden relative flex flex-col">
+                  {/* Toolbar */}
+                  <div className="h-12 border-b border-white/5 bg-zinc-900/80 px-4 flex items-center justify-between backdrop-blur-sm shrink-0">
+                     <div className="flex items-center gap-2">
+                        <div className="flex gap-1.5">
+                           <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
+                           <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
+                           <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
+                        </div>
+                     </div>
+                     
+                     <div className="flex items-center gap-1 bg-zinc-950/50 rounded-lg p-1 border border-white/5">
+                        <button 
+                           onClick={() => setViewMode('desktop')}
+                           className={`p-1.5 rounded-md transition-all ${viewMode === 'desktop' ? 'bg-zinc-800 text-white shadow-sm' : 'text-zinc-500 hover:text-zinc-300'}`}
+                           title="Desktop View"
+                        >
+                           <LayoutTemplate className="w-4 h-4" />
+                        </button>
+                        <button 
+                           onClick={() => setViewMode('mobile')}
+                           className={`p-1.5 rounded-md transition-all ${viewMode === 'mobile' ? 'bg-zinc-800 text-white shadow-sm' : 'text-zinc-500 hover:text-zinc-300'}`}
+                            title="Mobile View"
+                        >
+                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-smartphone"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+                        </button>
+                     </div>
+
+                     <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                        <span className="text-[10px] uppercase tracking-wider font-bold text-zinc-500">Live</span>
+                     </div>
                   </div>
 
-                  {/* Iframe Container */}
-                  <div className="w-full h-full">
-                    {previewHtml ? (
-                      <iframe
-                        srcDoc={previewHtml}
-                        className="w-full h-full border-0 bg-white"
-                        title="Live Preview"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground gap-3 bg-white/5 backdrop-blur-sm">
-                        <Loader2 className="w-6 h-6 animate-spin opacity-20" />
-                        <p className="text-xs font-medium opacity-40 uppercase tracking-widest">{t.generate.form.generating}</p>
-                      </div>
-                    )}
-
+                  {/* Iframe Container - Centered and constrained if mobile */}
+                  <div className={`flex-1 w-full bg-zinc-950/30 overflow-hidden flex items-center justify-center transition-all duration-500 ${viewMode === 'mobile' ? 'p-8' : ''}`}>
+                    <div className={`relative transition-all duration-500 ease-in-out bg-white shadow-2xl ${
+                        viewMode === 'mobile' 
+                           ? 'w-[375px] h-[667px] rounded-[2rem] border-[8px] border-zinc-900 overflow-hidden ring-1 ring-white/10' 
+                           : 'w-full h-full rounded-none border-0'
+                     }`}>
+                        {previewHtml ? (
+                           <iframe
+                           srcDoc={previewHtml}
+                           className="w-full h-full border-0 bg-white"
+                           title="Live Preview"
+                           />
+                        ) : (
+                           <div className="w-full h-full bg-white flex flex-col overflow-hidden">
+                              {/* Skeleton Loader - Mimics Layout */}
+                              <div className="w-full h-16 bg-zinc-50 border-b border-zinc-100 flex items-center justify-between px-8 shrink-0 animate-pulse">
+                                 <div className="w-24 h-6 bg-zinc-200 rounded-md"></div>
+                                 <div className="flex gap-4">
+                                    <div className="w-20 h-4 bg-zinc-100 rounded-md"></div>
+                                    <div className="w-20 h-4 bg-zinc-100 rounded-md"></div>
+                                    <div className="w-24 h-8 bg-zinc-900/10 rounded-full"></div>
+                                 </div>
+                              </div>
+                              <div className="flex-1 p-12 flex flex-col items-center justify-center space-y-8 animate-pulse">
+                                 <div className="w-3/4 h-16 bg-zinc-100 rounded-xl"></div>
+                                 <div className="w-1/2 h-4 bg-zinc-50 rounded-lg"></div>
+                                 <div className="flex gap-4 mt-8">
+                                    <div className="w-32 h-12 bg-zinc-900/10 rounded-xl"></div>
+                                    <div className="w-32 h-12 bg-zinc-100 rounded-xl"></div>
+                                 </div>
+                                 {/* Loading Text */}
+                                 <div className="flex flex-col items-center gap-3 mt-12">
+                                     <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
+                                     <p className="text-xs font-mono text-zinc-400 uppercase tracking-widest">{t.generate.form.generating}</p>
+                                 </div>
+                              </div>
+                           </div>
+                        )}
+                    </div>
                   </div>
                 </div>
               </motion.div>
