@@ -8,7 +8,7 @@ import { convertHtmlToReact } from '@/lib/html-converter'
 // Force dynamic to allow headers/cookies reading
 export const dynamic = 'force-dynamic'
 
-export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: Request) {
     // Note: We need to parse ID from URL if using app directory dynamic routes differently.
     // But here we are in /api/download/[id] theoretically if we use folder structure. 
     // However, the folder structure is /api/download/route.ts.
