@@ -1,3 +1,4 @@
+import { visualEditorScript } from '@/lib/visual-editor-script';
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
@@ -159,9 +160,10 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
     </script>
   `;
   
-  const { visualEditorScript } = require('@/lib/visual-editor-script'); 
-  // Note: Using require or import above. Since this is a route handler file, 
-  // let's stick to the import we added in the previous step but fix the usage.
+  /* 
+   * visualEditorScript is imported at top level.
+   * It provides the necessary client-side logic for "Edit Content".
+   */
   
   const combinedScript = editorScript + (visualEditorScript || '');
 
