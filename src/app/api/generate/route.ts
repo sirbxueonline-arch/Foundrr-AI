@@ -54,7 +54,6 @@ export async function POST(request: Request) {
     if (pages.includes('Pricing')) standardLinks.push('Pricing')
     if (pages.includes('About')) standardLinks.push('About')
     if (pages.includes('Blog')) standardLinks.push('Blog')
-    if (pages.includes('Contact')) standardLinks.push('Contact')
 
     const navLinksHtml = standardLinks.filter(l => l !== 'Home').map(link => 
       `<button onclick="navigateTo('${link.toLowerCase()}')" class="px-5 py-2 rounded-full text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white hover:shadow-sm transition-all">${link}</button>`
@@ -73,7 +72,7 @@ export async function POST(request: Request) {
 
     // Generate Navbar Links (Minimal variant has different classes)
     const navLinksHtmlMinimal = standardLinks.filter(l => l !== 'Home').map(link => 
-      `<button onclick="navigateTo('${link.toLowerCase()}')" class="hover:text-stone-900 dark:hover:text-white transition-colors">${link}</button>`
+      `<button onclick="navigateTo('${link.toLowerCase()}')" class="text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white transition-colors font-medium">${link}</button>`
     ).join('\n')
 
     // Generate Footer Links (Product Column)
@@ -89,7 +88,6 @@ export async function POST(request: Request) {
     const companyFooterLinks = []
     if (pages.includes('About')) companyFooterLinks.push('About')
     if (pages.includes('Blog')) companyFooterLinks.push('Blog')
-    if (pages.includes('Contact')) companyFooterLinks.push('Contact')
 
     const footerCompanyHtml = companyFooterLinks.map(link => 
         `<li><button onclick="navigateTo('${link.toLowerCase()}')" class="hover:text-black">${link}</button></li>`
@@ -121,25 +119,29 @@ export async function POST(request: Request) {
         -   <meta name="description" content="Engaging 160 char description...">
         -   <link rel="preconnect" href="https://fonts.googleapis.com">
         -   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        -   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+        -   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     5.  **Images**: Use \`/api/images/proxy?query=KEYWORD\` for ALL images. 
         -   **Specifics Matter**: NEVER use "office". Use "modern minimalist white office workspace with macbook".
         -   **Style Matching**: If layout is "Dark", query "dark futuristic cyber city". If "Luxury", query "marble gold texture luxury interior".
-    6.  **Design System & Aesthetics (MOBILE FIRST)**:
-        -   **Mobile Logic**: ALWAYS design for mobile first. Use \`flex-col\` by default, \`md:flex-row\` for desktop.
-        -   **Touch Targets**: ALL buttons/links MUST be at least 44px high. Use \`py-3\` or \`h-12\`.
-        -   **Typography**: 
-            - Headings: \`text-4xl\` on mobile, \`md:text-6xl\` or \`lg:text-7xl\` on desktop.
-            - Body: \`text-base\` or \`text-lg\`.
-            - Fonts: Use 'Outfit' for modern headings, 'Playfair Display' for luxury. 'Inter' for body.
-        -   **Spacing**: 
-            - Mobile: \`py-12\` or \`py-16\`. \`px-6\`.
-            - Desktop: \`md:py-24\` or \`lg:py-32\`.
-            - Use "Breathable" layout.
-        -   **Visuals**: Use glassmorphism (bg-white/90 backdrop-blur-md), subtle borders (border-white/10), and deep shadows (shadow-2xl).
-        -   **Colors**: If no primaryColor is given, CHOOSE one based on psychology.
-        -   **Animations**: heavily utilize AOS (data-aos="fade-up") with staggered delays.
-
+    6.  **Design System & Aesthetics (PREMIUM FEEL)**:
+        -   **Typography**: Use 'Outfit' or 'Space Grotesk' for Headings. 'Inter' for Body.
+            -   Headings must have \`tracking-tight\` or \`tracking-tighter\`.
+            -   Use \`text-balance\` on H1/H2 to prevent orphans.
+        -   **Spacing**: USE AGGRESSIVE WHITESPACE.
+            -   Sections should have \`py-24\` or \`py-32\`.
+            -   Elements need breathing room. \`mb-12\` minimum between headers and content.
+        -   **Components**: 
+            -   Glassmorphism: \`bg-white/50 backdrop-blur-xl border border-white/10\`.
+            -   Gradients: Use subtle mesh gradients, avoid harsh primary colors as backgrounds.
+            -   Shadows: Use \`shadow-2xl\` and \`shadow-indigo-500/10\` for colored glows.
+        -   **Buttons**: 
+            -   Rounded-full is preferred for modern look.
+            -   **Hover effects**: Scale (1.05) + Shadow.
+        -   **Animations**: USE SUBTLE ANIMATIONS.
+            -   Use \\`animate-fade-in-up\\` for cards and sections.
+            -   Use \\`animate-zoom-in\\` for images.
+            -   Do not over-animate. Stagger animations with \\`animation-delay\\`.
+    
     7. **Copywriting (The "Apple" Standard)**:
         -   **Rule #1**: NO MARKETING FLUFF.
         -   **Bad**: "Our cutting-edge solution revolutionizes the way you work."
@@ -154,13 +156,17 @@ export async function POST(request: Request) {
             - Navigation links must match section IDs (e.g., href="#features").
             - "Get Started" or "Contact" buttons should link to #contact or #pricing.
             - Do NOT use href="#".
-        - **FUNCTIONAL BUTTONS**: ALL buttons and links MUST work.
-            - Navigation links must match section IDs (e.g., href="#features").
-            - "Get Started" or "Contact" buttons should link to #contact or #pricing.
-            - Do NOT use href="#".
         - **BRANDING**: The site is generated by "Foundrr Group". DO NOT add any other "Made by" credits in the footer.
         - **STRICT QUALITY**: No broken layouts. No missing images. No lorem ipsum.
         - **TONE**: Adopt a specific persona based on the prompt. If it's a law firm, be "Confident & authoritative". If it's a creative agency, be "Bold & Avant-garde".
+        
+    9. **DYNAMIC PRICING LOGIC**:
+        - **Analyze the Product**: If the user is selling "Luxury Penthouses", do NOT use $29/mo. Use "$2.5M", "$5M", or "Inquire".
+        - **Analyze the Business Model**: 
+            - SaaS -> $29/mo, $99/mo.
+            - Consultancy -> $500/hr, $5000/project.
+            - High Ticket (Real Estate, Cars, Enterprise) -> "From $50k", "Contact for Price".
+        - **YOU MUST OVERRIDE THE DEFAULT TEMPLATE PRICES ($29, $79, etc) WITH VALUES MATCHING THE PROMPT.**
 
     COMPONENT SELECTION:
     Analyze the user's prompt "${prompt}" and choose the best sections.
@@ -170,7 +176,9 @@ export async function POST(request: Request) {
     ${navbarTemplate}
     
     2. **Hero Section** (Pick ONE based on prompt type):
-       - If SaaS/Startup/Business -> Use HERO_SAAS
+       - If prompt mentions "Minimal", "Simple", "Clean" AND prompt does NOT mention "SaaS", "Startup", "Tech" -> Use HERO_MINIMAL
+         ${TEMPLATES.HERO_MINIMAL}
+       - If SaaS/Startup/Tech/App -> Use HERO_SAAS
          ${TEMPLATES.HERO_SAAS}
        - If Portfolio/Creative/Art or user asks for "Creative" -> Use HERO_CREATIVE
          ${TEMPLATES.HERO_CREATIVE}
@@ -199,12 +207,9 @@ export async function POST(request: Request) {
          ${TEMPLATES.TEAM}
        - If prompt includes 'architecture' or 'design' -> Include STATS_MINIMAL:
          ${TEMPLATES.STATS_MINIMAL}
-
        
-       ${pages.includes('Features') ? `- Features/Services Section: ${TEMPLATES.BENTO_GRID} OR ${TEMPLATES.SERVICES_MINIMAL} (Use SERVICES_MINIMAL for architecture/clean brands)` : ''}
+       ${pages.includes('Features') ? `- Features/Services Section: ${TEMPLATES.BENTO_GRID} OR ${TEMPLATES.SERVICES_MINIMAL} OR ${TEMPLATES.ALTERNATING_FEATURES} (Use ALTERNATING_FEATURES for SaaS/App walkthroughs)` : ''}
        ${pages.includes('Pricing') ? `- Pricing Section: ${TEMPLATES.PRICING}` : ''}
-       ${pages.includes('Contact') ? `- Contact Section: ${TEMPLATES.CONTACT}` : ''}
-
 
     4. **Extra Pages** (YOU MUST INCLUDE THESE AS HIDDEN SECTIONS):
         - Login Page: ${TEMPLATES.PAGE_LOGIN}
@@ -234,7 +239,7 @@ export async function POST(request: Request) {
       <title>${prompt}</title>
       <script src="https://cdn.tailwindcss.com"></script>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
       <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
       <script>
         tailwind.config = {
@@ -251,13 +256,17 @@ export async function POST(request: Request) {
                 primary: '${primaryColor ? primaryColor : style === 'vibrant' ? '#4f46e5' : style === 'corporate' ? '#0f172a' : '#18181b'}',
               },
               animation: {
-                'fade-in-down': 'fadeInDown 0.5s ease-out',
+                'fade-in-down': 'fadeInDown 0.8s ease-out',
                 'float': 'float 6s ease-in-out infinite',
                 'gradient': 'gradient 8s ease infinite',
+                'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                'shine': 'shine 1.5s infinite',
+                'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                'zoom-in': 'zoomIn 0.8s ease-out forwards',
               },
               keyframes: {
                 fadeInDown: {
-                  '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                  '0%': { opacity: '0', transform: 'translateY(-20px)' },
                   '100%': { opacity: '1', transform: 'translateY(0)' },
                 },
                 float: {
@@ -268,6 +277,16 @@ export async function POST(request: Request) {
                     '0%, 100%': { 'background-size': '200% 200%', 'background-position': 'left center' },
                     '50%': { 'background-size': '200% 200%', 'background-position': 'right center' },
                 },
+                    '100%': { transform: 'translateX(100%)' }
+                },
+                fadeInUp: {
+                    '0%': { opacity: '0', transform: 'translateY(20px)' },
+                    '100%': { opacity: '1', transform: 'translateY(0)' },
+                },
+                zoomIn: {
+                    '0%': { opacity: '0', transform: 'scale(0.95)' },
+                    '100%': { opacity: '1', transform: 'scale(1)' },
+                }
               }
             }
           }

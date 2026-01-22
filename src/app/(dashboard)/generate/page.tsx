@@ -325,25 +325,46 @@ export default function GeneratePage() {
                     <BookOpen className="w-4 h-4 text-orange-500" />
                     {t.generate.form.includePages}
                   </label>
-                  <div className="flex flex-wrap gap-2">
-                    {['About', 'Contact', 'Pricing', 'Blog', 'Features'].map((page) => (
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {[
+                      { id: 'About', icon: 'User', label: 'About' },
+                      { id: 'Pricing', icon: 'CreditCard', label: 'Pricing' },
+                      { id: 'Blog', icon: 'FileText', label: 'Blog' },
+                      { id: 'Features', icon: 'Zap', label: 'Features' }
+                    ].map((item) => (
                       <button
-                        key={page}
+                        key={item.id}
                         type="button"
                         onClick={() => {
                           const current = formData.pages || [];
-                          const newPages = current.includes(page)
-                            ? current.filter(p => p !== page)
-                            : [...current, page];
+                          const newPages = current.includes(item.id)
+                            ? current.filter(p => p !== item.id)
+                            : [...current, item.id];
                           setFormData(prev => ({ ...prev, pages: newPages }));
                         }}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-200 ${(formData.pages || []).includes(page)
-                          ? 'bg-foreground text-background border-transparent shadow-md transform scale-105'
-                          : 'bg-transparent border-border text-muted-foreground hover:border-primary/50 hover:bg-secondary/50'
-                          }`}
+                        className={`group relative p-3 rounded-xl border transition-all duration-300 hover:shadow-sm flex flex-col items-center justify-center gap-2 ${
+                          (formData.pages || []).includes(item.id)
+                            ? 'bg-gradient-to-br from-black to-slate-800 text-white border-transparent ring-2 ring-black ring-offset-1 dark:from-white dark:to-slate-200 dark:text-black dark:ring-white scale-[1.02]'
+                            : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                        }`}
                       >
-                        {(formData.pages || []).includes(page) && <CheckCircle2 className="w-3 h-3 inline mr-1.5 mb-0.5" />}
-                        {page}
+                         <div className={`p-2 rounded-lg transition-colors ${
+                              (formData.pages || []).includes(item.id) ? 'bg-white/20' : 'bg-slate-100 group-hover:bg-slate-200'
+                           }`}>
+                              {item.id === 'About' && <div className="w-4 h-4 rounded-full border-2 border-current opacity-80" />}
+                              {item.id === 'Pricing' && <div className="w-4 h-4 rounded border-2 border-current opacity-80" />}
+                              {item.id === 'Blog' && <div className="w-4 h-4 border-b-2 border-current opacity-80" />}
+                              {item.id === 'Features' && <div className="w-4 h-4 rotate-45 border-2 border-current opacity-80" />}
+                         </div>
+                         <span className={`text-xs font-bold ${(formData.pages || []).includes(item.id) ? 'text-white dark:text-black' : 'text-slate-700'}`}>
+                            {item.label}
+                         </span>
+                         
+                         {(formData.pages || []).includes(item.id) && (
+                            <div className="absolute top-1.5 right-1.5">
+                              <CheckCircle2 className="w-3 h-3 text-white dark:text-black" />
+                            </div>
+                         )}
                       </button>
                     ))}
                   </div>

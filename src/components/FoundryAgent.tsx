@@ -21,11 +21,15 @@ interface Message {
 export function FoundryAgent({ siteId, activeFile, onUpdate, onNavigate, className }: FoundryAgentProps) {
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: "Initialising editing environment...", timestamp: new Date().toLocaleTimeString() },
-    { role: 'assistant', content: "Ready for instructions. Type a command to edit the site.", timestamp: new Date().toLocaleTimeString() }
-  ])
+  const [messages, setMessages] = useState<Message[]>([])
   const scrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setMessages([
+      { role: 'assistant', content: "Initialising editing environment...", timestamp: new Date().toLocaleTimeString() },
+      { role: 'assistant', content: "Ready for instructions. Type a command to edit the site.", timestamp: new Date().toLocaleTimeString() }
+    ])
+  }, [])
 
   useEffect(() => {
     if (scrollRef.current) {
