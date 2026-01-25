@@ -325,7 +325,18 @@ export async function POST(request: Request) {
             model: 'gpt-4o', // UPGRADED for superior creative output
             messages: [
               { role: 'system', content: systemPrompt },
-              { role: 'user', content: `Build a website for: ${prompt}. Style: ${style}.` },
+              {
+                role: 'user', content: `Build a high-end website for: ${prompt}. Style: ${style}. 
+              
+              CRITICAL INSTRUCTION: 
+              Refuse to perform a standard template assembly. 
+              You MUST "Remix" the layout structure. 
+              - Use unique padding (e.g. py-32 instead of py-20).
+              - Change the typography hierarchy completely.
+              - Use different border-radius for cards (e.g. if template is rounded-xl, use rounded-none or rounded-3xl).
+              - If the style is "${style}", go ALL IN on that aesthetic. 
+              - Use the provided code reference ONLY as a safety fallback for syntax. 
+              - MAKE IT LOOK CUSTOM.` },
             ],
             stream: true,
           })
