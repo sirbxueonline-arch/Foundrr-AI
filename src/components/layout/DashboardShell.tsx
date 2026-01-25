@@ -83,11 +83,7 @@ export function DashboardShell({ children, email }: { children: React.ReactNode,
               <p className="text-xs text-stone-500">Free Plan</p>
             </div>
             <button
-              onClick={async () => {
-                const supabase = createClient()
-                await supabase.auth.signOut()
-                window.location.href = '/'
-              }}
+              onClick={() => signOut({ redirectUrl: '/' })}
               className="text-stone-400 hover:text-red-500 transition-colors p-1"
               title={t.nav.logout || "Log out"}
             >
