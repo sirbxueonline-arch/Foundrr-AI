@@ -14,7 +14,7 @@ export async function DELETE(
     // Create Supabase client
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
 
     // 1. Auth Check
