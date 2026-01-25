@@ -1,7 +1,7 @@
 
 'use client'
 
-import { SignOutButton } from '@clerk/nextjs'
+import { useClerk } from '@clerk/nextjs'
 import Link from 'next/link'
 import { User, LogOut, LayoutDashboard, ChevronDown } from 'lucide-react'
 import {
@@ -15,6 +15,8 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 
 export function UserMenu({ email }: { email: string }) {
+  const { signOut } = useClerk()
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="outline-none">
@@ -50,12 +52,13 @@ export function UserMenu({ email }: { email: string }) {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
 
-        <SignOutButton redirectUrl="/">
-          <DropdownMenuItem className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50">
-            <LogOut className="mr-2 h-4 w-4" />
-            <span>Log out</span>
-          </DropdownMenuItem>
-        </SignOutButton>
+        <DropdownMenuItem
+          onClick={() => signOut({ redirectUrl: '/' })}
+          className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50"
+        >
+          <LogOut className="mr-2 h-4 w-4" />
+          <span>Log out</span>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
