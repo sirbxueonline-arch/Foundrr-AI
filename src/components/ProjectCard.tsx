@@ -125,7 +125,7 @@ export function ProjectCard({ site }: { site: Site }) {
         </div>
 
         {/* Action Menu (Three Dots) - Positioned Absolute Top Right */}
-        <div className="absolute top-2 right-2 z-10">
+        <div className="absolute top-2 right-2 z-30">
           <button
             onClick={toggleMenu}
             className="p-1.5 rounded-full bg-white/80 hover:bg-white shadow-sm border opacity-100 transition-all"
