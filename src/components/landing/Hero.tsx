@@ -145,50 +145,50 @@ export function Hero({ lang, t }: { lang?: string; t?: any }) {
             </div>
 
             {/* Browser Content - Split View */}
-            <div className="grid md:grid-cols-12 min-h-[500px] divide-y md:divide-y-0 md:divide-x divide-white/5">
+            <div className="grid md:grid-cols-12 min-h-[500px] divide-y md:divide-y-0 md:divide-x divide-zinc-200/50">
 
               {/* Left: Input Console */}
-              <div className="md:col-span-5 bg-zinc-950/50 p-6 md:p-8 flex flex-col justify-between relative group/console">
+              <div className="md:col-span-5 bg-zinc-50/50 p-6 md:p-8 flex flex-col justify-between relative group/console">
                 <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-0 group-hover/console:opacity-100 transition-opacity" />
 
                 <div className="relative space-y-8">
                   <div>
-                    <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <div className="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                       <Terminal className="w-3 h-3" />
                       Prompt Input
                     </div>
-                    <div className="text-xl md:text-2xl font-medium text-white leading-normal font-sans">
+                    <div className="text-xl md:text-2xl font-medium text-zinc-900 leading-normal font-sans">
                       "{text.prompt}"
                     </div>
                   </div>
 
                   <div className="space-y-4">
-                    <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                    <div className="text-xs font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-2">
                       <Code2 className="w-3 h-3" />
                       Engine Output
                     </div>
-                    <div className="bg-zinc-950 rounded-lg border border-white/5 p-4 font-mono text-xs text-zinc-400 h-40 overflow-hidden relative">
-                      <div className="absolute top-0 right-0 p-2 bg-zinc-950/80 backdrop-blur-sm border-l border-b border-white/5 rounded-bl-lg text-[10px] text-zinc-600">
+                    <div className="bg-white rounded-lg border border-zinc-200 p-4 font-mono text-xs text-zinc-500 h-40 overflow-hidden relative shadow-sm">
+                      <div className="absolute top-0 right-0 p-2 bg-zinc-50/80 backdrop-blur-sm border-l border-b border-zinc-200 rounded-bl-lg text-[10px] text-zinc-500">
                         LOGS
                       </div>
                       {demoStep === 'idle' ? (
-                        <div className="flex items-center justify-center h-full text-zinc-700">Waiting to start...</div>
+                        <div className="flex items-center justify-center h-full text-zinc-400">Waiting to start...</div>
                       ) : (
                         <div className="space-y-2">
-                          <div className="text-emerald-500/80">&gt; Initializing neural engine...</div>
+                          <div className="text-emerald-600/90">&gt; Initializing neural engine...</div>
                           {(demoStep === 'analyzing' || demoStep === 'building' || demoStep === 'complete') && (
-                            <div className="text-blue-400/80">&gt; Parsing prompt intent... Ok.</div>
+                            <div className="text-blue-600/90">&gt; Parsing prompt intent... Ok.</div>
                           )}
                           {(demoStep === 'building' || demoStep === 'complete') && (
                             <>
-                              <div className="text-amber-400/80">&gt; Generating component structure...</div>
-                              <div className="text-zinc-500">&gt; Added Hero.tsx</div>
-                              <div className="text-zinc-500">&gt; Added Features.tsx</div>
-                              <div className="text-purple-400/80">&gt; Applying distinctive visual style...</div>
+                              <div className="text-amber-600/90">&gt; Generating component structure...</div>
+                              <div className="text-zinc-600">&gt; Added Hero.tsx</div>
+                              <div className="text-zinc-600">&gt; Added Features.tsx</div>
+                              <div className="text-purple-600/90">&gt; Applying distinctive visual style...</div>
                             </>
                           )}
                           {demoStep === 'complete' && (
-                            <div className="text-emerald-500 font-bold">&gt; Build successfully complated (0.4s)</div>
+                            <div className="text-emerald-600 font-bold">&gt; Build successfully complated (0.4s)</div>
                           )}
                           <div className="w-2 h-4 bg-primary animate-pulse mt-1" />
                         </div>
@@ -201,13 +201,13 @@ export function Hero({ lang, t }: { lang?: string; t?: any }) {
                   {demoStep === 'idle' ? (
                     <button
                       onClick={runDemo}
-                      className="w-full py-4 rounded-xl bg-white text-black font-bold hover:bg-zinc-200 transition-all flex items-center justify-center gap-2 group/btn shadow-lg shadow-white/5"
+                      className="w-full py-4 rounded-xl bg-black text-white font-bold hover:bg-zinc-800 transition-all flex items-center justify-center gap-2 group/btn shadow-lg shadow-zinc-900/10"
                     >
-                      <Sparkles className="w-4 h-4 group-hover/btn:rotate-12 transition-transform text-amber-500" />
+                      <Sparkles className="w-4 h-4 group-hover/btn:rotate-12 transition-transform text-amber-300" />
                       Visualize Idea
                     </button>
                   ) : (
-                    <div className="w-full h-1 bg-zinc-900 rounded-full overflow-hidden">
+                    <div className="w-full h-1 bg-zinc-100 rounded-full overflow-hidden">
                       <div className="h-full bg-gradient-to-r from-primary via-purple-500 to-primary animate-[shimmer_1.5s_infinite] w-full" />
                     </div>
                   )}
@@ -215,10 +215,10 @@ export function Hero({ lang, t }: { lang?: string; t?: any }) {
               </div>
 
               {/* Right: Visual Preview */}
-              <div className="md:col-span-7 bg-zinc-900 relative overflow-hidden flex items-center justify-center p-8 bg-[url('/grid.svg')] bg-center">
+              <div className="md:col-span-7 bg-zinc-100 relative overflow-hidden flex items-center justify-center p-8 bg-[url('/grid.svg')] bg-center">
                 <div className={`transition-all duration-1000 ease-out transform ${demoStep === 'complete' ? 'opacity-100 scale-100 translate-y-0' : 'opacity-40 scale-95 translate-y-4 blur-sm grayscale'}`}>
                   {/* Generated Site Mockup */}
-                  <div className="w-full max-w-sm bg-white rounded-lg shadow-2xl overflow-hidden pointer-events-none select-none relative">
+                  <div className="w-full max-w-sm bg-white rounded-lg shadow-2xl overflow-hidden pointer-events-none select-none relative ring-1 ring-black/5">
                     {/* Overlay for "Building" state */}
                     {demoStep === 'building' && (
                       <div className="absolute inset-0 z-50 bg-black/10 backdrop-blur-[1px] flex items-center justify-center">
