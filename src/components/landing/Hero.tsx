@@ -29,12 +29,12 @@ export function Hero({ lang, t }: { lang?: string; t?: any }) {
   }
 
   return (
-    <section className="relative overflow-hidden pt-24 pb-20 md:pt-32 md:pb-32 bg-black text-white selection:bg-primary/30 selection:text-primary-foreground">
+    <section className="relative overflow-hidden pt-24 pb-20 md:pt-32 md:pb-32 bg-white text-zinc-900 selection:bg-primary/30 selection:text-primary-foreground">
       {/* Premium Background */}
-      <div className="absolute inset-0 -z-10 h-full w-full bg-black">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-20" />
-        <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-primary/10 via-transparent to-transparent opacity-30 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 right-0 h-[300px] bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 -z-10 h-full w-full bg-white">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-100" />
+        <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-primary/5 via-transparent to-transparent opacity-60 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-[300px] bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none" />
       </div>
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
@@ -45,15 +45,15 @@ export function Hero({ lang, t }: { lang?: string; t?: any }) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-zinc-300 backdrop-blur-md mb-8 hover:bg-white/10 transition-colors cursor-default"
+            className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50/50 px-3 py-1 text-xs font-medium text-zinc-600 backdrop-blur-md mb-8 hover:bg-zinc-100 transition-colors cursor-default"
           >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
             {text.badge}
-            <span className="w-px h-3 bg-white/20 mx-1" />
-            <span className="opacity-60">{text.badgeSub}</span>
+            <span className="w-px h-3 bg-zinc-300 mx-1" />
+            <span className="opacity-80">{text.badgeSub}</span>
           </motion.div>
 
           {/* Headline */}
@@ -61,10 +61,10 @@ export function Hero({ lang, t }: { lang?: string; t?: any }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
-            className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-white mb-6 drop-shadow-2xl"
+            className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-zinc-900 mb-6 drop-shadow-sm"
           >
             {text.headline} <br className="hidden md:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-300 to-primary animate-gradient-x pb-2">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-500 to-primary animate-gradient-x pb-2">
               {text.headlineSub}
             </span>
           </motion.h1>
@@ -74,7 +74,7 @@ export function Hero({ lang, t }: { lang?: string; t?: any }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="max-w-2xl text-lg md:text-xl text-zinc-400 leading-relaxed text-balance mb-10"
+            className="max-w-2xl text-lg md:text-xl text-zinc-600 leading-relaxed text-balance mb-10"
           >
             {text.desc}
           </motion.p>
@@ -88,7 +88,7 @@ export function Hero({ lang, t }: { lang?: string; t?: any }) {
           >
             <Link
               href="/login"
-              className="group relative inline-flex h-14 items-center justify-center overflow-hidden rounded-full bg-white px-8 font-bold text-black transition-all hover:bg-zinc-200 hover:scale-[1.02] active:scale-[0.98] shadow-xl hover:shadow-2xl hover:shadow-white/20"
+              className="group relative inline-flex h-14 items-center justify-center overflow-hidden rounded-full bg-black px-8 font-bold text-white transition-all hover:bg-zinc-800 hover:scale-[1.02] active:scale-[0.98] shadow-xl hover:shadow-2xl hover:shadow-zinc-900/20"
             >
               <span className="relative flex items-center gap-2 z-10">
                 {text.ctaPrimary}
@@ -97,7 +97,7 @@ export function Hero({ lang, t }: { lang?: string; t?: any }) {
             </Link>
             <Link
               href="#how-it-works"
-              className="inline-flex h-14 items-center justify-center rounded-full border border-white/10 bg-white/5 backdrop-blur-sm px-8 text-sm font-medium text-white shadow-sm transition-all hover:bg-white/10 hover:border-white/20 active:scale-[0.98]"
+              className="inline-flex h-14 items-center justify-center rounded-full border border-zinc-200 bg-white/50 backdrop-blur-sm px-8 text-sm font-medium text-zinc-700 shadow-sm transition-all hover:bg-white hover:border-zinc-300 active:scale-[0.98]"
             >
               {text.ctaSecondary}
             </Link>
