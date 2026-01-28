@@ -11,9 +11,37 @@ export function Footer() {
           <p className="text-center text-sm leading-loose text-muted-foreground">
             &copy; {new Date().getFullYear()} foundrr. {t.footer.copyright}
           </p>
-          <p className="text-center text-xs text-muted-foreground/60">
-            Made by <a href="https://foundrr.online" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Foundrr Group</a>
-          </p>
+      {/* GULUZADA Studio Signature */}
+      <div 
+        className="guluzada-credit" 
+        style={{
+          textAlign: "center",
+          padding: "2rem 0",
+          fontSize: "14px",
+          fontFamily: "'Space Grotesk', sans-serif",
+          color: "currentColor",
+          opacity: 0.8,
+        }}
+      >
+        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&display=swap" rel="stylesheet" />
+        
+        <span style={{ fontWeight: 400, opacity: 0.7 }}>by </span> 
+        <a 
+          href="https://guluzada.dev" 
+          target="_blank" 
+          rel="noreferrer"
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+            display: "inline-block",
+            transition: "opacity 0.3s ease",
+          }}
+          onMouseOver={(e) => (e.currentTarget.style.opacity = "0.6")}
+          onMouseOut={(e) => (e.currentTarget.style.opacity = "1")}
+        >
+          <span style={{ fontWeight: 700, letterSpacing: "-0.02em" }}>GULUZADA</span> <span style={{ fontWeight: 300 }}>Studio</span>
+        </a>
+      </div>
         </div>
         <div className="flex items-center gap-6 text-sm text-muted-foreground">
           <a href="/terms" className="hover:text-foreground transition-colors">Terms</a>
