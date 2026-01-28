@@ -1,8 +1,9 @@
-import { createServerClient } from '@supabase/ssr'
+import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
 import { TEMPLATES } from '@/lib/generator-templates'
+import { auth } from '@clerk/nextjs/server'
 
 // Initialize lazily
 export async function POST(request: Request) {
@@ -10,35 +11,49 @@ export async function POST(request: Request) {
     apiKey: process.env.OPENAI_API_KEY,
   })
   try {
-    const cookieStore = await cookies()
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() {
-            return cookieStore.getAll()
-          },
-          setAll(cookiesToSet) {
-            try {
-              cookiesToSet.forEach(({ name, value, options }) =>
-                cookieStore.set(name, value, options)
-              )
-            } catch { }
-          },
-        },
-      }
-    )
+    const { userId } = await auth();
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
-    if (!user) {
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { prompt, style = 'minimal', lang = 'en', primaryColor = '', pages = [] } = await request.json()
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+
+
+    const { prompt, style = 'minimal', lang = 'en', primaryColor = '', pages = [], creativity = 'standard' } = await request.json()
+
+    // ... (keep validation logic)
+
+    // DYNAMIC INSTRUCTION GENERATOR
+    let systemInstruction = ''
+    if (creativity === 'standard') {
+      systemInstruction = "Follow the templates strictly. Use them as a solid foundation. Ensure high reliability and standard layout structures."
+    } else if (creativity === 'creative' || creativity === 'high') {
+      systemInstruction = `
+              CRITICAL INSTRUCTION: 
+              Refuse to perform a standard template assembly. 
+              You MUST "Remix" the layout structure. 
+              - Use unique padding (e.g. py-32 instead of py-20).
+              - Change the typography hierarchy completely.
+              - Use different border-radius for cards (e.g. if template is rounded-xl, use rounded-none or rounded-3xl).
+              - If the style is "${style}", go ALL IN on that aesthetic. 
+              - Use the provided code reference ONLY as a safety fallback for syntax. 
+         `
+    } else if (creativity === 'chaos') {
+      systemInstruction = `
+              CRITICAL INSTRUCTION: CHAOS MODE ACTIVATED.
+              - INGORE STANDARD GRIDS. Use uneven grid columns (col-span-7 vs col-span-5).
+              - USE MASSIVE TYPOGRAPHY (text-9xl).
+              - USE NEON COLORS and extreme contrast.
+              - Make it look like an AWARD-WINNING EXPERIMENTAL site. 
+              - BREAK THE RULES.
+         `
+    }
+
+
 
     if (!prompt) {
       return NextResponse.json({ error: 'Missing prompt' }, { status: 400 })
@@ -46,7 +61,7 @@ export async function POST(request: Request) {
 
     // Generate a secure ID immediately
     const siteId = Math.random().toString(36).substring(2, 9)
-    const fileName = `${user.id}/${siteId}/index.html`
+    const fileName = `${userId}/${siteId}/index.html`
 
     // Generate Navbar Links
     const standardLinks = ['Home'] // Home is always there
@@ -55,23 +70,23 @@ export async function POST(request: Request) {
     if (pages.includes('About')) standardLinks.push('About')
     if (pages.includes('Blog')) standardLinks.push('Blog')
 
-    const navLinksHtml = standardLinks.filter(l => l !== 'Home').map(link => 
+    const navLinksHtml = standardLinks.filter(l => l !== 'Home').map(link =>
       `<button onclick="navigateTo('${link.toLowerCase()}')" class="px-5 py-2 rounded-full text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white hover:shadow-sm transition-all">${link}</button>`
     ).join('\n')
 
-    const mobileNavLinksHtml = standardLinks.filter(l => l !== 'Home').map(link => 
+    const mobileNavLinksHtml = standardLinks.filter(l => l !== 'Home').map(link =>
       `<button onclick="navigateTo('${link.toLowerCase()}'); toggleMobileMenu()" class="text-left font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 dark:text-white">${link}</button>`
     ).join('\n')
 
     // Detect if this is an architecture/minimal site
-    const isArchitectural = prompt.toLowerCase().includes('architecture') || 
-                           prompt.toLowerCase().includes('interior') || 
-                           prompt.toLowerCase().includes('construction') ||
-                           style === 'minimal' || 
-                           style === 'elegant';
+    const isArchitectural = prompt.toLowerCase().includes('architecture') ||
+      prompt.toLowerCase().includes('interior') ||
+      prompt.toLowerCase().includes('construction') ||
+      style === 'minimal' ||
+      style === 'elegant';
 
     // Generate Navbar Links (Minimal variant has different classes)
-    const navLinksHtmlMinimal = standardLinks.filter(l => l !== 'Home').map(link => 
+    const navLinksHtmlMinimal = standardLinks.filter(l => l !== 'Home').map(link =>
       `<button onclick="navigateTo('${link.toLowerCase()}')" class="text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white transition-colors font-medium">${link}</button>`
     ).join('\n')
 
@@ -79,9 +94,9 @@ export async function POST(request: Request) {
     const productFooterLinks = []
     if (pages.includes('Features')) productFooterLinks.push('Features')
     if (pages.includes('Pricing')) productFooterLinks.push('Pricing')
-    
-    const footerProductHtml = productFooterLinks.map(link => 
-        `<li><button onclick="navigateTo('${link.toLowerCase()}')" class="hover:text-black">${link}</button></li>`
+
+    const footerProductHtml = productFooterLinks.map(link =>
+      `<li><button onclick="navigateTo('${link.toLowerCase()}')" class="hover:text-black">${link}</button></li>`
     ).join('\n')
 
     // Generate Footer Links (Company Column)
@@ -89,8 +104,8 @@ export async function POST(request: Request) {
     if (pages.includes('About')) companyFooterLinks.push('About')
     if (pages.includes('Blog')) companyFooterLinks.push('Blog')
 
-    const footerCompanyHtml = companyFooterLinks.map(link => 
-        `<li><button onclick="navigateTo('${link.toLowerCase()}')" class="hover:text-black">${link}</button></li>`
+    const footerCompanyHtml = companyFooterLinks.map(link =>
+      `<li><button onclick="navigateTo('${link.toLowerCase()}')" class="hover:text-black">${link}</button></li>`
     ).join('\n')
 
     // Prepare Navbar & Footer Template with injected links
@@ -109,6 +124,7 @@ export async function POST(request: Request) {
     
     STRICT RULES:
     1.  **Output**: Return ONLY the raw HTML code. Do not wrap in markdown \`\`\`.
+    2.  **CREATIVITY**: You are NOT a template assembler. You are a DESIGNER. You MUST change the provided templates significantly to match the prompt.
     2.  **Tech Stack**: HTML5, Tailwind CSS (CDN), FontAwesome (CDN), Google Fonts, AOS (Animate On Scroll).
     3.  **Language**: All visible text MUST be in ${lang === 'az' ? 'Azerbaijani (Azərbaycan dili)' : 'English'}.
         - Translate ALL headlines, paragraphs, buttons, and navigation links.
@@ -127,33 +143,38 @@ export async function POST(request: Request) {
         -   **Typography**: Use 'Outfit' or 'Space Grotesk' for Headings. 'Inter' for Body.
             -   Headings must have \`tracking-tight\` or \`tracking-tighter\`.
             -   Use \`text-balance\` on H1/H2 to prevent orphans.
+            -   **Scale**: Don't be afraid of HUGE text (text-6xl, text-7xl, text-8xl) for impact.
         -   **Spacing**: USE AGGRESSIVE WHITESPACE.
             -   Sections should have \`py-24\` or \`py-32\`.
             -   Elements need breathing room. \`mb-12\` minimum between headers and content.
-        -   **Components**: 
-            -   Glassmorphism: \`bg-white/50 backdrop-blur-xl border border-white/10\`.
-            -   Gradients: Use subtle mesh gradients, avoid harsh primary colors as backgrounds.
-            -   Shadows: Use \`shadow-2xl\` and \`shadow-indigo-500/10\` for colored glows.
+        -   **Layouts**: 
+            -   **Bento Grids**: Use grid layouts (\`grid-cols-3\` or \`grid-cols-4\`) with spanning cells (\`col-span-2\`) for feature sections.
+            -   **Asymmetry**: Avoid perfectly centered text everywhere. Use left-aligned text with right-aligned images.
+            -   **Glassmorphism**: \`bg-white/50 backdrop-blur-3xl border border-white/10\`.
+        -   **Gradients & Colors**: 
+            -   Use subtle mesh gradients \`bg-gradient-to-br from-indigo-50 via-white to-purple-50\`.
+            -   Avoid harsh primary colors as full backgrounds.
+            -   **Dark Mode**: Use \`bg-slate-950\` deeply, with \`bg-slate-900/50\` cards.
+        -   **Shadows**: Use \`shadow-2xl\` and \`shadow-indigo-500/10\` for colored glows.
         -   **Buttons**: 
             -   Rounded-full is preferred for modern look.
             -   **Hover effects**: Scale (1.05) + Shadow.
         -   **Animations**: USE SUBTLE ANIMATIONS.
-            -   Use \`animate-fade-in-up\` for cards and sections.
-            -   Use \`animate-zoom-in\` for images.
-            -   Do not over-animate. Stagger animations with \`animation-delay\`.
-    
+            -   Use \`data-aos="fade-up"\` on almost every section/card.
+            -   Stagger animations with \`data-aos-delay="100"\`.
+            -   Do not over-animate. Keep it smooth.
+
     7. **Copywriting (The "Apple" Standard)**:
         -   **Rule #1**: NO MARKETING FLUFF.
         -   **Bad**: "Our cutting-edge solution revolutionizes the way you work."
         -   **Good**: "Work faster. Save time."
         -   **Focus**: Active verbs. Short sentences. User benefits.
         -   **Headlines**: Punchy, short (2-5 words), emotional. "Your Ideas. Realized."
-    
-    8. **Content Completeness**:
+
+    8. **Content Completeness & Quality**:
         -   **NEGATIVE CONSTRAINTS**: DO NOT use: "Unlock", "Unleash", "Elevate", "Supercharge", "Game-changer", "Revolutionize", "Destiny", "Embark", "Realm", "Tapestry", "Delve", "Cutting-edge", "State-of-the-art".
         -   **NO PLACEHOLDERS**: NEVER use "Lorem Ipsum", "Feature 1", "John Doe". Generate realistic names/titles.
         - **FUNCTIONAL BUTTONS**: ALL buttons and links MUST work.
-            - Navigation links must match section IDs (e.g., href="#features").
             - "Get Started" or "Contact" buttons should link to #contact or #pricing.
             - Do NOT use href="#".
         - **BRANDING**: The site is generated by "Foundrr Group". DO NOT add any other "Made by" credits in the footer.
@@ -223,9 +244,18 @@ export async function POST(request: Request) {
     6. **Router Script**: REQUIRED for navigation:
     ${TEMPLATES.JS_ROUTER}
     
+    
+    10. **CREATIVE FREEDOM (CRITICAL)**:
+        - The provided templates are **WIREFRAMES ONLY**.
+        - **DO NOT** just copy-paste them.
+        - **YOU MUST** heavily customize the CSS, layout, and structure to match the requested "Vibe".
+        - **Example**: If the user asks for "Cyberpunk", change backgrounds to black, add neon green borders, change fonts to 'Space Grotesk', and add glow effects.
+        - **Example**: If the user asks for "Playful", use rounded corners (rounded-3xl), pastel colors, and bouncy animations.
+        - **REWRITE SECTIONS** if they don't fit the theme. You are the Architect.
+
     INSTRUCTIONS:
-    - **Assemble**: Put all the selected sections into the \`body\`.
-    - **Customize**: MODIFY the text, colors, and images in the templates to MATCH the user's request explicitly.
+    - **Architect & Refine**: Use the provided sections as a functional base, but **redesign them** to match the prompt.
+    - **Customize**: MODIFY the text, colors, spacing, and images in the templates to MATCH the user's request explicitly.
     - **Translate**: ALL content in templates (Navbar, Hero, Features, etc.) MUST be translated to ${lang === 'az' ? 'Azerbaijani' : 'English'}.
     - **Styles**: 
       - If the user asks for "Dark Mode" or style='dark', add \`bg-slate-950 text-white\` to the body and ensure all components adapt (use dark: classes).
@@ -322,10 +352,15 @@ export async function POST(request: Request) {
       async start(controller) {
         try {
           const completion = await openai.chat.completions.create({
-            model: 'gpt-4o-mini',
+            model: 'gpt-4o', // UPGRADED for superior creative output
             messages: [
               { role: 'system', content: systemPrompt },
-              { role: 'user', content: `Build a website for: ${prompt}. Style: ${style}.` },
+              {
+                role: 'user', content: `Build a high-end website for: ${prompt}. Style: ${style}. Creativity Level: ${creativity}.
+              
+              ${systemInstruction}
+              
+              MAKE IT LOOK CUSTOM.` },
             ],
             stream: true,
           })
@@ -358,7 +393,7 @@ export async function POST(request: Request) {
           // Save to DB
           await supabase.from('websites').insert({
             id: siteId,
-            user_id: user.id,
+            user_id: userId,
             html_path: fileName,
             paid: false,
             price: 75.99, // Force explicit price

@@ -1,5 +1,7 @@
 'use client'
 
+import { useClerk } from '@clerk/nextjs'
+
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
@@ -13,17 +15,13 @@ import {
   ChevronRight
 } from 'lucide-react'
 import { useState } from 'react'
-
 import { useLanguage } from '@/contexts/LanguageContext'
-
-import { createClient } from '@/lib/supabase/client'
-
-// ... imports remain ...
 
 export function DashboardShell({ children, email }: { children: React.ReactNode, email: string }) {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { t, lang, toggleLanguage } = useLanguage()
+  const { signOut } = useClerk()
 
   const navigation = [
     { name: t.nav.myWebsites, href: '/projects', icon: LayoutDashboard },
@@ -85,11 +83,7 @@ export function DashboardShell({ children, email }: { children: React.ReactNode,
               <p className="text-xs text-stone-500">Free Plan</p>
             </div>
             <button
-              onClick={async () => {
-                const supabase = createClient()
-                await supabase.auth.signOut()
-                window.location.href = '/'
-              }}
+              onClick={() => signOut({ redirectUrl: '/' })}
               className="text-stone-400 hover:text-red-500 transition-colors p-1"
               title={t.nav.logout || "Log out"}
             >
